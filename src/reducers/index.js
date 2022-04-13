@@ -1,6 +1,6 @@
 const INITIAL_STATE = {
   testData: "Hello world!",
-  tableItems : [{name: "pizza", total: 1}, {name: "pizza", total: 1}, {name: "hamburger", total: 1}],
+  tableItems : [],
 };
 
 // bu switch degistirmek icin

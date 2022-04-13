@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -11,59 +11,60 @@ import Button from '@mui/material/Button'
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {data} from '../data'
+import Alert from './Alert'
 // import {data} from '../data'
 
 import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
 
 function MenuCard(props) {
+  const [counters, setCounters] = useState([{name: 'test', counter: 0}]);
+  const [isAlert, setIsAlert] = useState(false);
+
   const addToBasket = (itemName, counter) =>{
     // add items to basket
     let existingItems = props.tableItems;
     props.setTableItems([...existingItems, {name: itemName, total: counter}])
     // reset the counter of that item
+    // Switch Alert
+    setIsAlert(true);
+    setTimeout(() => {
+      setIsAlert(false);
+    }, 2000);
   }
-  const decreaseMenuItem = (itemName, item) =>{
+
+  const addCounterToExistingObject = (item, object, value) => {
+    let filteredArray = counters.filter(counterObject => counterObject.name !== item.name);
+      object.counter = object?.counter + value;
+      setCounters(counters=> [...filteredArray, object])
+      item.counter = object.counter;
+  }
+  // add and change counters state
+  const changeMenuItemCounter = (item, value) =>{
     let object;
     counters.forEach(counterObject => {
-      console.log(counterObject);
-      if(counterObject.name === itemName){
+      if(counterObject.name === item.name){
         console.log('contains ',counterObject);
         object = counterObject
       }
     })
     if(!object){
-      let newObject = {name:itemName, counter: -1};
+      // add new object to the counters array
+      // set value to 0 to prevent -1
+      if(value === -1) value = 0
+      let newObject = {name: item.name, counter: value};
       setCounters(counters=> [...counters, newObject]);
       item.counter = newObject.counter;
-    }else if(object){
-      let filteredArray = counters.filter(counterObject => counterObject.name !==itemName);
-      object.counter = object?.counter - 1;
-      setCounters(counters=> [...filteredArray, object])
-      item.counter = object.counter;
     }
-  }
-  const increaseMenuItem = (itemName, item) => {
-    let object;
-    counters.forEach(counterObject => {
-      if(counterObject.name ===itemName){
-        console.log('contains ',counterObject);
-        object = counterObject
+    else if(object){
+      if(object.counter + value < 0){
+        addCounterToExistingObject(item, object, 0)
+      } else {
+        addCounterToExistingObject(item, object, value)
       }
-    })
-    if(!object){
-      let newObject = {name:itemName, counter: + 1};
-      setCounters(counters=> [...counters, newObject]);
-      item.counter = newObject.counter;
-      
-    }else if(object){
-      let filteredArray = counters.filter(counterObject => counterObject.name !==itemName);
-      object.counter = object?.counter + 1;
-      setCounters(counters=> [...filteredArray, object])
-      item.counter = object.counter;
     }
   }
-  const [counters, setCounters] = useState([{name: 'test', counter: 0}])
+
   const renderCards = () => {
     return data.map(item => { 
       return(
@@ -86,15 +87,15 @@ function MenuCard(props) {
           <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime} min</Typography>
           <Box sx={{display: 'flex'}}>
             <ArrowLeftIcon 
-            onClick={()=>decreaseMenuItem(item.name, item)}>
+            onClick={()=>changeMenuItemCounter(item, -1)}>
             </ArrowLeftIcon>
-            <Typography>{
+            <Typography>{ 
             counters?.map(counterObject => {
             if(counterObject.name === item.name){
              return counterObject.counter
             } 
             }) }</Typography>
-            <ArrowRightIcon onClick={()=> increaseMenuItem(item.name, item)}></ArrowRightIcon>
+            <ArrowRightIcon onClick={()=> changeMenuItemCounter(item, +1)}></ArrowRightIcon>
           </Box>
           <Button onClick={()=> addToBasket(item.name, item.counter)} variant='contained'>Order</Button>
         </CardActions>
@@ -105,6 +106,7 @@ function MenuCard(props) {
   return (
     <div>
       {renderCards()}
+      <Alert isAlert={isAlert} setIsAlert={setIsAlert}></Alert>
     </div>
   );
 }
