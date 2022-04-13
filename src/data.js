@@ -1,6 +1,6 @@
 export const data = [{
   name: 'Pizza',
-  quantity: 0,
+  counter: 0,
   preperationTime: '15-20',
   image: 'https://w7.pngwing.com/pngs/448/578/png-transparent-pizza-margherita-italian-cuisine-chicago-style-pizza-pepperoni-pizza.png',
   description: `This impressive paella is a perfect party dish and a fun meal to cook
@@ -8,10 +8,10 @@ export const data = [{
   if you like.`
 }, {
   name: 'Hamburger',
-  quantity: 0,
+  counter: 0,
   preperationTime: '15-20',
   image: 'https://w7.pngwing.com/pngs/448/578/png-transparent-pizza-margherita-italian-cuisine-chicago-style-pizza-pepperoni-pizza.png',
   description: `This impressive paella is a perfect party dish and a fun meal to cook
   together with your guests. Add 1 cup of frozen peas along with the mussels,
   if you like.`
-}]
+},]
