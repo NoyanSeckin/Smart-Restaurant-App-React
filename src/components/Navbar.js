@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,14 +11,19 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import { NavLink } from "react-router-dom";
-
+import MenuDialog from './MenuDialog'
 // Redux
 import { connect } from "react-redux";
 import {setTableItems} from '../actions'
  function Navbar(props) {
+   const [open, setOpen] = useState(false)
   
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleDialog = (childData) => {
+
+  }
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -29,8 +35,17 @@ import {setTableItems} from '../actions'
   const calculateTotalItems = (arr) =>{
    return arr.map(item => item.total).reduce((prev, curr) => prev + curr, 0);
   }
+  
+  const handleDialogOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDialogClose = (value) => {
+    setOpen(false);
+    // setSelectedValue(value);
+  };
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, position: 'relative' }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -50,7 +65,7 @@ import {setTableItems} from '../actions'
           {auth && (
             <Box sx={{display: 'flex'}}>
               <Box sx={{alignSelf: 'center' ,position: 'relative'}}>
-                <TableRestaurantIcon sx={{alignSelf: 'center', mr: 3}}>
+                <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', mr: 3}}>
                 </TableRestaurantIcon>
                 <Typography sx={{position: 'absolute', right: '14px', top: '-10px'}} variant="caption">
                     {calculateTotalItems(props.tableItems)}
@@ -89,6 +104,7 @@ import {setTableItems} from '../actions'
           )}
         </Toolbar>
       </AppBar>
+      <MenuDialog open={open} setOpen={setOpen} handleDialogOpen={handleDialogOpen}handleDialogClose={handleDialogClose}></MenuDialog>
     </Box>
   );
 }

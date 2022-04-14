@@ -44,7 +44,6 @@ function MenuCard(props) {
     let object;
     counters.forEach(counterObject => {
       if(counterObject.name === item.name){
-        console.log('contains ',counterObject);
         object = counterObject
       }
     })
