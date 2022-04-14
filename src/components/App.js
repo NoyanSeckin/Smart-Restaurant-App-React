@@ -4,7 +4,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Navbar from './Navbar';
 import Home from '../pages/Home';
 import Menu from '../pages/Menu';
-
+import UserTable from '../pages/UserTable'
 const App = () => {
   return (
     <div className='App'>
@@ -13,6 +13,7 @@ const App = () => {
           <Navbar />
           <Route path="/" exact component={Home} />
           <Route path="/menu" component={Menu} />
+          <Route path="/usertable" component={UserTable} />
         </div>
       </BrowserRouter>
     </div>

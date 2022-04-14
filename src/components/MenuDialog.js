@@ -12,55 +12,59 @@ import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
+import { NavLink } from "react-router-dom";
+import Box from '@mui/material/Box'
+// redux
 
+import {setTableItems} from '../actions'
+import { connect } from 'react-redux';
 
-
-function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
+function MenuDialog(props) {
+  const {open, handleDialogClose} = props;
   return (
-    <Dialog sx={{position: 'absolute', bottom: {lg: '570px', md: '550px', xs: '570px'}, left: {md: '600px', lg: '66%', xs: '70px', sm: '360px'  }}} onClose={handleClose} open={open}>
+    <Dialog sx={{width: '700px', position: 'absolute', bottom: {lg: '570px', md: '620px', xs: '570px'}, left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'  }}} onClose={handleDialogClose} open={open}>
       <DialogTitle>Your Table</DialogTitle>
       <List sx={{ pt: 0 }}>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
+         {props.tableItems.map(tableItem => {
+           return(
+            <ListItem>
+            <ListItemAvatar>
+              {/* {tableItem.image} */}
+              <img style={{width:'70px'}} src={tableItem.image} alt="" />
+            </ListItemAvatar>
+            <ListItemText sx={{ml: 3}} primary={tableItem.name} />
+            <ListItemText sx={{ml: 3}} primary={tableItem.count} />
+          </ListItem>
+         )})}
+            
+        <Box sx={{display: 'flex' ,justifyContent: 'space-around', mt: 1}}>
+          <NavLink to='/usertable'>
+            <Button variant={'outlined'}>
+                Go to table
+            </Button>
+          </NavLink>
+          <Button variant={'outlined'}>
+                Order 
+          </Button>
+        </Box>
       </List>
     </Dialog>
   );
 }
 
-SimpleDialog.propTypes = {
+MenuDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.string.isRequired,
 };
 
-export default function SimpleDialogDemo({open, handleDialogClose, handleDialogOpen}) {
-  return (
-    <div>
-      <Typography variant="subtitle1" component="div">
-      </Typography>
-      <br />
-      <Button variant="outlined" onClick={handleDialogOpen}>
-        Open simple dialog
-      </Button>
-      <SimpleDialog
-        open={open}
-        onClose={handleDialogClose}
-      />
-    </div>
-  );
-}
+
+const mapStateToProps = (state) => {
+  return {
+    tableItems: state.tableItems,
+  };
+};
+export default connect(mapStateToProps, {
+  setTableItems,
+})(MenuDialog);
+

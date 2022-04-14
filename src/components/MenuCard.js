@@ -21,10 +21,10 @@ function MenuCard(props) {
   const [counters, setCounters] = useState([{name: 'test', counter: 0}]);
   const [isAlert, setIsAlert] = useState(false);
 
-  const addToBasket = (itemName, counter) =>{
+  const addToBasket = (item) =>{
     // add items to basket
     let existingItems = props.tableItems;
-    props.setTableItems([...existingItems, {name: itemName, total: counter}])
+    props.setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price }])
     // reset the counter of that item
     // Switch Alert
     setIsAlert(true);
@@ -96,7 +96,7 @@ function MenuCard(props) {
             }) }</Typography>
             <ArrowRightIcon onClick={()=> changeMenuItemCounter(item, +1)}></ArrowRightIcon>
           </Box>
-          <Button onClick={()=> addToBasket(item.name, item.counter)} variant='contained'>Order</Button>
+          <Button onClick={()=> addToBasket(item)} variant='contained'>Order</Button>
         </CardActions>
       </Card>
       )

@@ -33,7 +33,7 @@ import {setTableItems} from '../actions'
     setAnchorEl(null);
   };
   const calculateTotalItems = (arr) =>{
-   return arr.map(item => item.total).reduce((prev, curr) => prev + curr, 0);
+   return arr.map(item => item.count).reduce((prev, curr) => prev + curr, 0);
   }
   
   const handleDialogOpen = () => {
