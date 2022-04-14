@@ -22,18 +22,17 @@ import { connect } from 'react-redux';
 function MenuDialog(props) {
   const {open, handleDialogClose} = props;
   return (
-    <Dialog sx={{width: '700px', position: 'absolute', bottom: {lg: '570px', md: '620px', xs: '570px'}, left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'  }}} onClose={handleDialogClose} open={open}>
-      <DialogTitle>Your Table</DialogTitle>
+    <Dialog sx={{ position: 'absolute', bottom: {lg: '570px', md: '620px', xs: '570px'}, left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'  }}} onClose={handleDialogClose} open={open}>
+      <DialogTitle sx={{width: '300px'}}>Your Table</DialogTitle>
       <List sx={{ pt: 0 }}>
          {props.tableItems.map(tableItem => {
            return(
             <ListItem>
-            <ListItemAvatar>
-              {/* {tableItem.image} */}
+            <ListItemAvatar >
               <img style={{width:'70px'}} src={tableItem.image} alt="" />
             </ListItemAvatar>
-            <ListItemText sx={{ml: 3}} primary={tableItem.name} />
-            <ListItemText sx={{ml: 3}} primary={tableItem.count} />
+            <ListItemText sx={{mx: 5}} primary={tableItem.name} />
+            <ListItemText sx={{mr: 3}} primary={tableItem.count} />
           </ListItem>
          )})}
             

@@ -22,15 +22,32 @@ function MenuCard(props) {
   const [isAlert, setIsAlert] = useState(false);
 
   const addToBasket = (item) =>{
-    // add items to basket
-    let existingItems = props.tableItems;
-    props.setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price }])
-    // reset the counter of that item
-    // Switch Alert
-    setIsAlert(true);
-    setTimeout(() => {
-      setIsAlert(false);
-    }, 2000);
+    // if item exist modify, else add it directly to tableItems
+    if(item.counter > 0){
+      let filteredItems = [];
+      let existingItems = props.tableItems;
+      let existingObject;
+      existingItems.forEach(existingItem => {
+        if(existingItem.name === item.name){
+          existingObject = existingItem;
+        }else{
+          filteredItems.push(existingItem);
+        }
+      })
+      if(existingObject){
+        existingObject.count += item.counter;
+        props.setTableItems([...filteredItems, existingObject])
+      } else if(!existingObject){
+        props.setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price }])
+      }
+      // reset the counter of that item
+      // Switch Alert
+      setIsAlert(true);
+      setTimeout(() => {
+        setIsAlert(false);
+      }, 2000);
+    }
+   
   }
 
   const addCounterToExistingObject = (item, object, value) => {
