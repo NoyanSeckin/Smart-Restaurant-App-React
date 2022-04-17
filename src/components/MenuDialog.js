@@ -22,12 +22,12 @@ import { connect } from 'react-redux';
 function MenuDialog(props) {
   const {open, handleDialogClose} = props;
   return (
-    <Dialog sx={{ position: 'absolute', bottom: {lg: '570px', md: '620px', xs: '570px'}, left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'  }}} onClose={handleDialogClose} open={open}>
+    <Dialog sx={{ position: 'absolute', bottom: {lg: '570px', md: '620px', xs: '570px'}, left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'}, minHeight: 300}} onClose={handleDialogClose} open={open}>
       <DialogTitle sx={{width: '300px'}}>Your Table</DialogTitle>
       <List sx={{ pt: 0 }}>
          {props.tableItems.map(tableItem => {
            return(
-            <ListItem>
+            <ListItem key={tableItem.name}>
             <ListItemAvatar >
               <img style={{width:'70px'}} src={tableItem.image} alt="" />
             </ListItemAvatar>
@@ -51,11 +51,6 @@ function MenuDialog(props) {
   );
 }
 
-MenuDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
 
 
 const mapStateToProps = (state) => {

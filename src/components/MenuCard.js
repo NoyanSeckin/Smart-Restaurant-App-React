@@ -82,9 +82,11 @@ function MenuCard(props) {
   }
 
   const renderCards = () => {
-    return data.map(item => { 
+    return(
+    <Box sx={{display: 'flex', gap: 8, flexWrap: 'wrap'}}> 
+      {data[props.selectedMenu].map(item => { 
       return(
-        <Card key={item.name} sx={{ maxWidth: 300 }}>
+        <Card key={item.name} sx={{ maxWidth: 300, minWidth: 300 }}>
           <CardMedia
             component="img"
             height="194"
@@ -110,7 +112,7 @@ function MenuCard(props) {
             if(counterObject.name === item.name){
              return counterObject.counter
             } 
-            }) }</Typography>
+            })}</Typography>
             <ArrowRightIcon onClick={()=> changeMenuItemCounter(item, +1)}></ArrowRightIcon>
           </Box>
           <Button onClick={()=> addToBasket(item)} variant='contained'>Order</Button>
@@ -118,6 +120,8 @@ function MenuCard(props) {
       </Card>
       )
     })
+  }
+  </Box>)
   }
   return (
     <div>
