@@ -21,10 +21,6 @@ import {setTableItems} from '../actions'
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleDialog = (childData) => {
-
-  }
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -58,7 +54,8 @@ import {setTableItems} from '../actions'
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <NavLink to='/menu'>
+            {/* TODO: add parameter route, according to active table  */}
+            <NavLink to='/menu/:id'>
               Menu
             </NavLink>
           </Typography>

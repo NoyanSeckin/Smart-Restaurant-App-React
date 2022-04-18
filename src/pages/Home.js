@@ -1,7 +1,10 @@
 import React from 'react'
-
+import {Box, Grid} from '@mui/material'
 export default function Home() {
   return (
-    <div>Home</div>
+    <Box>
+      <h3>Qr Codes</h3>
+      
+    </Box>
   )
 }

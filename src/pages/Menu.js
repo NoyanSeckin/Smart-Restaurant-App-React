@@ -1,14 +1,33 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import MenuCard from '../components/MenuCard'
 import SelectComponent from '../components/SelectComponent'
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-export default function Menu() {
+import { useParams } from 'react-router-dom';
+import { connect } from "react-redux";
+import {setOccupiedTables} from '../actions'
 
-  // let selectedMenu = 'mainDishes';
+function Menu({occupiedTables, setOccupiedTables}) {
+  // get current table with id route parameter
+  const { id } = useParams();
+  
+  useEffect(()=>{
+
+    if(id){
+      if(occupiedTables){
+        setOccupiedTables([...occupiedTables, id])
+      }else if(!occupiedTables){
+        setOccupiedTables([id])
+      }
+    }   
+  }, [])
+  
+  console.log(occupiedTables)
+  
   const [selectedMenu, setSelectedMenu] = useState('mainDishes')
+  // get selected item from SelectComponent 
   function getData(data){
-    console.log(data)
+    // set and send it to menucard
     setSelectedMenu(data);
   }
   return (
@@ -24,3 +43,14 @@ export default function Menu() {
     </Box>
   )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    occupiedTables: state.occupiedTables,
+  };
+};
+export default connect(mapStateToProps, {
+  setOccupiedTables,
+})(Menu);
+
+
