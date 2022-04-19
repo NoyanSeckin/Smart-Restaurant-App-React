@@ -9,21 +9,22 @@ import {setCurrentTable, setTables} from '../actions'
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, doc, updateDoc, arrayUnion, getDoc} from "firebase/firestore";
 import firebaseApp from '../firebase/init'
+
 function Menu({setCurrentTable, setTables}) {
   // get current table with id route parameter
   const { id } = useParams();
   
   const db = getFirestore();
-  const docRef = doc(db, 'Tables', 'tables');
+  const docRef = doc(db, 'OccupiedTables', 'occupiedTables');
   
   const fetchActiveTables = async () =>{
     const docSnap = await getDoc(docRef);
-    const tables = docSnap.data().tables;
+    const tables = docSnap.data().occupiedTables;
     console.log(tables)
     setTables(tables);
-    const occupiedTables = [];
-    tables.forEach(table => occupiedTables.push(table.tableNumber))
-    return occupiedTables;
+    // const occupiedTables = [];
+    // tables.forEach(table => occupiedTables.push(table.tableNumber))
+    return tables;
   }
   useEffect(() => {
     const currentTable = Number(id);
@@ -33,7 +34,7 @@ function Menu({setCurrentTable, setTables}) {
     fetchActiveTables().then(activeTables => {
       if(!activeTables.includes(currentTable)){
         updateDoc(docRef, {
-          tables: arrayUnion({tableNumber: currentTable})
+          occupiedTables: arrayUnion(currentTable)
         })
       }
     })

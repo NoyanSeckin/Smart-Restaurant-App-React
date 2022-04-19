@@ -7,7 +7,8 @@ export const data = {
       description: `This impressive paella is a perfect party dish and a fun meal to cook
       together with your guests. Add 1 cup of frozen peas along with the mussels,
       if you like.`,
-      price: 10
+      price: 10,
+      orderStatus: 'Not Ordered'
       },
       {name: 'Hamburger',
       counter: 0,
@@ -16,7 +17,8 @@ export const data = {
       description: `This impressive paella is a perfect party dish and a fun meal to cook
       together with your guests. Add 1 cup of frozen peas along with the mussels,
       if you like.`,
-      price: 10
+      price: 15,
+      orderStatus: 'Not Ordered'
     }
    ],
    sideDishes: [],

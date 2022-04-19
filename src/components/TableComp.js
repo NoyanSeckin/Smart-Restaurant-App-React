@@ -19,13 +19,14 @@ export default function BasicTable({tableItems}) {
             <TableCell align="center">Quantity</TableCell>
             <TableCell align="center">Price</TableCell>
             <TableCell align="center">Subtotal</TableCell>
+            <TableCell align="center">Order Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {tableItems.map((row) => (
             <TableRow
               key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0, width: '40%' } }}
+              sx={{ '&:last-child td, &:last-child th': { border: 0, width: '60%' } }}
             >
               <TableCell size={'small'} align='left' sx={{display: 'flex', gap: 5}} component="th" scope="row">
                  <img style={{width: '100px'}} src={row.image} alt="" /> 
@@ -33,9 +34,10 @@ export default function BasicTable({tableItems}) {
                    {row.name}
                  </Typography>
               </TableCell>
-              <TableCell align="center"> {row.count} </TableCell>
+              <TableCell  padding='none' size={'small'} align="center"> {row.count} </TableCell>
               <TableCell align="center">{row.price}$</TableCell>
               <TableCell align="center">{row.price * row.count}$</TableCell>
+              <TableCell align="center">{row.orderStatus}</TableCell>
             </TableRow>
           ))}
         </TableBody>

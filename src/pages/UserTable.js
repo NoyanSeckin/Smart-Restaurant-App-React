@@ -1,4 +1,4 @@
-import React from 'react'
+import {React, useState} from 'react'
 import { connect } from "react-redux";
 import {setTableItems, setCurrentTable, setTables} from '../actions'
 import TableComp from '../components/TableComp'
@@ -10,19 +10,31 @@ import { getFirestore, collection, doc, updateDoc, arrayUnion, getDoc} from "fir
 import firebaseApp from '../firebase/init'
 function Table({tableItems, currentTable, tables}) {
 
+  const [counter, setCounter] = useState(1);
+  const activeTable = `table-${currentTable}` 
   const db = getFirestore();
-  const docRef = doc(db, 'Tables', 'tables');
+  const docRef = doc(db, 'Tables', `table-${currentTable}`);
   console.log(currentTable, tables)
   const sendOrdersToDb = async () => {
-    
+    // const docSnap = await getDoc(docRef);
+    // const tableOrders = docSnap.data().orders;
+    // console.log(tableOrders);
+    const orderNumber = `order${counter}`;
+
+    updateDoc(docRef, {
+      [orderNumber]: tableItems
+    });
+
+
   }
+
   return (
     <Box sx={{mx: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Typography variant='h2' sx={{fontWeight: 'bold'}} > 
         My Table
       </Typography>
-      <TableComp tableItems={tableItems}></TableComp>
-      <Button onClick={()=> console.log(tables, currentTable)} variant='contained' color='success' sx={{alignSelf: 'end', mt: 5}}>Order Now</Button>
+      <TableComp tableItems={tableItems} ></TableComp>
+      <Button onClick={()=> sendOrdersToDb()} variant='contained' color='success' sx={{mt: 5}}>Order Now</Button>
     </Box>
   )
 }

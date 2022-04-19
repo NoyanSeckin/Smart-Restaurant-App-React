@@ -10,12 +10,13 @@ export default function Home() {
 
   const db = getFirestore();
   const [occupiedTables, setOccupiedTables] = useState([]);
-  const docRef = doc(db, 'Tables', 'tables')
+  const docRef = doc(db, 'OccupiedTables', 'occupiedTables')
   useEffect(()=> {
     onSnapshot(docRef, (doc) => {
-        const occupiedTableNums = [];
-        doc.data().tables.forEach(table => occupiedTableNums.push(table.tableNumber));
-        setOccupiedTables(occupiedTableNums);
+        setOccupiedTables(doc.data().occupiedTables);
+        // const occupiedTableNums = [];
+        // doc.data().tables.forEach(table => occupiedTableNums.push(table.tableNumber));
+        // setOccupiedTables(occupiedTableNums);
       })
     }, []) 
     console.log("state tables", occupiedTables)

@@ -38,7 +38,7 @@ function MenuCard(props) {
         existingObject.count += item.counter;
         props.setTableItems([...filteredItems, existingObject])
       } else if(!existingObject){
-        props.setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price }])
+        props.setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price, orderStatus: item.orderStatus }])
       }
       // reset the counter of that item
       // Switch Alert

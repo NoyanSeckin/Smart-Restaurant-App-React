@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Home from '../pages/Home';
 import Menu from '../pages/Menu';
 import UserTable from '../pages/UserTable'
+import Admin from '../pages/Admin'
 const App = () => {
   return (
     <div className='App'>
@@ -14,6 +15,7 @@ const App = () => {
           <Route path="/" exact component={Home} />
           <Route path="/menu/:id" component={Menu} />
           <Route path="/usertable" component={UserTable} />
+          <Route path="/admin" component={Admin} />
         </div>
       </BrowserRouter>
     </div>

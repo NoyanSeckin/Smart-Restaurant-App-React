@@ -43,7 +43,9 @@ import {setTableItems} from '../actions'
   return (
     <Box sx={{ flexGrow: 1, position: 'relative' }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between'}}>
+         
+          <Box sx={{display: 'flex', gap: 5, alignItems: 'center'}} className='nav-links'>
           <IconButton
             size="large"
             edge="start"
@@ -54,11 +56,21 @@ import {setTableItems} from '../actions'
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {/* TODO: add parameter route, according to active table  */}
-            <NavLink to='/menu/:id'>
+            <NavLink to='/'>
+              Home
+            </NavLink>
+          </Typography>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <NavLink to='/menu/1'>
               Menu
             </NavLink>
           </Typography>
+          <Typography variant="h6" component="div" >
+            <NavLink to='/admin'>
+              Admin
+            </NavLink>
+          </Typography>
+          </Box>
           {auth && (
             <Box sx={{display: 'flex'}}>
               <Box sx={{alignSelf: 'center' ,position: 'relative'}}>
