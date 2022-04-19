@@ -5,24 +5,40 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useParams } from 'react-router-dom';
 import { connect } from "react-redux";
-import {setOccupiedTables} from '../actions'
-
-function Menu({occupiedTables, setOccupiedTables}) {
+import {setCurrentTable, setTables} from '../actions'
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, doc, updateDoc, arrayUnion, getDoc} from "firebase/firestore";
+import firebaseApp from '../firebase/init'
+function Menu({setCurrentTable, setTables}) {
   // get current table with id route parameter
   const { id } = useParams();
   
-  useEffect(()=>{
-
-    if(id){
-      if(occupiedTables){
-        setOccupiedTables([...occupiedTables, id])
-      }else if(!occupiedTables){
-        setOccupiedTables([id])
-      }
-    }   
-  }, [])
+  const db = getFirestore();
+  const docRef = doc(db, 'Tables', 'tables');
   
-  console.log(occupiedTables)
+  const fetchActiveTables = async () =>{
+    const docSnap = await getDoc(docRef);
+    const tables = docSnap.data().tables;
+    console.log(tables)
+    setTables(tables);
+    const occupiedTables = [];
+    tables.forEach(table => occupiedTables.push(table.tableNumber))
+    return occupiedTables;
+  }
+  useEffect(() => {
+    const currentTable = Number(id);
+    setCurrentTable(currentTable);
+    
+    // add currentTable to the db
+    fetchActiveTables().then(activeTables => {
+      if(!activeTables.includes(currentTable)){
+        updateDoc(docRef, {
+          tables: arrayUnion({tableNumber: currentTable})
+        })
+      }
+    })
+    
+  }, [])
   
   const [selectedMenu, setSelectedMenu] = useState('mainDishes')
   // get selected item from SelectComponent 
@@ -46,11 +62,12 @@ function Menu({occupiedTables, setOccupiedTables}) {
 
 const mapStateToProps = (state) => {
   return {
-    occupiedTables: state.occupiedTables,
+    currentTable: state.currentTable,
+    tables: state.tables,
   };
 };
 export default connect(mapStateToProps, {
-  setOccupiedTables,
+  setCurrentTable, setTables
 })(Menu);
 
 

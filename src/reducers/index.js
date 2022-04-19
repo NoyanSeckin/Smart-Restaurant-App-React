@@ -1,7 +1,8 @@
 const INITIAL_STATE = {
   testData: "Hello world!",
   tableItems : [],
-  occupiedTables: [],
+  currentTable: 0,
+  tables: [],
 };
 
 // bu switch degistirmek icin
@@ -11,8 +12,10 @@ export const reducer = (state = INITIAL_STATE, action) => {
       return { ...state, testData: action.payload };
     case "GET_TABLE_ITEMS":
       return {...state, tableItems: action.payload}
-    case "GET_OCCUPIED_TABLES":
-      return {...state, occupiedTables: action.payload}
+    case "GET_CURRENT_TABLE":
+      return {...state, currentTable: action.payload}
+    case "GET_TABLES":
+      return {...state, tables: action.payload}
     default:
       return state;
   }

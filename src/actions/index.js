@@ -6,6 +6,10 @@ export const setTableItems = (tableItems) => {
   return {type: "GET_TABLE_ITEMS", payload: tableItems}
 }
 
-export const setOccupiedTables = (occupiedTables) => {
-  return {type: "GET_OCCUPIED_TABLES", payload: occupiedTables}
+export const setCurrentTable = (currentTable) => {
+  return {type: "GET_CURRENT_TABLE", payload: currentTable}
+}
+
+export const setTables = (tables) => {
+  return {type: "GET_TABLES", payload: tables}
 }
