@@ -36,7 +36,7 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   function directToMenu(){
     return(
       <NavLink to={`/menu/${currentTable}`}>
-        <Button onClick={()=> sendOrdersToDb()} variant='contained' color='success' sx={{mt: 5}}>Go To Menu</Button>
+        <Button onClick={()=> sendOrdersToDb()} variant='contained' sx={{mt: 3, background: '#ff9800'}}>Go To Menu</Button>
       </NavLink>
     )
   }

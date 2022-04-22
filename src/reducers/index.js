@@ -1,7 +1,7 @@
 const INITIAL_STATE = {
   testData: "Hello world!",
   tableItems : [],
-  currentTable: 0,
+  currentTable: 1,
   tables: [],
   orderedItems: [],
   currentOrder: 1,

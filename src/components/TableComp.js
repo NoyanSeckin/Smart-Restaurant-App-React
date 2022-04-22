@@ -13,7 +13,7 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
   function renderTable(items){
     return(
       <Box sx={{width: '100%'}}>
-      <TableContainer sx={{width: '100%', my: 4, mx: 'auto', maxWidth: '1000px'}} component={Paper}>
+      <TableContainer sx={{width: '100%', mb: 6, mx: 'auto', maxWidth: '1000px'}} component={Paper} elevation={4}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -48,9 +48,9 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
    </Box>
     )
   }
-  function renderTableItemsOrAlert(){
+  function renderTableItems(){
     return(
-      tableItems.length > 0 ? renderTable(tableItems) : <Typography variant='h5'>Nothing to order!</Typography> 
+      tableItems.length > 0 && renderTable(tableItems)
     )
   }
   function renderOrderedItems(){
@@ -59,8 +59,8 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
         Object.values(orderedItems).map((orderedItem, index) => {
           return (
             <Box>
-              <Typography variant='h4'>
-                Order {index + 1}
+              <Typography variant='h6'>
+                ORDER {index + 1}
               </Typography>
               {renderTable(orderedItem)}
             </Box>
@@ -73,7 +73,12 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
     if(tableItems.length > 0){
       return <Button onClick={()=> sendOrdersToDb()} variant='contained' color='success' sx={{mt: 5}}>Order Now</Button>
     }else{
-      return directToMenu();
+      return(
+        <Paper elevation={4} sx={{px: 3, py: 3, }}>
+          <Typography variant='h5'>Nothing to order!</Typography> 
+          {directToMenu()}
+        </Paper>
+        ) 
     }
   }
   return (
@@ -81,9 +86,9 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
       <Typography variant='h2' sx={{my:5, fontWeight: 'bold'}}>
         Your Basket
       </Typography>
-      {renderTableItemsOrAlert()}
+      {renderTableItems()}
       {renderButtonAction()}
-      <Typography variant='h2' sx={{my:5, fontWeight: 'bold'}}>
+      <Typography variant='h2' sx={{mt: 12, mb:5, fontWeight: 'bold'}}>
         Ordered Items
       </Typography>
       {renderOrderedItems()}
