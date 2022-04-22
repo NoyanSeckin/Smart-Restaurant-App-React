@@ -13,3 +13,11 @@ export const setCurrentTable = (currentTable) => {
 export const setTables = (tables) => {
   return {type: "GET_TABLES", payload: tables}
 }
+
+export const setOrderedItems = (orderedItems) => {
+  return {type: "GET_ORDERED_ITEMS", payload: orderedItems}
+}
+
+export const setCurrentOrder = (currentOrder) => {
+  return {type: "GET_CURRENT_ORDER", payload: currentOrder}
+}

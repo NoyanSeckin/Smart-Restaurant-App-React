@@ -15,7 +15,7 @@ import MenuDialog from './MenuDialog'
 // Redux
 import { connect } from "react-redux";
 import {setTableItems} from '../actions'
- function Navbar(props) {
+ function Navbar({tableItems, currentTable}) {
    const [open, setOpen] = useState(false)
   
   const [auth, setAuth] = React.useState(true);
@@ -61,7 +61,7 @@ import {setTableItems} from '../actions'
             </NavLink>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <NavLink to='/menu/1'>
+            <NavLink to={`/menu/${currentTable}`}>
               Menu
             </NavLink>
           </Typography>
@@ -77,7 +77,7 @@ import {setTableItems} from '../actions'
                 <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', mr: 3}}>
                 </TableRestaurantIcon>
                 <Typography sx={{position: 'absolute', right: '14px', top: '-10px'}} variant="caption">
-                    {calculateTotalItems(props.tableItems)}
+                    {calculateTotalItems(tableItems)}
                  </Typography>
               </Box>
              
@@ -120,6 +120,7 @@ import {setTableItems} from '../actions'
 const mapStateToProps = (state) => {
   return {
     tableItems: state.tableItems,
+    currentTable: state.currentTable
   };
 };
 export default connect(mapStateToProps, {

@@ -22,8 +22,6 @@ function Menu({setCurrentTable, setTables}) {
     const tables = docSnap.data().occupiedTables;
     console.log(tables)
     setTables(tables);
-    // const occupiedTables = [];
-    // tables.forEach(table => occupiedTables.push(table.tableNumber))
     return tables;
   }
   useEffect(() => {

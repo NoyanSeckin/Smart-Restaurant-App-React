@@ -19,7 +19,6 @@ export default function Home() {
         // setOccupiedTables(occupiedTableNums);
       })
     }, []) 
-    console.log("state tables", occupiedTables)
   function renderQrCodes(){
     const tables = [1,2,3,4,5,6];
     return tables.map(table => {

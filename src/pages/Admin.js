@@ -8,26 +8,31 @@ export default function Admin() {
   const db = getFirestore();
   const colRef = collection(db, 'Tables');
   const [tables, setTables] = useState([]);
-  useEffect(()=>{
-    onSnapshot(colRef, snapshot => {
-      const holderArray = [];
-      snapshot.forEach(snap => {
-        // console.log(snap.id);
-        holderArray.push({[snap.id]: snap.data()});
-      })
-      console.log(holderArray)
-      setTables(holderArray);
-    })
-  }, [])
+  // useEffect(()=>{
+  //   onSnapshot(colRef, snapshot => {
+  //     const holderArray = [];
+  //     snapshot.forEach(snap => {
+  //       // console.log(snap.id);
+  //       holderArray.push({[snap.id]: snap.data()});
+  //     })
+  //     console.log(holderArray)
+  //     setTables(holderArray);
+  //   })
+  // }, [])
   function renderTables(){
     
     return tables?.map((table, index) => {
-      const ordersArray = Object.values(table).map(orders => {
-        return  orders
-      });
-      // console.log(ordersArray)
-      const orderArray = ordersArray.map(order => console.log(Object.values(order)));
-      // orderArray.map(order => console.log(order))
+   
+      // const tableOrders = table[Object.keys(table)];
+      // const tableOrdersArr = Object.entries(tableOrders)
+      // console.log(tableOrdersArr)
+      // tableOrdersArr.map(orders => {
+      //   for(const order of orders[1]){
+      //     console.log(Object.entries(order))
+      //   }
+      //   console.log(orders[0], '//', orders[1])
+      // })
+     
       return(
         <Grid key={index} item> 
           <Typography variant="h1"> {index + 1} </Typography>

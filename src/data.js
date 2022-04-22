@@ -8,7 +8,6 @@ export const data = {
       together with your guests. Add 1 cup of frozen peas along with the mussels,
       if you like.`,
       price: 10,
-      orderStatus: 'Not Ordered'
       },
       {name: 'Hamburger',
       counter: 0,
@@ -18,7 +17,6 @@ export const data = {
       together with your guests. Add 1 cup of frozen peas along with the mussels,
       if you like.`,
       price: 15,
-      orderStatus: 'Not Ordered'
     }
    ],
    sideDishes: [],
@@ -26,7 +24,7 @@ export const data = {
    desserts: [],
    beverages: [
       { name: 'Coca-Cola',
-      price: 2,
+        price: 2,
       }
  ]
  }
