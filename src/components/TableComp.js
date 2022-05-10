@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
+import Accordion from './Accordion'
+
 export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, directToMenu}) {
   function renderTable(items){
     return(
@@ -58,12 +60,14 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
       return(
         Object.values(orderedItems).map((orderedItem, index) => {
           return (
-            <Box>
-              <Typography variant='h6'>
-                ORDER {index + 1}
-              </Typography>
-              {renderTable(orderedItem)}
-            </Box>
+            <Accordion header={`ORDER ${index + 1}`} renderTable={renderTable} orderedItem={orderedItem}>
+              <Box>
+                {/* <Typography variant='h6'>
+                  ORDER {index + 1}
+                </Typography> */}
+                {/* {renderTable(orderedItem)} */}
+             </Box>
+            </Accordion>
           )
       })
       )

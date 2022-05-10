@@ -9,6 +9,7 @@ import {React, useState, useEffect} from 'react';
 import { connect } from "react-redux";
 import {setTableItems, setCurrentTable, setCurrentOrder} from '../actions';
 import TableComp from '../components/TableComp';
+import TableWithSort from '../components/TableWithSort';
 
 function Table({tableItems, setTableItems, currentTable, currentOrder, setCurrentOrder }) {
 
@@ -16,6 +17,12 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   const [orderedItems, setOrderedItems] = useState([]);
   const db = getFirestore();
   const tableRef = doc(db, 'Tables', activeTable);
+  
+  const tableHeaders = [
+    {id: 'name', numeric: false, disablePadding: true, label: 'Meal/Beverage'}, {id: 'quantity', numeric: false, disablePadding: true, label: 'Quantity'},
+    {id: 'price', numeric: false, disablePadding: true, label: 'Price'},
+    {id: 'subtotal', numeric: false, disablePadding: true, label: 'Subtotal'},
+    {id: 'status', numeric: false, disablePadding: true, label: 'Order Status'}];
 
   const sendOrdersToDb = async () => {
     const statusChangedArr = [];
@@ -47,7 +54,7 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   }, [])
   return (
     <Box sx={{mx: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-   
+      <TableWithSort newHeaders={tableHeaders} newRows={tableItems}></TableWithSort>
       <TableComp directToMenu={directToMenu} sendOrdersToDb={sendOrdersToDb} orderedItems={orderedItems} tableItems={tableItems} ></TableComp>
      
     </Box>

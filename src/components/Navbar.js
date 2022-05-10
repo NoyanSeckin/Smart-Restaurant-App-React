@@ -1,19 +1,14 @@
+import {AppBar, Box, Container, Toolbar, Typography, IconButton, Menu, MenuItem} from '@mui/material';
+import { NavLink } from "react-router-dom";
+import MenuIcon from '@mui/icons-material/Menu'
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
+import { connect } from "react-redux";
+
+import MenuDialog from './MenuDialog'
 import * as React from 'react';
 import {useState} from 'react'
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
-import { NavLink } from "react-router-dom";
-import MenuDialog from './MenuDialog'
 // Redux
-import { connect } from "react-redux";
 import {setTableItems} from '../actions'
  function Navbar({tableItems, currentTable}) {
    const [open, setOpen] = useState(false)
@@ -41,33 +36,29 @@ import {setTableItems} from '../actions'
     // setSelectedValue(value);
   };
   return (
-    <Box sx={{ flexGrow: 1, position: 'relative' }}>
-      <AppBar position="static">
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between'}}>
-         
+    <Box sx={{ flexGrow: 1, position: 'relative', background: 'orange' }}>
+      <Container maxWidth='xl'>
+      <AppBar elevation={0} position="static" sx={{background: 'orange'}}>
+        <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{display: 'flex', gap: 5, alignItems: 'center'}} className='nav-links'>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" >
             <NavLink to='/'>
               Home
             </NavLink>
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" >
             <NavLink to={`/menu/${currentTable}`}>
               Menu
             </NavLink>
           </Typography>
-          <Typography variant="h6" component="div" >
+          <Typography variant="h6"  >
             <NavLink to='/admin'>
               Admin
+            </NavLink>
+          </Typography>
+          <Typography variant="h6"  >
+            <NavLink to='/tables'>
+              Tables
             </NavLink>
           </Typography>
           </Box>
@@ -106,7 +97,7 @@ import {setTableItems} from '../actions'
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem sx={{size: 'large'}} onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </Box>
@@ -114,6 +105,8 @@ import {setTableItems} from '../actions'
         </Toolbar>
       </AppBar>
       <MenuDialog open={open} setOpen={setOpen} handleDialogOpen={handleDialogOpen}handleDialogClose={handleDialogClose}></MenuDialog>
+      </Container>
+     
     </Box>
   );
 }
