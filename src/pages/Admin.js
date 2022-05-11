@@ -8,17 +8,17 @@ export default function Admin() {
   const db = getFirestore();
   const colRef = collection(db, 'Tables');
   const [tables, setTables] = useState([]);
-  // useEffect(()=>{
-  //   onSnapshot(colRef, snapshot => {
-  //     const holderArray = [];
-  //     snapshot.forEach(snap => {
-  //       // console.log(snap.id);
-  //       holderArray.push({[snap.id]: snap.data()});
-  //     })
-  //     console.log(holderArray)
-  //     setTables(holderArray);
-  //   })
-  // }, [])
+  useEffect(()=>{
+    onSnapshot(colRef, snapshot => {
+      const holderArray = [];
+      snapshot.forEach(snap => {
+        console.log(snap.id, snap.data());
+        // holderArray.push({[snap.id]: snap.data()});
+      })
+      // console.log(holderArray)
+      // setTables(holderArray);
+    })
+  }, [])
   function renderTables(){
     
     return tables?.map((table, index) => {

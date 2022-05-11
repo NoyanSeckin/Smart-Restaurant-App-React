@@ -19,11 +19,17 @@ import Box from '@mui/material/Box'
 import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
 
-function MenuDialog(props) {
+function BasketDialog(props) {
   const {open, handleDialogClose} = props;
   return (
-    <Dialog sx={{ position: 'absolute', bottom: {lg: '570px', md: '620px', xs: '570px'}, left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'}, minHeight: 300}} onClose={handleDialogClose} open={open}>
-      <DialogTitle sx={{width: '300px'}}>Your Table</DialogTitle>
+    <Dialog sx={{ 
+      position: 'absolute', 
+      bottom: {lg: '570px', md: '620px', xs: '570px'}, 
+      left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'}, 
+      minHeight: 300}} 
+      onClose={handleDialogClose} 
+      open={open}>
+      <DialogTitle>Your Table</DialogTitle>
       <List sx={{ pt: 0 }}>
          {props.tableItems.map(tableItem => {
            return(
@@ -38,7 +44,7 @@ function MenuDialog(props) {
             
         <Box sx={{display: 'flex' ,justifyContent: 'space-around', mt: 1}}>
           <NavLink to='/usertable'>
-            <Button variant={'outlined'}>
+            <Button onClick={handleDialogClose} variant={'outlined'}>
                 Go to table
             </Button>
           </NavLink>
@@ -60,5 +66,5 @@ const mapStateToProps = (state) => {
 };
 export default connect(mapStateToProps, {
   setTableItems,
-})(MenuDialog);
+})(BasketDialog);
 

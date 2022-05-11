@@ -9,7 +9,7 @@ import {React, useState, useEffect} from 'react';
 import { connect } from "react-redux";
 import {setTableItems, setCurrentTable, setCurrentOrder} from '../actions';
 import TableComp from '../components/TableComp';
-import TableWithSort from '../components/TableWithSort';
+import UserBasket from '../components/UserBasket';
 
 function Table({tableItems, setTableItems, currentTable, currentOrder, setCurrentOrder }) {
 
@@ -54,8 +54,8 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   }, [])
   return (
     <Box sx={{mx: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <TableWithSort newHeaders={tableHeaders} newRows={tableItems}></TableWithSort>
-      <TableComp directToMenu={directToMenu} sendOrdersToDb={sendOrdersToDb} orderedItems={orderedItems} tableItems={tableItems} ></TableComp>
+      <UserBasket newHeaders={tableHeaders} tableItems={tableItems} setTableItems={setTableItems}/>
+      {/* <TableComp directToMenu={directToMenu} sendOrdersToDb={sendOrdersToDb} orderedItems={orderedItems} tableItems={tableItems} ></TableComp> */}
      
     </Box>
   )

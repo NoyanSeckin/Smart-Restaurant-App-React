@@ -5,15 +5,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect({getData}) {
+export default function BasicSelect({getSelectedMenu}) {
   const [menu, setMenu] = React.useState('mainDishes');
 
   const handleChange = (event) => {
     setMenu(event.target.value);
-    getData(event.target.value)
+    // send data
+    getSelectedMenu(event.target.value)
   };
-
-
   return (
     <Box sx={{ minWidth: 120, maxWidth: '300px' }}>
       <FormControl fullWidth>

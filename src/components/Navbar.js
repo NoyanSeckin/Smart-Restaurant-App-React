@@ -5,11 +5,15 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import { connect } from "react-redux";
 
-import MenuDialog from './MenuDialog'
+import BasketDialog from './BasketDialog'
 import * as React from 'react';
 import {useState} from 'react'
 // Redux
 import {setTableItems} from '../actions'
+
+  const navLinkStyle = {
+    fontSize: {xs: '0.9rem', lg: '1.25rem'}
+  }
  function Navbar({tableItems, currentTable}) {
    const [open, setOpen] = useState(false)
   
@@ -40,23 +44,27 @@ import {setTableItems} from '../actions'
       <Container maxWidth='xl'>
       <AppBar elevation={0} position="static" sx={{background: 'orange'}}>
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
-          <Box sx={{display: 'flex', gap: 5, alignItems: 'center'}} className='nav-links'>
-          <Typography variant="h6" >
+          <Box sx={{
+            display: 'flex', 
+            gap: {xs: 1, lg: 5}, 
+            alignItems: 'center',
+            }}>
+          <Typography variant="h6" sx={navLinkStyle}>
             <NavLink to='/'>
               Home
             </NavLink>
           </Typography>
-          <Typography variant="h6" >
+          <Typography variant="h6" sx={navLinkStyle}>
             <NavLink to={`/menu/${currentTable}`}>
               Menu
             </NavLink>
           </Typography>
-          <Typography variant="h6"  >
+          <Typography variant="h6" sx={navLinkStyle}>
             <NavLink to='/admin'>
               Admin
             </NavLink>
           </Typography>
-          <Typography variant="h6"  >
+          <Typography variant="h6" sx={navLinkStyle}>
             <NavLink to='/tables'>
               Tables
             </NavLink>
@@ -64,7 +72,7 @@ import {setTableItems} from '../actions'
           </Box>
           {auth && (
             <Box sx={{display: 'flex'}}>
-              <Box sx={{alignSelf: 'center' ,position: 'relative'}}>
+              <Box sx={{alignSelf: 'center' ,position: 'relative', '&:hover': {cursor: 'pointer'}}}>
                 <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', mr: 3}}>
                 </TableRestaurantIcon>
                 <Typography sx={{position: 'absolute', right: '14px', top: '-10px'}} variant="caption">
@@ -104,7 +112,7 @@ import {setTableItems} from '../actions'
           )}
         </Toolbar>
       </AppBar>
-      <MenuDialog open={open} setOpen={setOpen} handleDialogOpen={handleDialogOpen}handleDialogClose={handleDialogClose}></MenuDialog>
+      <BasketDialog open={open} setOpen={setOpen} handleDialogOpen={handleDialogOpen}handleDialogClose={handleDialogClose}></BasketDialog>
       </Container>
      
     </Box>

@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@mui/material/styles';
 
+import './styles.css'
 import React from 'react';
 import { BrowserRouter, Route } from "react-router-dom";
 import  {GlobalTheme}  from './theme/GlobalTheme';

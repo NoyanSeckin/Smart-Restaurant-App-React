@@ -41,15 +41,14 @@ function Menu({setCurrentTable, setTables}) {
   
   const [selectedMenu, setSelectedMenu] = useState('mainDishes')
   // get selected item from SelectComponent 
-  function getData(data){
-    // set and send it to menucard
+  function getSelectedMenu(data){
     setSelectedMenu(data);
   }
   return (
     <Box sx={{mt: 10}}>
       <Grid sx={{flexDirection: 'column'}} container>
         <Grid item sx={{mt: 10, ml: {lg: 30}}} xs={9}>
-          <SelectComponent getData={getData}></SelectComponent>
+          <SelectComponent getSelectedMenu={getSelectedMenu}></SelectComponent>
         </Grid>
         <Grid item xs={9} sx={{mt: 5, ml: {lg: 30}}}>
           <MenuCard selectedMenu={selectedMenu}></MenuCard>
