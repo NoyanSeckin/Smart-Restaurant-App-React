@@ -48,5 +48,13 @@ a{
   text-decoration: none;
 }
 
-/*  */
+/* My Css */
 
+/* UserTable */
+
+.active-nav{
+	color: #b2102f !important;
+	border-bottom: 2px solid #b2102f;
+	padding-bottom: 10px;
+	z-index: 3;
+}

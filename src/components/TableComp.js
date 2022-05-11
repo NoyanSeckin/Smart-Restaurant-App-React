@@ -55,47 +55,34 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
       tableItems.length > 0 && renderTable(tableItems)
     )
   }
+  console.log(orderedItems)
   function renderOrderedItems(){
-    if(orderedItems){
-      return(
-        Object.values(orderedItems).map((orderedItem, index) => {
-          return (
-            <Accordion header={`ORDER ${index + 1}`} renderTable={renderTable} orderedItem={orderedItem}>
-              <Box>
-                {/* <Typography variant='h6'>
-                  ORDER {index + 1}
-                </Typography> */}
-                {/* {renderTable(orderedItem)} */}
-             </Box>
-            </Accordion>
-          )
-      })
-      )
-    }
+    return  Object.values(orderedItems).map((orderedItem, index) => renderTable(orderedItem))
   }
-  function renderButtonAction(){
-    if(tableItems.length > 0){
-      return <Button onClick={()=> sendOrdersToDb()} variant='contained' color='success' sx={{mt: 5}}>Order Now</Button>
-    }else{
+  function renderDirectToMenu(){
       return(
         <Paper elevation={4} sx={{px: 3, py: 3, }}>
           <Typography variant='h5'>Nothing to order!</Typography> 
           {directToMenu()}
         </Paper>
         ) 
-    }
+  }
+
+  function renderPage(){
+    if(orderedItems){
+      return renderOrderedItems();
+    }else return renderDirectToMenu();
   }
   return (
     <div>
       <Typography variant='h2' sx={{my:5, fontWeight: 'bold'}}>
         Your Basket
       </Typography>
-      {renderTableItems()}
-      {renderButtonAction()}
+      {renderPage()}
       <Typography variant='h2' sx={{mt: 12, mb:5, fontWeight: 'bold'}}>
         Ordered Items
       </Typography>
-      {renderOrderedItems()}
+     
     </div>
   );
 }

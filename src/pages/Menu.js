@@ -17,6 +17,7 @@ function Menu({setCurrentTable, setTables}) {
   const db = getFirestore();
   const docRef = doc(db, 'OccupiedTables', 'occupiedTables');
   
+  // buraya gerek yok galiba bunu silebilirim
   const fetchActiveTables = async () =>{
     const docSnap = await getDoc(docRef);
     const tables = docSnap.data().occupiedTables;

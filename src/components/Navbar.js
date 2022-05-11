@@ -12,7 +12,7 @@ import {useState} from 'react'
 import {setTableItems} from '../actions'
 
   const navLinkStyle = {
-    fontSize: {xs: '0.9rem', lg: '1.25rem'}
+    fontSize: {xs: '0.9rem', md: '1.25rem'}
   }
  function Navbar({tableItems, currentTable}) {
    const [open, setOpen] = useState(false)
@@ -46,7 +46,7 @@ import {setTableItems} from '../actions'
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{
             display: 'flex', 
-            gap: {xs: 1, lg: 5}, 
+            gap: {xs: 1, md: 5}, 
             alignItems: 'center',
             }}>
           <Typography variant="h6" sx={navLinkStyle}>

@@ -69,7 +69,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
-            sx={{width: {xs: '10px', lg: 'auto'}}} 
+            sx={{width: {xs: '10px', md: 'auto'}, pl: {xs: 0, md: 4.5}}} 
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -129,8 +129,7 @@ const EnhancedTableToolbar = (props) => {
   return (
     <Toolbar
       sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
+        px: {xs: 1, md: 5},
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
@@ -187,7 +186,6 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems}) {
   const [orderBy, setOrderBy] = React.useState('');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -234,10 +232,6 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems}) {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -248,13 +242,12 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems}) {
   headCells = newHeaders;
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%'}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} selected={selected} setTableItems={setTableItems} tableItems={tableItems} setSelected={setSelected}/>
         <TableContainer>
           <Table
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
             sx={thStyle}
 
           >
@@ -314,7 +307,7 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems}) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -333,10 +326,6 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems}) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }

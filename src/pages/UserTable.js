@@ -1,6 +1,4 @@
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button'
+import {Box, Button,Container, Typography, Paper} from '@mui/material';
 import { getFirestore, doc, updateDoc, onSnapshot} from "firebase/firestore";
 import firebaseApp from '../firebase/init';
 
@@ -13,8 +11,9 @@ import UserBasket from '../components/UserBasket';
 
 function Table({tableItems, setTableItems, currentTable, currentOrder, setCurrentOrder }) {
 
-  const activeTable = `table_${currentTable}` 
   const [orderedItems, setOrderedItems] = useState([]);
+  const [activePage, setActivePage] = useState('New Order')
+  const activeTable = `table_${currentTable}` 
   const db = getFirestore();
   const tableRef = doc(db, 'Tables', activeTable);
   
@@ -52,11 +51,43 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
       setOrderedItems(snap.data())
     })
   }, [])
+
+  function renderNavs(){
+    const navs = ['New Order', 'Previous Orders'];
+    return navs.map(nav => 
+    <Typography sx={{
+      fontSize: {xs: '0.9rem', md: '1.125rem'},
+      fontWeight: '700',
+      '&:hover': {
+        cursor: 'pointer'
+      }
+    }} 
+      onClick={()=> setActivePage(nav)}
+      className={activePage === nav && 'active-nav' }>
+        {nav}
+      </Typography>)
+  }
+  function renderActivePage(){
+    if(activePage === 'New Order'){
+      return <UserBasket newHeaders={tableHeaders} tableItems={tableItems} setTableItems={setTableItems}/>
+    } else return <TableComp directToMenu={directToMenu} sendOrdersToDb={sendOrdersToDb} orderedItems={orderedItems} tableItems={tableItems} ></TableComp>
+  }
   return (
-    <Box sx={{mx: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <UserBasket newHeaders={tableHeaders} tableItems={tableItems} setTableItems={setTableItems}/>
-      {/* <TableComp directToMenu={directToMenu} sendOrdersToDb={sendOrdersToDb} orderedItems={orderedItems} tableItems={tableItems} ></TableComp> */}
+    <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
+      <Container maxWidth='xl'>
+      <Box sx={{
+        background: '#fff',
+        display: 'flex',
+        gap: {xs: 5, lg: '5rem'},
+        pt: 5,
+        pb: 3,
+        px: 5, 
+        }}>
+        {renderNavs()}
+      </Box>
+      {renderActivePage()}
      
+    </Container>
     </Box>
   )
 }
