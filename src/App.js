@@ -25,7 +25,7 @@ const App = () => {
             <Route path="/usertable" component={UserTable} />
             <Route path="/admin" component={Admin} />
             <Route path="/tables" component={Tables} />
-            <Route path="/admintablesdetail/:id" component={AdminTablesDetail} />
+            <Route path="/admintablesdetail/:tableNum" component={AdminTablesDetail} />
           </div>
         </BrowserRouter>
       </ThemeProvider>

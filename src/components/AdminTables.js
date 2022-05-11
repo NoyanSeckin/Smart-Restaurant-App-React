@@ -47,7 +47,7 @@ export default function AdminTables({tables}) {
   }
 
   function directToDetail(tableNum){
-    history.push(`/admintablesdetail${tableNum}`)
+    history.push(`/admintablesdetail/${tableNum}`)
   }
 
   return (
