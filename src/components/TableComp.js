@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -9,31 +9,45 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
-import Accordion from './Accordion'
 
-export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, directToMenu}) {
+export default function BasicTable({tableItems, renderDirectToMenu}) {
+
+  const [orderedItems, setOrderedItems] = useState([]);
+
+  function getOrderedItems(){
+    const existingOrders = sessionStorage.getItem('orders');
+    if(existingOrders){
+      setOrderedItems(JSON.parse(existingOrders));
+    }
+  }
+
+  useEffect(()=> {
+    getOrderedItems();
+  }, [])
+  
+
   function renderTable(items){
     return(
-      <Box sx={{width: '100%'}}>
-      <TableContainer sx={{width: '100%', mb: 6, mx: 'auto', maxWidth: '1000px'}} component={Paper} elevation={4}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Box>
+      <TableContainer sx={{width: '100%', mt: 3}} component={Paper} >
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">Meal/Beverage</TableCell>
+            <TableCell align="center" sx={{width: '100px'}}>Meal/Beverage</TableCell>
             <TableCell align="center">Quantity</TableCell>
             <TableCell align="center">Price</TableCell>
             <TableCell align="center">Subtotal</TableCell>
-            <TableCell align="center">Order Status</TableCell>
+            <TableCell align="center">Order Number</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {items?.map((row) => (
             <TableRow
               key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0, width: '60%' } }}
+              sx={{ '&:last-child td, &:last-child th': { border: 0}}}
             >
-              <TableCell size={'small'} align='left' sx={{display: 'flex', gap: 5}} component="th" scope="row">
-                 <img style={{width: '100px'}} src={row.image} alt="" /> 
+              <TableCell align='left' sx={{display: 'flex', gap: 5, pr: 0}} component="th" scope="row">
+                 <img style={{width: '100px', borderRadius: '8px'}} src={row.image} alt="" /> 
                  <Typography sx={{alignSelf: 'center', justifySelf: 'center'}}>
                    {row.name}
                  </Typography>
@@ -41,7 +55,7 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
               <TableCell  padding='none' size={'small'} align="center"> {row.count} </TableCell>
               <TableCell align="center">{row.price}$</TableCell>
               <TableCell align="center">{row.price * row.count}$</TableCell>
-              <TableCell align="center">{row.status || 'Not Ordered'}</TableCell>
+              <TableCell align="center">{row?.orderNumber}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -52,37 +66,23 @@ export default function BasicTable({tableItems, orderedItems, sendOrdersToDb, di
   }
   function renderTableItems(){
     return(
-      tableItems.length > 0 && renderTable(tableItems)
+      orderedItems.length > 0 && renderTable(orderedItems)
     )
   }
   console.log(orderedItems)
-  function renderOrderedItems(){
-    return  Object.values(orderedItems).map((orderedItem, index) => renderTable(orderedItem))
-  }
-  function renderDirectToMenu(){
-      return(
-        <Paper elevation={4} sx={{px: 3, py: 3, }}>
-          <Typography variant='h5'>Nothing to order!</Typography> 
-          {directToMenu()}
-        </Paper>
-        ) 
-  }
+  // function renderOrderedItems(){
+  //   return  Object.values(orderedItems).map((orderedItem, index) => renderTable(orderedItem))
+  // }
+ 
 
   function renderPage(){
-    if(orderedItems){
-      return renderOrderedItems();
+    if(orderedItems.length > 0){
+      return renderTableItems();
     }else return renderDirectToMenu();
   }
   return (
     <div>
-      <Typography variant='h2' sx={{my:5, fontWeight: 'bold'}}>
-        Your Basket
-      </Typography>
       {renderPage()}
-      <Typography variant='h2' sx={{mt: 12, mb:5, fontWeight: 'bold'}}>
-        Ordered Items
-      </Typography>
-     
     </div>
   );
 }

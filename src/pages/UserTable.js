@@ -1,4 +1,5 @@
 import {Box, Button,Container, Typography, Paper} from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 import { getFirestore, doc, updateDoc, onSnapshot} from "firebase/firestore";
 import firebaseApp from '../firebase/init';
 
@@ -11,46 +12,73 @@ import UserBasket from '../components/UserBasket';
 
 function Table({tableItems, setTableItems, currentTable, currentOrder, setCurrentOrder }) {
 
-  const [orderedItems, setOrderedItems] = useState([]);
   const [activePage, setActivePage] = useState('New Order')
   const activeTable = `table_${currentTable}` 
   const db = getFirestore();
   const tableRef = doc(db, 'Tables', activeTable);
-  
-  const tableHeaders = [
-    {id: 'name', numeric: false, disablePadding: true, label: 'Meal/Beverage'}, {id: 'quantity', numeric: false, disablePadding: true, label: 'Quantity'},
-    {id: 'price', numeric: false, disablePadding: true, label: 'Price'},
-    {id: 'subtotal', numeric: false, disablePadding: true, label: 'Subtotal'},
-    {id: 'status', numeric: false, disablePadding: true, label: 'Order Status'}];
+  // orderstosend includes the selected item names in userbasket
+  const [ordersToSend, setOrdersToSend] = useState();
+  const [orderErrorMessage, setOrderErrorMessage] = useState('')
 
-  const sendOrdersToDb = async () => {
-    const statusChangedArr = [];
-    tableItems.forEach(item => {
-      statusChangedArr.push({...item, status: 'Ordered'});
-    })
+  const extraTableHeader = [{id: 'status', numeric: false, disablePadding: true, label: 'Order Status'}];
 
-    if(tableItems.length > 0){
-      const orderNumber = `order_${currentOrder}`;
-      updateDoc(tableRef, {
-      [orderNumber]: statusChangedArr
-      })
-      console.log(orderNumber)
-      setCurrentOrder(currentOrder + 1);
-      setTableItems([]);
+  // use session storage to display users ordered items
+  function setItemsToSessionStorage(itemsArray){
+    const existingOrders = sessionStorage.getItem('orders');
+    if(existingOrders){
+     const mergedArray = JSON.parse(existingOrders).concat(itemsArray);
+     sessionStorage.setItem('orders', JSON.stringify(mergedArray)) ;
+    }
+    else{
+      sessionStorage.setItem('orders', JSON.stringify(itemsArray))
     }
   }
-  function directToMenu(){
+
+  const sendOrdersToDb = async () => {
+    const orderedItems = [];
+    const itemsToSessionStorage = [];
+    
+    tableItems?.forEach(item => {
+      if(ordersToSend.includes(item.name)){
+        const sessionItem = {...item, orderNumber: currentOrder};
+        itemsToSessionStorage.push(sessionItem);
+        delete item.image;
+        orderedItems.push({...item, orderNumber: currentOrder, id: uuidv4()});
+        console.log(orderedItems)
+      }
+    })
+
+    if(orderedItems.length > 0){
+      const orderNumber = `order_${currentOrder}`;
+      updateDoc(tableRef, {
+      [orderNumber]: orderedItems
+      })
+      setCurrentOrder(currentOrder + 1);
+      
+      const notOrderedItems = tableItems.filter(item => !ordersToSend.includes(item.name));
+      setTableItems(notOrderedItems);
+      
+      setOrderErrorMessage('');
+      setItemsToSessionStorage(itemsToSessionStorage);
+    }else setOrderErrorMessage('Please choose items')
+  }
+  
+  function directToMenuButton(){
     return(
       <NavLink to={`/menu/${currentTable}`}>
-        <Button onClick={()=> sendOrdersToDb()} variant='contained' sx={{mt: 3, background: '#ff9800'}}>Go To Menu</Button>
+        <Button onClick={()=> sendOrdersToDb()} variant='contained' sx={{mt: 2, background: '#ff9800'}}>Go To Menu</Button>
       </NavLink>
     )
   }
-  useEffect(()=> {
-    onSnapshot(tableRef, (snap)=>{
-      setOrderedItems(snap.data())
-    })
-  }, [])
+
+  function renderDirectToMenu(){
+    return(
+      <Paper elevation={0} sx={{mt: 2}}>
+        <Typography variant='h5'>Nothing to order!</Typography> 
+        {directToMenuButton()}
+      </Paper>
+      ) 
+}
 
   function renderNavs(){
     const navs = ['New Order', 'Previous Orders'];
@@ -67,25 +95,36 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
         {nav}
       </Typography>)
   }
+
   function renderActivePage(){
     if(activePage === 'New Order'){
-      return <UserBasket newHeaders={tableHeaders} tableItems={tableItems} setTableItems={setTableItems}/>
-    } else return <TableComp directToMenu={directToMenu} sendOrdersToDb={sendOrdersToDb} orderedItems={orderedItems} tableItems={tableItems} ></TableComp>
+      if(tableItems.length > 0){
+        return <UserBasket newHeaders={extraTableHeader} tableItems={tableItems} setTableItems={setTableItems} sendOrdersToDb={sendOrdersToDb} setOrdersToSend={setOrdersToSend} orderErrorMessage={orderErrorMessage} setOrderErrorMessage={setOrderErrorMessage}/>
+      }else{
+        return renderDirectToMenu();
+      }
+    } 
+    else return <TableComp renderDirectToMenu={renderDirectToMenu} tableItems={tableItems} />
   }
   return (
     <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
-      <Container maxWidth='xl'>
-      <Box sx={{
-        background: '#fff',
-        display: 'flex',
-        gap: {xs: 5, lg: '5rem'},
-        pt: 5,
-        pb: 3,
-        px: 5, 
-        }}>
-        {renderNavs()}
-      </Box>
-      {renderActivePage()}
+      <Container maxWidth='xl' sx={{pt: 4}}>
+        <Paper elevation={4} 
+        sx={{
+            py: 5,
+            px: 5, 
+            }}>
+          <Box
+          sx={{
+            background: '#fff',
+            display: 'flex',
+            gap: {xs: 5, lg: 5},
+            }}>
+          {renderNavs()}
+        </Box>
+        {renderActivePage()}
+        </Paper>
+      
      
     </Container>
     </Box>

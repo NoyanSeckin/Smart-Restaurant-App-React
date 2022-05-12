@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,9 +21,8 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import {useEffect} from 'react'
 
-let rows = []
+let rows = [];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -56,7 +54,12 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-let headCells =  [];
+const headCells = [
+  {id: 'name', numeric: false, disablePadding: true, label: 'Meal/Beverage'}, {id: 'quantity', numeric: false, disablePadding: true, label: 'Quantity'},
+  {id: 'price', numeric: false, disablePadding: true, label: 'Price'},
+  {id: 'subtotal', numeric: false, disablePadding: true, label: 'Subtotal'}, 
+  {id: 'orderNumber', numeric: false, disablePadding: true, label: 'Order Number'},
+  ];
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
@@ -70,7 +73,6 @@ function EnhancedTableHead(props) {
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
-            // sx={{width: {xs: '10px', md: 'auto'}, pl: {xs: 0, md: 4.5}}} 
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -115,22 +117,14 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-// Table actions
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
-
-  function deleteItems(){ 
-    // filter selected items
-    let filteredItems = props.tableItems.filter(item =>(!props.selected.includes(item.name)))
-    // delete items from state and redux
-    props.setTableItems(filteredItems)
-    props.setSelected([])
-  }
 
   return (
     <Toolbar
       sx={{
-        px: {xs: 1, md: 5},
+        pl: { sm: 2 },
+        pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
@@ -153,14 +147,14 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Basket
+          Nutrition
         </Typography>
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete" >
-          <IconButton onClick={deleteItems}>
-            <DeleteIcon sx={{color: '#b2102f'}}/>
+        <Tooltip title="Delete">
+          <IconButton>
+            <DeleteIcon />
           </IconButton>
         </Tooltip>
       ) : (
@@ -178,27 +172,13 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-
-export default function EnhancedTable({tableItems, newHeaders, setTableItems, sendOrdersToDb, setOrdersToSend, orderErrorMessage, setOrderErrorMessage},) {
-  const [order, setOrder] = React.useState('');
-  const [orderBy, setOrderBy] = React.useState('');
+export default function EnhancedTable({tableOrders}) {
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  useEffect(()=>{
-    setOrdersToSend(selected);
-    
-    if(selected.length > 0){
-      setOrderErrorMessage('');
-    }
-
-  },[selected])
-
-  function handleSendOrder(){
-    sendOrdersToDb();
-    setSelected([]);
-  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -208,19 +188,19 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.name + n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, nameAndId) => {
+    const selectedIndex = selected.indexOf(nameAndId);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, nameAndId);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -231,8 +211,9 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
         selected.slice(selectedIndex + 1),
       );
     }
-
+    console.log(selected)
     setSelected(newSelected);
+    // setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -244,28 +225,26 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
     setPage(0);
   };
 
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  // set table headers and  rows
-  rows = tableItems; 
-  headCells = [
-    {id: 'name', numeric: false, disablePadding: true, label: 'Meal/Beverage'}, {id: 'quantity', numeric: false, disablePadding: true, label: 'Quantity'},
-    {id: 'price', numeric: false, disablePadding: true, label: 'Price'},
-    {id: 'subtotal', numeric: false, disablePadding: true, label: 'Subtotal'},
-    ];
-  headCells = headCells.concat(newHeaders);
-
+  rows = tableOrders;
   return (
-    <Box sx={{mt: 3}}>
-      <Paper sx={{display: 'flex', flexDirection: 'column' }}>
-        <EnhancedTableToolbar numSelected={selected.length} selected={selected} setTableItems={setTableItems} tableItems={tableItems} setSelected={setSelected}/>
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
+        <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
+            sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
+            size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -276,25 +255,26 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
               rowCount={rows.length}
             />
             <TableBody>
+              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                 rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.name + row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.name+row.id, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.name + row.orderNumber}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -308,35 +288,19 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
                         scope="row"
                         padding="none"
                       >
-                        <Box 
-                        sx={{
-                          display: 'flex', 
-                          alignItems: 'center',
-                          gap: 1
-                        }}> 
-                        {row.image && 
-                        <img src={row.image} alt='item'
-                        style={{
-                          width: '60px',
-                          borderRadius: '8px',
-                          // position: 'absolute'
-                        }}/>}
                         {row.name}
-                        </Box>
-                       
                       </TableCell>
-                      <TableCell 
-                        align="left">{row.count}</TableCell>
-                      <TableCell align="left">{row.price}</TableCell>
-                      <TableCell align="left">{row.price * row.count}</TableCell>
-                      <TableCell align="left">Not Ordered</TableCell>
+                      <TableCell align="left">{row.count}</TableCell>
+                      <TableCell align="left">{row.price}$</TableCell>
+                      <TableCell align="left">{row.price * row.count}$</TableCell>
+                      <TableCell align="left">{row.orderNumber}</TableCell>
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (53) * emptyRows,
+                    height: (dense ? 33 : 53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -354,12 +318,11 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      <Box sx={{alignSelf: 'end'}}>
-        <Typography sx={{fontSize: '0.85rem'}}>{orderErrorMessage}</Typography>
-        <Button onClick={handleSendOrder} variant='contained' 
-        sx={{background: '#ff9800', px: 4, mb: 2, mr: 2}}>Order Now</Button>
-      </Box>
       </Paper>
+      <FormControlLabel
+        control={<Switch checked={dense} onChange={handleChangeDense} />}
+        label="Dense padding"
+      />
     </Box>
   );
 }

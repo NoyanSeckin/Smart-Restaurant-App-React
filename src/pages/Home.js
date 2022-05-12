@@ -54,7 +54,7 @@ export default function Home() {
   }
 
   function renderListTexts(){
-    const listTexts = ['A panel to display and handle recieved orders', 'Customiziable QR menu', 'Digital table system with QR code', 'Interactive loyalty program', 'Enhanced communication among staff', 'Revenue Panel']
+    const listTexts = ['A panel to display and handle recieved orders', 'Customiziable QR menu', 'Digital table system with QR code', 'Interactive loyalty program', 'Enhanced restaurant management', 'Revenue Panel']
     return(
       <List>
         {listTexts.map(text =>

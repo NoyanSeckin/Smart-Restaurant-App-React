@@ -23,8 +23,8 @@ export default function AdminTables({tables}) {
   function renderTables(){
     const tables = [1,2,3,4,5,6,7,8,9]
     return tables.map(table =>  
-    <Grid item lg={2}> 
-      <Card elevation='5' sx={{background: 'orange'}}>
+    <Grid key={table} item lg={2} sx={{flexGrow: 1}}> 
+      <Card elevation={5} sx={{background: 'orange'}}>
         <CardContent sx={{textAlign: 'center', mt: 2}}>
            <Typography variant='h4'>
              {table}
@@ -34,11 +34,18 @@ export default function AdminTables({tables}) {
             'Table is Active' : 'Table is Empty'}
            </Typography>
         </CardContent>
-        <CardActions>
-          <Button sx={{color: '#ff1744'}}>
+        <CardActions sx={{display: 'flex'}}>
+          <Button variant='contained'
+          sx={{
+            color: '#ff1744', 
+            flexGrow: 1,
+            background: '#F2F2F2'
+            }}>
             Close Table
           </Button>
-          <Button onClick={()=> directToDetail(table)}>
+          <Button variant='contained'
+          sx={{flexGrow: 1}}
+          onClick={()=> directToDetail(table)}>
             Go to Table
           </Button>
         </CardActions>
