@@ -57,9 +57,9 @@ import {setTableItems} from '../actions'
     // setSelectedValue(value);
   };
   return (
-    <Box sx={{ flexGrow: 1, position: 'relative', background: '#46244C' }}>
+    <Box sx={{ flexGrow: 1, position: 'relative', background: '#F58840' }}>
       <Container maxWidth='xl'>
-      <AppBar elevation={0} position="static" sx={{background: '#46244C'}}>
+      <AppBar elevation={0} position="static" sx={{background: '#F58840'}}>
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{
             display: 'flex', 

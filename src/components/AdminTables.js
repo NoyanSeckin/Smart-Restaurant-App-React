@@ -46,7 +46,37 @@ export default function AdminTables({tables}) {
   function returnAlertColor(){
     if(waiterAlert){
       return '#E3170A';
-    }else return 'orange'
+    }else return '#F58840'
+  }
+
+  function renderTableText(tableNum){
+    if(waiterCalls.includes(tableNum)){
+      return 'Waiter is needed!'
+    }
+    else if(occupiedTables.includes(tableNum)){
+      return 'Active'
+    }
+    else return 'Empty'
+  }
+  function renderTableColor(tableNum){
+    if(occupiedTables.includes(tableNum)){
+      return '#F58840'
+    }else return '#F3F4ED'
+  }
+
+  function renderGoToTableBtn(tableNum){
+      return (
+      <Button variant='contained'
+      onClick={()=> directToDetail(tableNum)}
+      sx={{
+        visibility: !occupiedTables.includes(tableNum) && 'hidden',
+        color: '#000', 
+        flexGrow: 1,
+        background: '#FCFFE7',
+        '&:hover':{background: '#F2F2F2'}
+        }}>
+        Go to Table
+      </Button>)
   }
 
   function renderTables(){
@@ -55,37 +85,29 @@ export default function AdminTables({tables}) {
     <Grid key={table} item lg={3} md={3}> 
       <Card elevation={5} 
       sx={{
-        background: `${waiterCalls.includes(table) ? returnAlertColor() : '#F58840'}`, 
+        background: `${waiterCalls.includes(table) ? returnAlertColor() : renderTableColor(table)}`, 
         px: 1, 
         pb: 1,
         position: 'relative'}}>
           {waiterCalls.includes(table) && 
-          <AlarmOffIcon onClick={()=> turnOffTableAlert(table)}
+          <Button endIcon={<AlarmOffIcon/>} 
+          onClick={()=> turnOffTableAlert(table)}
           sx={{
+            color: '#000',
             position: 'absolute', 
             right: '5px', 
             top: '5px', 
-            '&:hover': {cursor: 'pointer'}}}/>}
+            '&:hover': {cursor: 'pointer'}}}> Turn Off </Button>}
         <CardContent sx={{textAlign: 'center', mt: 2}}>
            <Typography variant='h4'>
              {table}
            </Typography>
            <Typography sx={{mt: 3}}>
-            {occupiedTables.includes(table) ? 
-            'Table is Active' : 'Table is Empty'}
+            {renderTableText(table)}
            </Typography>
         </CardContent>
         <CardActions sx={{display: 'flex'}}>
-          <Button variant='contained'
-          onClick={()=> directToDetail(table)}
-          sx={{
-            color: '#000', 
-            flexGrow: 1,
-            background: '#FCFFE7',
-            '&:hover':{background: '#F2F2F2'}
-            }}>
-            Go to Table
-          </Button>
+        {renderGoToTableBtn(table)}
         </CardActions>
       </Card>
     </Grid>)

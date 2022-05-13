@@ -53,8 +53,8 @@ a{
 /* UserTable */
 
 .active-nav{
-	color: #000000!important;
-	border-bottom: 2px solid #000000;
+	color: #b2102f !important;
+	border-bottom: 2px solid #b2102f;
 	padding-bottom: 10px;
 	z-index: 3;
 }
