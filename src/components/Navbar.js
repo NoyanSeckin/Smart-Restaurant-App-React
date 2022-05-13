@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu'
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
+import RoomServiceIcon from '@mui/icons-material/RoomService';
 import { connect } from "react-redux";
 
 import BasketDialog from './BasketDialog'
@@ -73,14 +74,13 @@ import {setTableItems} from '../actions'
           {auth && (
             <Box sx={{display: 'flex'}}>
               <Box sx={{alignSelf: 'center' ,position: 'relative', '&:hover': {cursor: 'pointer'}}}>
-                <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', mr: 3}}>
-                </TableRestaurantIcon>
+                <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', mr: 3}}/>
                 <Typography sx={{position: 'absolute', right: '14px', top: '-10px'}} variant="caption">
                     {calculateTotalItems(tableItems)}
                  </Typography>
               </Box>
-             
-              <IconButton
+              <RoomServiceIcon sx={{'&:hover': {cursor: 'pointer'}}}/>
+              {/* <IconButton
                 size="large"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -107,7 +107,7 @@ import {setTableItems} from '../actions'
               >
                 <MenuItem sx={{size: 'large'}} onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
+              </Menu> */}
             </Box>
           )}
         </Toolbar>

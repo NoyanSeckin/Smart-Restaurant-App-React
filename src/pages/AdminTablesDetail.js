@@ -1,6 +1,6 @@
 import {useParams} from 'react-router-dom'
 import { getFirestore, collection, updateDoc, arrayUnion, doc, onSnapshot, getDoc} from "firebase/firestore";
-
+import {Box, Container} from '@mui/material'
 import React, {useEffect, useState} from 'react'
 import AdminTableData from '../components/AdminTableData'
 
@@ -10,8 +10,6 @@ export default function AdminTablesDetail() {
   const [tableOrders, setTableOrders] = useState([]);
   const db = getFirestore();
 
-  const extraTableHeader = [{id: 'status', numeric: false, disablePadding: true, label: 'Order Number'}];
-  
   async function fetchTable(){
     const tableRef = doc(db, 'Tables', `table_${tableNum}`)
     const tableSnap = await getDoc(tableRef)
@@ -30,7 +28,7 @@ export default function AdminTablesDetail() {
 
   function renderTable(){
     if(tableOrders.length > 0){
-     return <AdminTableData tableOrders={tableOrders}/>
+     return <AdminTableData tableOrders={tableOrders} tableNum={tableNum}/>
     }
   }
 
@@ -38,8 +36,10 @@ export default function AdminTablesDetail() {
     fetchTable()
   }, [])
   return (
-    <div>
+    <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
+      <Container maxWidth='xl' sx={{pt:4}}>
       {renderTable()}
-    </div>
+    </Container>
+    </Box>
   )
 }

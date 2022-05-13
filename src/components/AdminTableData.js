@@ -16,8 +16,7 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import Button from '@mui/material/Button'
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
@@ -142,12 +141,12 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
+          sx={{ flex: '1 1 100%', fontWeight: '600' }}
+          variant="h5"
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          Table {props.tableNum}
         </Typography>
       )}
 
@@ -172,12 +171,11 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({tableOrders}) {
+export default function EnhancedTable({tableOrders, tableNum}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -211,9 +209,7 @@ export default function EnhancedTable({tableOrders}) {
         selected.slice(selectedIndex + 1),
       );
     }
-    console.log(selected)
     setSelected(newSelected);
-    // setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -225,10 +221,6 @@ export default function EnhancedTable({tableOrders}) {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -238,13 +230,12 @@ export default function EnhancedTable({tableOrders}) {
   rows = tableOrders;
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+      <Paper sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'column' }}>
+        <EnhancedTableToolbar numSelected={selected.length} tableNum={tableNum} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -300,7 +291,7 @@ export default function EnhancedTable({tableOrders}) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -318,11 +309,21 @@ export default function EnhancedTable({tableOrders}) {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        <Box sx={{alignSelf: 'end', mb: 1, mr: 1}}>
+        <Button variant='contained'
+          sx={{
+            color: '#ff1744', 
+            background: '#F2F2F2',
+            mr: 2
+            }}>
+            Cancel Table
+          </Button>
+          <Button variant='contained'
+          sx={{px: 3}}>
+            Checkout
+          </Button>
+        </Box>
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }
