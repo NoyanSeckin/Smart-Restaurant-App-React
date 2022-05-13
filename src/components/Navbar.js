@@ -16,7 +16,8 @@ import {useState} from 'react'
 import {setTableItems} from '../actions'
 
   const navLinkStyle = {
-    fontSize: {xs: '0.9rem', md: '1.25rem'}
+    fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
+    color: '#F2F2F2'
   }
  function Navbar({tableItems, currentTable}) {
 
@@ -56,46 +57,46 @@ import {setTableItems} from '../actions'
     // setSelectedValue(value);
   };
   return (
-    <Box sx={{ flexGrow: 1, position: 'relative', background: 'orange' }}>
+    <Box sx={{ flexGrow: 1, position: 'relative', background: '#46244C' }}>
       <Container maxWidth='xl'>
-      <AppBar elevation={0} position="static" sx={{background: 'orange'}}>
+      <AppBar elevation={0} position="static" sx={{background: '#46244C'}}>
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{
             display: 'flex', 
             gap: {xs: 1, md: 5}, 
             alignItems: 'center',
             }}>
-          <Typography variant="h6" sx={navLinkStyle}>
-            <NavLink to='/'>
+          <NavLink to='/'>
+            <Typography variant="h6" sx={navLinkStyle}>
               Home
-            </NavLink>
-          </Typography>
-          <Typography variant="h6" sx={navLinkStyle}>
-            <NavLink to={`/menu/${currentTable}`}>
+            </Typography>
+          </NavLink>
+          <NavLink to={`/menu/${currentTable}`}>
+            <Typography variant="h6" sx={navLinkStyle}>
               Menu
-            </NavLink>
-          </Typography>
-          <Typography variant="h6" sx={navLinkStyle}>
-            <NavLink to='/admin'>
+            </Typography>
+          </NavLink>
+          <NavLink to='/admin'>
+            <Typography variant="h6" sx={navLinkStyle}>
               Admin
-            </NavLink>
-          </Typography>
-          <Typography variant="h6" sx={navLinkStyle}>
-            <NavLink to='/tables'>
+            </Typography>
+          </NavLink>
+          <NavLink to='/tables'>
+            <Typography variant="h6" sx={navLinkStyle}>
               Tables
-            </NavLink>
-          </Typography>
+            </Typography>
+          </NavLink>
           </Box>
           {auth && (
             <Box sx={{display: 'flex'}}>
               <Box sx={{alignSelf: 'center' ,position: 'relative', '&:hover': {cursor: 'pointer'}}}>
-                <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', mr: 3}}/>
-                <Typography sx={{position: 'absolute', right: '14px', top: '-10px'}} variant="caption">
+                <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', color: '#F2F2F2', mr: 3}}/>
+                <Typography sx={{position: 'absolute', right: '14px', top: '-10px', color: '#F2F2F2'}} variant="caption">
                     {calculateTotalItems(tableItems)}
                  </Typography>
               </Box>
               <RoomServiceIcon onClick={callWaiter}
-              sx={{'&:hover': {cursor: 'pointer'}}}/>
+              sx={{color: '#F2F2F2', '&:hover': {cursor: 'pointer'}}}/>
               {/* <IconButton
                 size="large"
                 aria-label="account of current user"

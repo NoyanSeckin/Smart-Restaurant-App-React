@@ -55,7 +55,7 @@ export default function AdminTables({tables}) {
     <Grid key={table} item lg={3} md={3}> 
       <Card elevation={5} 
       sx={{
-        background: `${waiterCalls.includes(table) ? returnAlertColor() : '#F7B32B'}`, 
+        background: `${waiterCalls.includes(table) ? returnAlertColor() : '#F58840'}`, 
         px: 1, 
         pb: 1,
         position: 'relative'}}>
@@ -79,9 +79,10 @@ export default function AdminTables({tables}) {
           <Button variant='contained'
           onClick={()=> directToDetail(table)}
           sx={{
-            color: 'primary.main', 
+            color: '#000', 
             flexGrow: 1,
-            background: '#F2F2F2'
+            background: '#FCFFE7',
+            '&:hover':{background: '#F2F2F2'}
             }}>
             Go to Table
           </Button>
