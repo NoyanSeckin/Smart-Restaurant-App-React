@@ -27,18 +27,18 @@ export default function Admin() {
   }
  
   return (
-    <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
+    <Box sx={{background: '#2D1E2F', minHeight: '120vh'}}>
       <Container maxWidth='xl'
       sx={{
         borderRadius: '8px', 
         pt: 3, 
         }}>
-        <Paper sx={{px: 4, pt: 3, pb: 5, minHeight: '80vh'}}>
+        <Box sx={{px: 4, pt: 3, pb: 5, minHeight: '80vh'}}>
         <Box sx={{display: 'flex', gap: 5}}>
           {renderNavs()}
         </Box>
         {renderPage()}
-        </Paper>
+        </Box>
       </Container>
     </Box>
 

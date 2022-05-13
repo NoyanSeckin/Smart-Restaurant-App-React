@@ -6,6 +6,9 @@ import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
 import { connect } from "react-redux";
 
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, updateDoc, arrayUnion} from "firebase/firestore";
+
 import BasketDialog from './BasketDialog'
 import * as React from 'react';
 import {useState} from 'react'
@@ -16,7 +19,19 @@ import {setTableItems} from '../actions'
     fontSize: {xs: '0.9rem', md: '1.25rem'}
   }
  function Navbar({tableItems, currentTable}) {
-   const [open, setOpen] = useState(false)
+
+  const db = getFirestore();
+  const callsRef = doc(db, 'WaiterCalls', 'tables')
+
+  async function callWaiter(){
+    updateDoc(callsRef, {
+      calls: arrayUnion(currentTable)
+    })
+  }
+
+
+ 
+  const [open, setOpen] = useState(false)
   
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -79,7 +94,8 @@ import {setTableItems} from '../actions'
                     {calculateTotalItems(tableItems)}
                  </Typography>
               </Box>
-              <RoomServiceIcon sx={{'&:hover': {cursor: 'pointer'}}}/>
+              <RoomServiceIcon onClick={callWaiter}
+              sx={{'&:hover': {cursor: 'pointer'}}}/>
               {/* <IconButton
                 size="large"
                 aria-label="account of current user"

@@ -16,6 +16,7 @@ export default function AdminTables({tables}) {
   const [waiterCalls, setWaiterCalls] = useState([]);
   const [waiterAlert, setWaiterAlert] = useState(true);
 
+  // get occupied tables and waitercalls
   useEffect(()=> {
     onSnapshot(docRef, (doc) => {
         setOccupiedTables(doc.data().occupiedTables);
@@ -34,8 +35,12 @@ export default function AdminTables({tables}) {
     }, 1000);
   }, [waiterAlert])
 
-  async function turnOffTableAlert(){
-
+  async function turnOffTableAlert(tableNum){
+    const filteredAlerts = waiterCalls.filter(call => call !== tableNum);
+    console.log(filteredAlerts)
+    updateDoc(callsRef, {
+      calls: filteredAlerts
+    })
   }
 
   function returnAlertColor(){
@@ -50,12 +55,13 @@ export default function AdminTables({tables}) {
     <Grid key={table} item lg={3} md={3}> 
       <Card elevation={5} 
       sx={{
-        background: `${waiterCalls.includes(table) ? returnAlertColor() : 'orange'}`, 
+        background: `${waiterCalls.includes(table) ? returnAlertColor() : '#F7B32B'}`, 
         px: 1, 
         pb: 1,
         position: 'relative'}}>
           {waiterCalls.includes(table) && 
-          <AlarmOffIcon sx={{
+          <AlarmOffIcon onClick={()=> turnOffTableAlert(table)}
+          sx={{
             position: 'absolute', 
             right: '5px', 
             top: '5px', 
@@ -86,6 +92,7 @@ export default function AdminTables({tables}) {
 
   function directToDetail(tableNum){
     history.push(`/admintablesdetail/${tableNum}`)
+    turnOffTableAlert(tableNum);
   }
 
   return (
