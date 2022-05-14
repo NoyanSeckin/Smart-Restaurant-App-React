@@ -3,6 +3,7 @@ import {React, useState} from 'react'
 import {Box, Container, Paper, Typography} from '@mui/material'
 
 import AdminTables from '../components/AdminTables'
+import AddMenu from '../components/AddMenu'
 export default function Admin() {
 
   const [activePage, setActivePage] = useState('Restaurant Tables');
@@ -22,7 +23,7 @@ export default function Admin() {
     if(activePage === 'Restaurant Tables'){
       return <AdminTables/>
     } else if(activePage === 'Add Menu'){
-      return 'Add Menu'
+      return <AddMenu/>
     }else return 'Revenue'
   }
  

@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useDropzone} from 'react-dropzone';
 
 import React, {useEffect, useState} from 'react';
-import CloudIcon from '../constants/icons/CloudIcon'
+import CloudIcon from '../icons/CloudIcon'
 import ProgressBar from './ProgressBar'
 
 export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
