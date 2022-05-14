@@ -38,10 +38,13 @@ const checkoutButton = {
     px: 5 
   }
 
-export default function BuyModal({isModal, setIsModal, header, content, bgColor}) {
+export default function BuyModal({isModal, setIsModal, header, content, bgColor, proceedAction}) {
   
   const handleClose = () => setIsModal(false);
-  
+  function handleProceedAction(){
+    proceedAction(true)
+    handleClose();
+  }
   return (
     <Box>
       <Modal
@@ -65,8 +68,8 @@ export default function BuyModal({isModal, setIsModal, header, content, bgColor}
             <Typography id="transition-modal-description" sx={{ my: 1.7, color: '#555555' }}>
              {content}
             </Typography>
-            <Button sx={closeButton}onClick={handleClose}>Cancel</Button>
-            <Button sx={checkoutButton}>Proceed</Button>
+            <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleProceedAction} sx={checkoutButton}>Proceed</Button>
           </Box> 
         </Fade>
       </Modal>
