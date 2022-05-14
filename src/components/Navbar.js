@@ -56,6 +56,17 @@ import {setTableItems} from '../actions'
     setOpen(false);
     // setSelectedValue(value);
   };
+
+  function renderNavLink(direction, label){
+    return(
+      <NavLink to={direction}>
+      <Typography variant="h6" sx={navLinkStyle}>
+        {label}
+      </Typography>
+     </NavLink>
+    )
+  }
+
   return (
     <Box sx={{ flexGrow: 1, position: 'relative', background: '#F58840' }}>
       <Container maxWidth='xl'>
@@ -66,26 +77,10 @@ import {setTableItems} from '../actions'
             gap: {xs: 1, md: 5}, 
             alignItems: 'center',
             }}>
-          <NavLink to='/'>
-            <Typography variant="h6" sx={navLinkStyle}>
-              Home
-            </Typography>
-          </NavLink>
-          <NavLink to={`/menu/${currentTable}`}>
-            <Typography variant="h6" sx={navLinkStyle}>
-              Menu
-            </Typography>
-          </NavLink>
-          <NavLink to='/admin'>
-            <Typography variant="h6" sx={navLinkStyle}>
-              Admin
-            </Typography>
-          </NavLink>
-          <NavLink to='/tables'>
-            <Typography variant="h6" sx={navLinkStyle}>
-              Tables
-            </Typography>
-          </NavLink>
+            {renderNavLink('/', 'Home')}
+            {renderNavLink('/admin', 'Admin')}
+            {renderNavLink('/tables', 'Tables')}
+            {renderNavLink(`/menu/${currentTable}`, 'Menu')}
           </Box>
           {auth && (
             <Box sx={{display: 'flex'}}>

@@ -19,6 +19,10 @@ export default function AdminTablesDetail() {
   
   const db = getFirestore();
   const tableRef = doc(db, 'Tables', `table_${tableNum}`)
+
+  useEffect(()=> {
+    fetchTable()
+  }, [])
   
   async function fetchTable(){
     const tableSnap = await getDoc(tableRef)
@@ -58,7 +62,6 @@ export default function AdminTablesDetail() {
   useEffect(() => {
     deleteSelectedItems();
     fetchTable();
-    // console.log(deletedItems)
     setIsDeleteTrue(false);
   }, [isDeleteTrue])
 
@@ -67,7 +70,13 @@ export default function AdminTablesDetail() {
      return <AdminTableData setDeletedItems={setDeletedItems} deletedItems={deletedItems} setIsDeleteTrue={setIsDeleteTrue} tableOrders={tableOrders} tableNum={tableNum} setIsCheckoutModal={setIsCheckoutModal} setIsCancelModal={setIsCancelModal}/>
     }else{
       return(
-        <Paper sx={{borderRadius: '8px', pt: 4, pb: 2, px: 2, minHeight: '20vh'}}>
+        <Paper sx={{
+          borderRadius: '8px', 
+          pt: 4, 
+          pb: 2, 
+          px: 2, 
+          minHeight: '20vh'
+          }}>
           <Typography variant='h5' sx={{fontWeight: 'bold'}}>
             Table has not ordered yet!
           </Typography>
@@ -82,9 +91,7 @@ export default function AdminTablesDetail() {
     }
   }
 
-  useEffect(()=> {
-    fetchTable()
-  }, [])
+ 
   return (
     <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
       <Container maxWidth='xl' sx={{pt:4}}>
