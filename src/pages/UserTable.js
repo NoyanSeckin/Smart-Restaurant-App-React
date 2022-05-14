@@ -74,7 +74,8 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   function renderDirectToMenu(){
     return(
       <Paper elevation={0} sx={{mt: 2}}>
-        <Typography variant='h5'>Nothing to order!</Typography> 
+        <Typography variant='h5' sx={{mb: 1}}>Nothing to order!</Typography> 
+        <Typography>Check your previous orders.</Typography>
         {directToMenuButton()}
       </Paper>
       ) 

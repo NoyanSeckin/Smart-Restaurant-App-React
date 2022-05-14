@@ -176,7 +176,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({tableOrders, tableNum, deletedItems, setDeletedItems, setIsDeleteTrue}) {
+export default function EnhancedTable({tableOrders, tableNum, deletedItems, setDeletedItems, setIsDeleteTrue, setIsModal}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -328,6 +328,7 @@ export default function EnhancedTable({tableOrders, tableNum, deletedItems, setD
             Cancel Table
           </Button>
           <Button variant='contained'
+          onClick={()=> setIsModal(true)}
           sx={{px: 3}}>
             Checkout
           </Button>

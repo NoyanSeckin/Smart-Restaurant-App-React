@@ -1,8 +1,11 @@
 import {useParams} from 'react-router-dom'
-import { getFirestore, collection, updateDoc, arrayRemove, doc, onSnapshot, getDoc} from "firebase/firestore";
-import {Box, Container} from '@mui/material'
+import { getFirestore,  updateDoc,  doc, onSnapshot, getDoc} from "firebase/firestore";
+import {Box, Button, Container, Paper, Typography} from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { NavLink } from "react-router-dom";
 import React, {useEffect, useState} from 'react'
 import AdminTableData from '../components/AdminTableData'
+import Modal from '../components/Modal'
 
 export default function AdminTablesDetail() {
 
@@ -10,6 +13,7 @@ export default function AdminTablesDetail() {
   const [tableOrders, setTableOrders] = useState([]);
   const [deletedItems, setDeletedItems] = useState([]);
   const [isDeleteTrue, setIsDeleteTrue] = useState(false);
+  const [isModal, setIsModal] = useState(false);
 
   const db = getFirestore();
 
@@ -54,7 +58,21 @@ export default function AdminTablesDetail() {
 
   function renderTable(){
     if(tableOrders.length > 0){
-     return <AdminTableData setDeletedItems={setDeletedItems} deletedItems={deletedItems} setIsDeleteTrue={setIsDeleteTrue} tableOrders={tableOrders} tableNum={tableNum}/>
+     return <AdminTableData setDeletedItems={setDeletedItems} deletedItems={deletedItems} setIsDeleteTrue={setIsDeleteTrue} tableOrders={tableOrders} tableNum={tableNum} setIsModal={setIsModal}/>
+    }else{
+      return(
+        <Paper sx={{borderRadius: '8px', pt: 4, pb: 2, px: 2, minHeight: '20vh'}}>
+          <Typography variant='h5' sx={{fontWeight: 'bold'}}>
+            Table has not ordered yet!
+          </Typography>
+          <NavLink to='/admin'>
+            <Button  startIcon={<ArrowBackIcon/>}
+            sx={{mt: 3}}>
+              Back to tables
+            </Button>
+          </NavLink>
+        </Paper>
+      )
     }
   }
 
@@ -66,6 +84,7 @@ export default function AdminTablesDetail() {
       <Container maxWidth='xl' sx={{pt:4}}>
       {renderTable()}
     </Container>
+    <Modal isModal={isModal} setIsModal={setIsModal}/>
     </Box>
   )
 }
