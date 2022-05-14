@@ -8,83 +8,45 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button'
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import {data} from '../data'
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 import Alert from './Alert'
-// import {data} from '../data'
 
 import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
 
-function MenuCard({tableItems, setTableItems, item}) {
-  const [zero, setZero] = useState('0');
-  const [counters, setCounters] = useState([{name: 'test', counter: 0}]);
+function MenuCard({tableItems, setTableItems, item, counters, setCounters, index}) {
   const [isAlert, setIsAlert] = useState(false);
-  const addToTable = (item) =>{
-    // if item exist modify, else add it directly to tableItems
-    if(item.counter > 0){
-      let filteredItems = [];
-      let existingItems = tableItems;
-      let existingObject;
-      existingItems.forEach(existingItem => {
-        if(existingItem.name === item.name){
-          existingObject = existingItem;
-        }else{
-          filteredItems.push(existingItem);
-        }
-      })
-      if(existingObject){
-        existingObject.count += item.counter;
-        setTableItems([...filteredItems, existingObject])
-      } else if(!existingObject){
-        setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price }])
-      }
-      // reset the counter of that item
-      // Switch Alert
-      setIsAlert(true);
-      setTimeout(() => {
-        setIsAlert(false);
-      }, 2000);
-    }
-   
-  }
 
-  const addCounterToCards = (item, object, value) => {
-    let filteredArray = counters.filter(counterObject => counterObject.name !== item.name);
-      object.counter = object?.counter + value;
-      setCounters(counters=> [...filteredArray, object])
-      item.counter = object.counter;
-  }
-  // add and change counters state
-  const changeMenuItemCounter = (item, value) =>{
-    let object;
-    counters.forEach(counterObject => {
-      if(counterObject.name === item.name){
-        object = counterObject
+  function addToTable(item, itemCounter){
+    const newItem = {...item, count: itemCounter}
+    let isExistingObject = false;
+    // check if item exists and set new counter if so
+    tableItems.forEach(tableItem => {
+      if(tableItem.name === item.name){
+        const newCount = tableItem.count + newItem.count;
+        tableItem.count = newCount;
+        isExistingObject = true;
+        setTableItems([...tableItems])
       }
     })
-    if(!object){
-      // add new object to the counters array
-      // set value to 0 to prevent -1
-      if(value === -1) value = 0
-      let newObject = {name: item.name, counter: value};
-      setCounters(counters=> [...counters, newObject]);
-      item.counter = newObject.counter;
-    }
-    else if(object){
-      if(object.counter + value < 0){
-        addCounterToCards(item, object, 0)
-      } else {
-        addCounterToCards(item, object, value)
-      }
-    }
+    // or else add it directly to table items
+    if(!isExistingObject){
+      setTableItems([...tableItems, newItem])
+    }      
+  }
+
+  function handleCounterChange(index, value){
+   let newValue = counters[index] + value;
+   if(newValue < 0)newValue = 0;
+   let countersCopy = counters;
+   countersCopy[index] = newValue;
+   setCounters([...countersCopy])
   }
  
   const renderCards = () => {
-    console.log(item)
       return(
-        <Card key={item.name} sx={{ maxWidth: 300, minWidth: 300 }}>
+        <Card key={index} sx={{ maxWidth: 300, minWidth: 300 }}>
           <CardMedia
             component="img"
             height="194"
@@ -99,20 +61,18 @@ function MenuCard({tableItems, setTableItems, item}) {
             {item.description || 'Lorem ipsum'}
           </Typography>
         </CardContent>
-        <CardActions sx={{display: 'flex', justifyContent: 'space-between'}} disableSpacing>
-          <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime} min</Typography>
-          <Box sx={{display: 'flex'}}>
-            <ArrowLeftIcon 
-            onClick={()=>changeMenuItemCounter(item, -1)}>
-            </ArrowLeftIcon>
-            {counters?.map(counterObject => {
-            if(counterObject.name === item.name){
-              return <Typography>{counterObject.counter}</Typography>
-            } 
-            })  }
-            <ArrowRightIcon onClick={()=> changeMenuItemCounter(item, +1)}></ArrowRightIcon>
+        <CardActions sx={{display: 'flex', flexDirection: 'column'}} disableSpacing>
+          <Box sx={{display: 'flex', justifyContent: 'space-between', flexGrow: 1, width: '100%'}}>
+            <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime} min</Typography>
+            <Box sx={{display: 'flex', gap: 1}}>
+              <RemoveIcon fontSize='small' sx={{alignSelf: 'center', '&:hover': {cursor: 'pointer'}}}
+              onClick={()=> handleCounterChange(index, - 1)} />
+              <Typography>{counters[index]}</Typography>
+              <AddIcon fontSize='small' sx={{alignSelf: 'center', '&:hover': {cursor: 'pointer'}}}
+              onClick={()=> handleCounterChange(index, 1)}/>
+            </Box>
           </Box>
-          <Button onClick={()=> addToTable(item)} variant='contained'>Order</Button>
+          <Button sx={{width: '100%', mt: 1, background: '#F58840'}} onClick={()=> addToTable(item, counters[index])} variant='contained'>Order</Button>
         </CardActions>
       </Card>
       )
@@ -120,9 +80,7 @@ function MenuCard({tableItems, setTableItems, item}) {
 
   return (
     <div>
-       <Box sx={{display: 'flex', gap: 8, flexWrap: 'wrap'}}>
-        {renderCards()}
-       </Box>
+       {renderCards()}
       <Alert isAlert={isAlert} setIsAlert={setIsAlert}></Alert>
     </div>
   );

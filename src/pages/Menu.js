@@ -1,14 +1,12 @@
-import {React, useState, useEffect} from 'react'
-import MenuCard from '../components/MenuCard'
-import SelectComponent from '../components/SelectComponent'
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+import {Box, Container, Grid, Paper} from '@mui/material'
+import { getFirestore, doc, updateDoc, arrayUnion, getDoc} from "firebase/firestore";
 import { useParams } from 'react-router-dom';
 import { connect } from "react-redux";
+
+import {React, useState, useEffect} from 'react'
 import {setCurrentTable, setTables} from '../actions'
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, updateDoc, arrayUnion, getDoc} from "firebase/firestore";
-import firebaseApp from '../firebase/init'
+import MenuCard from '../components/MenuCard'
+import SelectComponent from '../components/SelectComponent'
 
 function Menu({setCurrentTable, setTables}) {
   // get current table with id route parameter
@@ -46,35 +44,41 @@ function Menu({setCurrentTable, setTables}) {
   }
 
   const [activeMenuItems, setActiveMenuItems] = useState([]);
+  const [counters, setCounters] = useState([]);
+
 
   async function fetchSelectedMenu(){
     const menuRef = doc(db, 'Menu', `${selectedMenu}`);
     const menuSnap = await getDoc(menuRef);
     const menuArray = menuSnap.data()[selectedMenu]
     setActiveMenuItems(menuArray);
-    console.log(activeMenuItems)
 
+    // add counters to menu items, using a counter array in state 
+    let totalCounters = [];
+    for(let i = 0; i < menuArray.length; i++){
+      totalCounters.push(0)
+    }
+    setCounters([...totalCounters])
   }
+
   useEffect(()=>{
     fetchSelectedMenu();
   },[selectedMenu])
 
   function renderCards(){
-    return activeMenuItems.map(item => (
-      <MenuCard item={item}/>
-    ))
+    return activeMenuItems.map((item, index) => 
+      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index}/>
+    )
   }
 
   return (
-    <Box sx={{mt: 10}}>
-      <Grid sx={{flexDirection: 'column'}} container>
-        <Grid item sx={{mt: 10, ml: {lg: 30}}} xs={9}>
-          <SelectComponent getSelectedMenu={getSelectedMenu}></SelectComponent>
-        </Grid>
-        <Grid item xs={9} sx={{mt: 5, ml: {lg: 30}}}>
-          {renderCards()}
-        </Grid>
-      </Grid>
+    <Box >
+     <Container maxWidth='xl' sx={{pt: 10}}>
+         <SelectComponent getSelectedMenu={getSelectedMenu}/>
+         <Box sx={{display: 'flex', pt: 2, gap: 4}}>
+           {renderCards()}
+         </Box>
+     </Container>
     </Box>
   )
 }
