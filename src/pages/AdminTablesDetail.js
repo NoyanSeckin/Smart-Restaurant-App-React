@@ -54,7 +54,7 @@ export default function AdminTablesDetail() {
 
   function renderTable(){
     if(tableOrders.length > 0){
-     return <AdminTableData setDeletedItems={setDeletedItems} setIsDeleteTrue={setIsDeleteTrue} tableOrders={tableOrders} tableNum={tableNum}/>
+     return <AdminTableData setDeletedItems={setDeletedItems} deletedItems={deletedItems} setIsDeleteTrue={setIsDeleteTrue} tableOrders={tableOrders} tableNum={tableNum}/>
     }
   }
 

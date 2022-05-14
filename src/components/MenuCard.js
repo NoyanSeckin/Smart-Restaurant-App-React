@@ -45,7 +45,8 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
  
   const renderCards = () => {
       return(
-        <Card key={index} sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1 }}>
+        <Card key={index} 
+        sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1 }}>
           <CardMedia
             component="img"
             height="194"

@@ -118,6 +118,11 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
+  function handleDelete(){
+    props.setIsDeleteTrue(true); 
+    let filteredArray = props.selected.filter(item => !props.deletedItems.includes(item))
+    props.setSelected(filteredArray);
+  }
 
   return (
     <Toolbar
@@ -151,7 +156,7 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete" onClick={()=> props.setIsDeleteTrue(true)}>
+        <Tooltip title="Delete" onClick={handleDelete}>
           <IconButton >
             <DeleteIcon/>
           </IconButton>
@@ -171,7 +176,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({tableOrders, tableNum, setDeletedItems, setIsDeleteTrue}) {
+export default function EnhancedTable({tableOrders, tableNum, deletedItems, setDeletedItems, setIsDeleteTrue}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -195,7 +200,7 @@ export default function EnhancedTable({tableOrders, tableNum, setDeletedItems, s
     setSelected([]);
   };
 
-  const handleClick = (event, id, orderNumber) => {
+  const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -211,9 +216,6 @@ export default function EnhancedTable({tableOrders, tableNum, setDeletedItems, s
         selected.slice(selectedIndex + 1),
       );
     }
-    // setDeletedItems(deletedItem => {
-    //   if(newSelected.includes(deletedItem)){}
-    // })
     setSelected(newSelected);
     setDeletedItems(newSelected)
   };
@@ -237,7 +239,8 @@ export default function EnhancedTable({tableOrders, tableNum, setDeletedItems, s
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'column' }}>
-        <EnhancedTableToolbar numSelected={selected.length} tableNum={tableNum} setDeletedItems={setDeletedItems} setIsDeleteTrue={setIsDeleteTrue} selected={selected}/>
+        <EnhancedTableToolbar numSelected={selected.length} tableNum={tableNum} setDeletedItems={setDeletedItems} setIsDeleteTrue={setIsDeleteTrue} selected={selected} setSelected={setSelected}
+        deletedItems={deletedItems}/>
         <TableContainer>
           <Table
             aria-labelledby="tableTitle"
@@ -263,7 +266,7 @@ export default function EnhancedTable({tableOrders, tableNum, setDeletedItems, s
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id, row.orderNumber)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
