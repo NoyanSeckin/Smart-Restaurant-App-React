@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom'
-import { getFirestore, collection, updateDoc, arrayUnion, doc, onSnapshot, getDoc} from "firebase/firestore";
+import { getFirestore, collection, updateDoc, arrayRemove, doc, onSnapshot, getDoc} from "firebase/firestore";
 import {Box, Container} from '@mui/material'
 import React, {useEffect, useState} from 'react'
 import AdminTableData from '../components/AdminTableData'
@@ -8,14 +8,19 @@ export default function AdminTablesDetail() {
 
   const {tableNum} = useParams()
   const [tableOrders, setTableOrders] = useState([]);
+  const [deletedItems, setDeletedItems] = useState([]);
+  const [isDeleteTrue, setIsDeleteTrue] = useState(false);
+
   const db = getFirestore();
 
+  const tableRef = doc(db, 'Tables', `table_${tableNum}`)
   async function fetchTable(){
-    const tableRef = doc(db, 'Tables', `table_${tableNum}`)
     const tableSnap = await getDoc(tableRef)
     
     if(tableSnap.exists()){
       // recived db data is an object, reduce it to an array
+      const recievedData = tableSnap.data();
+      console.log(recievedData)
       const ordersArray = Object.values(tableSnap.data()).reduce((total, currentValue) => {
       const valueHolder =[];
        currentValue.forEach(value => valueHolder.push(value))
@@ -26,9 +31,30 @@ export default function AdminTablesDetail() {
     }
   }
 
+  useEffect(() => {
+    if(isDeleteTrue){
+      const deletingItems = tableOrders.filter(orderItem => deletedItems.includes(orderItem.id));
+      const stayingItems = tableOrders.filter(orderItem => !deletedItems.includes(orderItem.id));
+
+      deletingItems.forEach(item => {
+       const orderNumber = `order_${item.orderNumber}`;
+       
+       const ordersToUpload = stayingItems.filter(stayingItem => stayingItem.orderNumber === item.orderNumber)
+       console.log(ordersToUpload)
+
+      updateDoc(tableRef, {
+        [orderNumber]: ordersToUpload
+      })
+     })
+    }
+    fetchTable();
+    // console.log(deletedItems)
+    setIsDeleteTrue(false);
+  }, [isDeleteTrue])
+
   function renderTable(){
     if(tableOrders.length > 0){
-     return <AdminTableData tableOrders={tableOrders} tableNum={tableNum}/>
+     return <AdminTableData setDeletedItems={setDeletedItems} setIsDeleteTrue={setIsDeleteTrue} tableOrders={tableOrders} tableNum={tableNum}/>
     }
   }
 

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
@@ -46,7 +45,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
  
   const renderCards = () => {
       return(
-        <Card key={index} sx={{ maxWidth: 300, minWidth: 300 }}>
+        <Card key={index} sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1 }}>
           <CardMedia
             component="img"
             height="194"

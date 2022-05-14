@@ -158,8 +158,8 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete" >
-          <IconButton onClick={deleteItems}>
+        <Tooltip title="Delete" onClick={deleteItems}>
+          <IconButton>
             <DeleteIcon sx={{color: '#b2102f'}}/>
           </IconButton>
         </Tooltip>
