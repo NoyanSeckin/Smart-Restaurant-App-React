@@ -24,7 +24,6 @@ const checkoutButton = {
   background: '#4B9CE2', 
   borderRadius: '8px', 
   color: '#fff', 
-  fontWeight: 700, 
   fontSize: '18px', 
   px: 5,
   '&:hover': {background: '#4B9CE2'}
@@ -35,12 +34,11 @@ const checkoutButton = {
     borderRadius: '8px', 
     color: '#ff1744', 
     fontSize: '18px', 
-    fontWeight: '700', 
     mr: 1,
     px: 5 
   }
 
-export default function BuyModal({isModal, setIsModal}) {
+export default function BuyModal({isModal, setIsModal, header, content, bgColor}) {
   
   const handleClose = () => setIsModal(false);
   
@@ -56,19 +54,19 @@ export default function BuyModal({isModal, setIsModal}) {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-          style:{opacity: 0.7, background: '#4B9CE2'}
+          style:{opacity: 0.7, background: bgColor}
         }}
       >
         <Fade in={isModal}>
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', fontSize: '25px', mt: 2.5}}>
-              Satın AI
+              {header}
             </Typography>
             <Typography id="transition-modal-description" sx={{ my: 1.7, color: '#555555' }}>
-             Satın AImak istiyor musunuz?
+             {content}
             </Typography>
-            <Button sx={closeButton}onClick={handleClose}>Vazgeç</Button>
-            <Button sx={checkoutButton}>Satın AI</Button>
+            <Button sx={closeButton}onClick={handleClose}>Cancel</Button>
+            <Button sx={checkoutButton}>Proceed</Button>
           </Box> 
         </Fade>
       </Modal>

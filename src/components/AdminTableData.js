@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -176,12 +176,17 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({tableOrders, tableNum, deletedItems, setDeletedItems, setIsDeleteTrue, setIsModal}) {
+export default function EnhancedTable({tableOrders, tableNum, deletedItems, setDeletedItems, setIsDeleteTrue, setIsCheckoutModal, setIsCancelModal}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  // keep deletedItems synchronized with selected items
+  useEffect(()=> {
+    setDeletedItems(selected)
+  }, [selected])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -193,12 +198,18 @@ export default function EnhancedTable({tableOrders, tableNum, deletedItems, setD
     if (event.target.checked) {
       const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
-      setDeletedItems(newSelecteds);
       return;
     }
     setDeletedItems([]);
     setSelected([]);
   };
+
+  function handleModalOpen(setModalState){
+    setModalState(true);
+    // select all elements
+    const newSelecteds = rows.map((n) => n.id);
+    setSelected(newSelecteds);
+  }
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
@@ -217,7 +228,6 @@ export default function EnhancedTable({tableOrders, tableNum, deletedItems, setD
       );
     }
     setSelected(newSelected);
-    setDeletedItems(newSelected)
   };
 
   const handleChangePage = (event, newPage) => {
@@ -239,7 +249,7 @@ export default function EnhancedTable({tableOrders, tableNum, deletedItems, setD
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, display: 'flex', flexDirection: 'column' }}>
-        <EnhancedTableToolbar numSelected={selected.length} tableNum={tableNum} setDeletedItems={setDeletedItems} setIsDeleteTrue={setIsDeleteTrue} selected={selected} setSelected={setSelected}
+        <EnhancedTableToolbar numSelected={selected.length} tableNum={tableNum} setIsDeleteTrue={setIsDeleteTrue} selected={selected} setSelected={setSelected}
         deletedItems={deletedItems}/>
         <TableContainer>
           <Table
@@ -320,6 +330,7 @@ export default function EnhancedTable({tableOrders, tableNum, deletedItems, setD
         />
         <Box sx={{alignSelf: 'end', mb: 1, mr: 1}}>
         <Button variant='contained'
+        onClick={()=> setIsCancelModal(true)}
           sx={{
             color: '#ff1744', 
             background: '#F2F2F2',
@@ -328,7 +339,7 @@ export default function EnhancedTable({tableOrders, tableNum, deletedItems, setD
             Cancel Table
           </Button>
           <Button variant='contained'
-          onClick={()=> setIsModal(true)}
+          onClick={()=> handleModalOpen(setIsCheckoutModal)}
           sx={{px: 3}}>
             Checkout
           </Button>
