@@ -17,7 +17,7 @@ import Alert from './Alert'
 import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
 
-function MenuCard(props) {
+function MenuCard({tableItems, setTableItems, item}) {
   const [zero, setZero] = useState('0');
   const [counters, setCounters] = useState([{name: 'test', counter: 0}]);
   const [isAlert, setIsAlert] = useState(false);
@@ -25,7 +25,7 @@ function MenuCard(props) {
     // if item exist modify, else add it directly to tableItems
     if(item.counter > 0){
       let filteredItems = [];
-      let existingItems = props.tableItems;
+      let existingItems = tableItems;
       let existingObject;
       existingItems.forEach(existingItem => {
         if(existingItem.name === item.name){
@@ -36,9 +36,9 @@ function MenuCard(props) {
       })
       if(existingObject){
         existingObject.count += item.counter;
-        props.setTableItems([...filteredItems, existingObject])
+        setTableItems([...filteredItems, existingObject])
       } else if(!existingObject){
-        props.setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price }])
+        setTableItems([...existingItems, {name: item.name, count: item.counter, image: item.image, price: item.price }])
       }
       // reset the counter of that item
       // Switch Alert
@@ -82,9 +82,7 @@ function MenuCard(props) {
   }
  
   const renderCards = () => {
-    return(
-    <Box sx={{display: 'flex', gap: 8, flexWrap: 'wrap'}}> 
-      {data[props.selectedMenu].map(item => { 
+    console.log(item)
       return(
         <Card key={item.name} sx={{ maxWidth: 300, minWidth: 300 }}>
           <CardMedia
@@ -93,12 +91,12 @@ function MenuCard(props) {
             image={item.image}
             alt={item.name}
           />
-          <CardContent>
-          <CardHeader>
+          <CardContent sx={{pt: 0.5}}>
+          <Typography variant='h6'>
             {item.name}
-          </CardHeader>
+          </Typography>
           <Typography variant="body2" color="text.secondary">
-            {item.description}
+            {item.description || 'Lorem ipsum'}
           </Typography>
         </CardContent>
         <CardActions sx={{display: 'flex', justifyContent: 'space-between'}} disableSpacing>
@@ -118,13 +116,13 @@ function MenuCard(props) {
         </CardActions>
       </Card>
       )
-    })
   }
-  </Box>)
-  }
+
   return (
     <div>
-      {renderCards()}
+       <Box sx={{display: 'flex', gap: 8, flexWrap: 'wrap'}}>
+        {renderCards()}
+       </Box>
       <Alert isAlert={isAlert} setIsAlert={setIsAlert}></Alert>
     </div>
   );

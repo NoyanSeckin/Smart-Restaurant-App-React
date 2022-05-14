@@ -14,7 +14,7 @@ export default function AdminTables({tables}) {
 
   const [occupiedTables, setOccupiedTables] = useState([]);
   const [waiterCalls, setWaiterCalls] = useState([]);
-  const [waiterAlert, setWaiterAlert] = useState(true);
+  const [waiterAlert, setWaiterAlert] = useState(false);
 
   // get occupied tables and waitercalls
   useEffect(()=> {

@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { connect } from "react-redux";
 import {setCurrentTable, setTables} from '../actions'
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, updateDoc, arrayUnion, getDoc} from "firebase/firestore";
+import { getFirestore, doc, updateDoc, arrayUnion, getDoc} from "firebase/firestore";
 import firebaseApp from '../firebase/init'
 
 function Menu({setCurrentTable, setTables}) {
@@ -15,13 +15,12 @@ function Menu({setCurrentTable, setTables}) {
   const { id } = useParams();
   
   const db = getFirestore();
-  const docRef = doc(db, 'OccupiedTables', 'occupiedTables');
   
-  // buraya gerek yok galiba bunu silebilirim
+  // add current table to the db
+  const docRef = doc(db, 'OccupiedTables', 'occupiedTables');
   const fetchActiveTables = async () =>{
     const docSnap = await getDoc(docRef);
     const tables = docSnap.data().occupiedTables;
-    console.log(tables)
     setTables(tables);
     return tables;
   }
@@ -45,6 +44,27 @@ function Menu({setCurrentTable, setTables}) {
   function getSelectedMenu(data){
     setSelectedMenu(data);
   }
+
+  const [activeMenuItems, setActiveMenuItems] = useState([]);
+
+  async function fetchSelectedMenu(){
+    const menuRef = doc(db, 'Menu', `${selectedMenu}`);
+    const menuSnap = await getDoc(menuRef);
+    const menuArray = menuSnap.data()[selectedMenu]
+    setActiveMenuItems(menuArray);
+    console.log(activeMenuItems)
+
+  }
+  useEffect(()=>{
+    fetchSelectedMenu();
+  },[selectedMenu])
+
+  function renderCards(){
+    return activeMenuItems.map(item => (
+      <MenuCard item={item}/>
+    ))
+  }
+
   return (
     <Box sx={{mt: 10}}>
       <Grid sx={{flexDirection: 'column'}} container>
@@ -52,7 +72,7 @@ function Menu({setCurrentTable, setTables}) {
           <SelectComponent getSelectedMenu={getSelectedMenu}></SelectComponent>
         </Grid>
         <Grid item xs={9} sx={{mt: 5, ml: {lg: 30}}}>
-          <MenuCard selectedMenu={selectedMenu}></MenuCard>
+          {renderCards()}
         </Grid>
       </Grid>
     </Box>
