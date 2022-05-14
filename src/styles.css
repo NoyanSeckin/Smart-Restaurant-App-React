@@ -91,3 +91,48 @@ a{
 	border-radius: 8px;
 	margin-top: 1.2rem;
 }
+
+/* Add product */
+
+form input{
+	background-color: #F4F4F4;
+	border-radius: 8px;
+	padding: 1rem 0.7rem;
+	border: 1px solid #fff;
+	margin-bottom: 1rem;
+	margin-top: 0.3rem;
+	
+}
+
+form input:focus{
+	border: 1px solid #4B9CE2;
+	outline: none;
+	background-color: #F0F8FF;
+	color: #3E3E3E;
+}
+
+.form-error{
+	border: 1px solid #F77474;
+	background: #FFF2F2;
+	color: #F77474;
+}
+
+textarea{
+	background-color: #F4F4F4;
+	border-radius: 8px;
+	border: 1px solid #fff;
+	font-size: 16px;
+	font-family: 'Nunito', 'sans-serif';
+	margin-bottom: 1rem;
+	margin-top: 0.3rem;
+	padding: 1rem 0.7rem;
+	resize: none;
+	width: 80%;
+}
+
+form textarea:focus{
+	border: 1px solid #4B9CE2;
+	outline: none;
+	background-color: #F0F8FF;
+	color: #3E3E3E;
+}

@@ -13,6 +13,7 @@
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^9.6.11",
+    "formik": "^2.2.9",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -22,7 +23,8 @@
     "react-scripts": "5.0.0",
     "redux": "^4.1.2",
     "uuid": "^8.3.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
