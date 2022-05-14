@@ -58,6 +58,8 @@ export default function AdminTablesDetail() {
         [orderNumber]: ordersToUpload
       })
      })
+     fetchTable();
+     setIsDeleteTrue(false);
     }
   }
 
@@ -70,7 +72,6 @@ export default function AdminTablesDetail() {
   }
 
   async function cancelTable(){
-    if(isCancelTable){
       const fields = tableOrders.reduce((accumulator, currentOrder) => [...accumulator, currentOrder.orderNumber], []);
       const uniqueFields = [...new Set(fields)]
       
@@ -84,19 +85,19 @@ export default function AdminTablesDetail() {
       removeOccupiedTable()
       history.push('/admin');
       setIsCancelTable(false);
-    }
   }
 
   // cancel table
   useEffect(()=>{
-    cancelTable();
+    if(isCancelTable){
+      cancelTable();
+    }
   }, [isCancelTable])
 
   // delete selected items from db
   useEffect(() => {
     deleteSelectedItems();
-    fetchTable();
-    setIsDeleteTrue(false);
+    
   }, [isDeleteTrue])
 
   function renderTable(){
@@ -114,12 +115,24 @@ export default function AdminTablesDetail() {
           <Typography variant='h5' sx={{fontWeight: 'bold'}}>
             Table has not ordered yet!
           </Typography>
-          <NavLink to='/admin'>
-            <Button  startIcon={<ArrowBackIcon/>}
-            sx={{mt: 3}}>
-              Back to tables
-            </Button>
-          </NavLink>
+          <Box sx={{display: 'flex', mt: 3}}>
+            <NavLink to='/admin'>
+              <Button  startIcon={<ArrowBackIcon/>}>
+                Back to tables
+              </Button>
+            </NavLink>
+            <Button variant='contained'
+            onClick={cancelTable}
+              sx={{
+                color: '#ff1744', 
+                background: '#F2F2F2',
+                ml: 2,
+                height: '30px',
+                '&:hover': {background: '#F2F2F2'}
+                }}>
+            Cancel Table
+          </Button>
+          </Box>
         </Paper>
       )
     }
