@@ -105,8 +105,8 @@ export default function AddProduct() {
           }}
           validationSchema={
             Yup.object({
-              name: Yup.string().max(100, 'Max 50 characters.').required(requiredText),
-              description: Yup.string().max(500, 'Max 100 characters').required(requiredText),
+              name: Yup.string().max(100, 'Max 50 characters.').required(),
+              description: Yup.string().max(500, 'Max 100 characters').required(),
               category: Yup.string(),
               preperationTime: Yup.string(),
               price: Yup.number().required(),
@@ -138,7 +138,7 @@ export default function AddProduct() {
 
                     <Box sx={{ flexGrow: 1}}>
                       <label htmlFor="preperationTime" style={{marginBottom: '1rem', display: 'inline-block'}}>Preperation Time</label>
-                      <PreperationSelect id='preperationTime' value={values.preperationTime} handlePreperationChange={handleChange} />
+                      <PreperationSelect id='preperationTime' value={values.preperationTime} handlePreperationChange={handleChange}/>
                     </Box>
                  </Box>
 

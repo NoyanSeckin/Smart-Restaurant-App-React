@@ -5,10 +5,10 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function SelectLabels({handlePreperationChange, id, value}) {
+export default function SelectLabels({handlePreperationChange, id, value, style}) {
   return (
     <div>
-      <FormControl sx={{minWidth: 120, maxWidth: '300px' }} 
+      <FormControl sx={{minWidth: 120 }} 
           fullWidth
           >
         <Select

@@ -164,3 +164,20 @@ form label {
 	box-sizing: border-box;
 }
 
+/* Edit form */
+
+.edit textarea{ 
+	height: 10px;
+	overflow: hidden;
+	margin: 0;
+	font-size: 18px;
+}
+
+.edit .price-wrapper::after{
+	top: 22px
+}
+
+.edit .MuiSelect-outlined{
+	padding: 0.6rem 0.7rem;
+}
+

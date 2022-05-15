@@ -1,22 +1,28 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import Typography from '@mui/material/Typography';
-
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import PreperationSelect from './PreperationSelect'
+import DropzoneComp from './DropzoneComp';
 const style = {
   bgcolor: '#fff',
   borderRadius: '8px',
   boxShadow: '0px 3px 12px #1E36482E',
-  height: '171px',
   left: '50%',
   position: 'absolute',
   top: '50%',
   transform: 'translate(-50%, -50%)',
   width: '355px',
   zIndex: 33,
+  px: 2,
+  py: 2,
 };
 
 const checkoutButton = {
@@ -25,6 +31,7 @@ const checkoutButton = {
   color: '#fff', 
   fontSize: '18px', 
   px: 5,
+  width: '100%',
   '&:hover': {backgroundColor: 'primary.main'}
 }
 
@@ -33,19 +40,76 @@ const checkoutButton = {
     borderRadius: '8px', 
     color: 'warning.dark', 
     fontSize: '18px', 
-    mr: 1,
-    px: 5 
+    mt: 1,
+    px: 5 ,
+    width: '100%'
+  }
+
+  const iconStyle = {
+    position: 'absolute',
+    top: '50px',
+    '&:hover': {cursor: 'pointer'}
   }
 
 export default function EditModal({isModal, setIsModal, item, proceedAction}) {
-  console.log(item)
+
+  const [isItemImageStay, setIsItemImageStay] = useState(true);
+  const [files, setFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFileError, setSelectedFileError] = useState();
   const handleClose = () => setIsModal(false);
   function handleProceedAction(){
     proceedAction(true)
     handleClose();
   }
+
+  function renderImageOrDropzone(){
+    if(isItemImageStay){
+      return  <img src={item?.image} alt="" style={{width: '60%'}} />    
+    }else return <DropzoneComp files={files} setFiles={setFiles} setSelectedFile={setSelectedFile} setSelectedFileError={setSelectedFileError}/>
+  }
+
+  function renderActionIcon(){
+    if(isItemImageStay){
+      return <CloseIcon className='delete-icon' sx={iconStyle} onClick={()=> setIsItemImageStay(false)}/>
+    } else return <SettingsBackupRestoreIcon sx={iconStyle} onClick={()=> setIsItemImageStay(true)}/>
+  }
+
+  // formik
+
+  const inputInfos = {
+    name: {label: 'Product Name', placeholder: 'Enter a name'},
+    description: {label: 'Description', placeholder: 'Enter a description'},
+    category: {label: 'Category', placeholder: 'Choose a category'},
+    price: {label: 'Price', placeholder: 'Enter a price'}
+  }
+
+  function renderInput(value, error, handleChange, valueName){
+    return(
+      <Box sx={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
+        <textarea className={error && 'form-error'} id={valueName} type='text' value={value} onChange={handleChange} rows='1'
+        />
+        <Typography sx={{position: 'absolute', bottom: '-5px', color: '#F77474'}}>{error}</Typography>
+      </Box>
+    )
+  }
+
+  function renderSelectedFileError(){
+    if(selectedFileError){
+      return <Typography sx={{color: '#F77474', mt: 1, textAlign: 'center'}}>{selectedFileError}</Typography>
+    }
+  }
+
+  function renderButtonActions(){
+    return(
+      <Box>
+          <Button type='submit' onClick={handleProceedAction} sx={checkoutButton}>Proceed</Button>
+         <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
+      </Box>
+    )
+  }
   return (
-    <Box>
+    <Box sx={{position: 'relative'}}>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -61,13 +125,67 @@ export default function EditModal({isModal, setIsModal, item, proceedAction}) {
       >
         <Fade in={isModal}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', fontSize: '25px', mt: 2.5}}>
+            {renderActionIcon()}
+            <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', mb: 2}}>
               Edit Item
             </Typography>
-            <Typography id="transition-modal-description" sx={{ my: 1.7, color: '#555555' }}>
-            </Typography>
-            <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleProceedAction} sx={checkoutButton}>Proceed</Button>
+            <Box sx={{height: '160px', mt: 3}}>
+              {renderImageOrDropzone()}
+            </Box>
+            <Formik 
+          initialValues={{
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            preperationTime: item.preperationTime
+          }}
+          validationSchema={
+            Yup.object({
+              name: Yup.string().max(100, 'Max 50 characters.').required('Name is required'),
+              description: Yup.string().max(500, 'Max 100 characters').required('Description is required'),
+              category: Yup.string(),
+              preperationTime: Yup.string(),
+              price: Yup.number().required(),
+            })
+          }
+          onSubmit={(values, {resetForm}) => {
+            // if(selectedFile?.name){
+            //   uploadProduct(values.name, values.description, values.preperationTime, values.price, values.category);
+
+            //   resetForm()
+            //   setSelectedFile('')
+            //   setFiles([]);
+            //   setIsAlert(true)
+            // }else setSelectedFileError('Choose a file')
+          }}
+          >
+            {({values, errors, handleSubmit, handleChange}) => (
+              <form className='edit' onSubmit={handleSubmit}>
+                
+                <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, width: '100%', mt: 1}}>
+                  
+                  {renderInput(values.name, errors.name, handleChange, 'name')}
+                  {renderInput(values.description, errors.description, handleChange, 'description')}
+
+                 <Box sx={{display: 'flex', fleWrap: 'wrap', gap: 2}}>
+                    <Box sx={{ flexGrow: 1}}>
+                      <PreperationSelect id='preperationTime' value={values.preperationTime} handlePreperationChange={handleChange} style={{p: 0}}/>
+                    </Box>
+                 </Box>
+
+                  <div className='price-wrapper'>
+                    <input className={` price-input ${errors.price && 'form-error'}`} type="text" value={values.price} id='price' onChange={handleChange} placeholder={inputInfos.price.placeholder}
+                    style={{marginBottom: 0}}/>
+                  </div>
+                  
+                  {renderButtonActions()}
+                  </Box>
+              </form>
+            )}
+          </Formik>
+
+
+           
           </Box> 
         </Fade>
       </Modal>

@@ -41,7 +41,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
   const [isAlert, setIsAlert] = useState(false);
 
   const [isModal, setIsModal] = useState(false)
-  const [isEditModal, setIsEditModal] = useState(true)
+  const [isEditModal, setIsEditModal] = useState(false)
   const [editItem, setEditItem] = useState({});
 
   function addToTable(item, itemCounter){

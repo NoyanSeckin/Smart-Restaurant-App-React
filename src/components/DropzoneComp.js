@@ -18,7 +18,7 @@ const closeIconStyle = {
   '&:hover': {cursor: 'pointer'}
 }
 
-export default function DropzoneComp({setSelectedFile, setSelectedFileError, selectedFile, files, setFiles}) {
+export default function DropzoneComp({setSelectedFile, setSelectedFileError,  files, setFiles}) {
   const [loader, setLoader] = useState(true);
   const validImgTypes = ['image/png', 'image/jpg', 'image/jpeg']
   
