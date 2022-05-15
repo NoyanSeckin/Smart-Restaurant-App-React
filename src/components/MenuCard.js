@@ -49,9 +49,9 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
         sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1 }}>
           <CardMedia
             component="img"
-            height="194"
             image={item.image}
             alt={item.name}
+            height='194'
           />
           <CardContent sx={{pt: 0.5}}>
           <Typography variant='h6'>
@@ -61,9 +61,12 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
             {item.description || 'Lorem ipsum'}
           </Typography>
         </CardContent>
+        
         <CardActions sx={{display: 'flex', flexDirection: 'column'}} disableSpacing>
+        <Typography sx={{alignSelf: 'start'}}>{item?.price} $</Typography>
+
           <Box sx={{display: 'flex', justifyContent: 'space-between', flexGrow: 1, width: '100%'}}>
-            <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime} min</Typography>
+            <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime}</Typography>
             <Box sx={{display: 'flex', gap: 1}}>
               <RemoveIcon fontSize='small' sx={{alignSelf: 'center', '&:hover': {cursor: 'pointer'}}}
               onClick={()=> handleCounterChange(index, - 1)} />

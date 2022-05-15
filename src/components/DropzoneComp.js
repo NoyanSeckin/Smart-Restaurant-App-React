@@ -18,9 +18,8 @@ const closeIconStyle = {
   '&:hover': {cursor: 'pointer'}
 }
 
-export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
+export default function DropzoneComp({setSelectedFile, setSelectedFileError, selectedFile, files, setFiles}) {
   const [loader, setLoader] = useState(true);
-  const [files, setFiles] = useState([]);
   const validImgTypes = ['image/png', 'image/jpg', 'image/jpeg']
   
   const {getRootProps, getInputProps, open} = useDropzone({
@@ -30,11 +29,10 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
     multiple: false,
     noClick: true,
     onDrop: (acceptedFiles) => {
-      const uploadedFile = acceptedFiles[0];
       // size check
-      if(uploadedFile.size > 400000){
+      if(acceptedFiles[0].size > 400000){
         setSelectedFileError("Image is larger than 400kb")
-      }else if(validImgTypes.includes(uploadedFile.type)){
+      }else if(validImgTypes.includes(acceptedFiles[0].type)){
         // activate loader
         setLoader(true);
         // set image preview
@@ -42,13 +40,13 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
           preview: URL.createObjectURL(file)
         })));
         // get the uploaded image
-        setSelectedFile(uploadedFile)
+        setSelectedFile(acceptedFiles[0])
         setSelectedFileError('')
         // disable loader
         setTimeout(() => {
           setLoader(false);
         }, 1000);
-      } else if(!validImgTypes.includes(uploadedFile)){
+      } else if(!validImgTypes.includes(acceptedFiles[0])){
         setSelectedFileError('PNG & JPEG files only')
       }
     }
@@ -107,7 +105,7 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
           </Box>
         )
      }
-       else {
+       else if(selectedFile){
         return(
           <aside style={{position: 'relative'}} >
           {thumbs}

@@ -75,7 +75,7 @@ function Menu({setCurrentTable, setTables}) {
     <Box >
      <Container maxWidth='xl' sx={{pt: 10}}>
          <SelectComponent getSelectedMenu={getSelectedMenu}/>
-         <Box sx={{display: 'flex', pt: 2, gap: 4}}>
+         <Box sx={{display: 'flex', pt: 2, gap: 4, flexWrap: 'wrap'}}>
            {renderCards()}
          </Box>
      </Container>

@@ -1,16 +1,34 @@
 import firebaseApp from "../firebase/init"
 import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import {arrayUnion, doc, getFirestore, updateDoc} from 'firebase/firestore'
 import {Box, Button, Typography, Grid} from '@mui/material'
 import { v4 as uuidv4 } from 'uuid';
 import { Formik} from 'formik';
 import * as Yup from 'yup';
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Dropzone from './DropzoneComp'
 import SelectComponent from './SelectComponent'
+import PreperationSelect from './PreperationSelect'
+
+const submitBtnStyle = {
+  color: '#fff',
+  fontSize: '18px',
+  borderRadius: '8px',
+  position: 'absolute', 
+  px: {xs: 0, lg:16},
+  left: {xs: 0, lg: 'auto'},
+  mx: {xs: 3.5, lg: 0},
+  right: {xs: '0', lg: '0'},
+  bottom: {xs: '-35px', lg: '0'},  
+  mb: {xs: 1, lg: 0},
+  '&:hover': {
+    cursor: 'pointer'
+  }
+  }
 
 export default function AddProduct() {
-
+  const db = getFirestore()
   const storage = getStorage(firebaseApp)
 
   const requiredText = 'This field is required.'
@@ -18,16 +36,39 @@ export default function AddProduct() {
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileError, setSelectedFileError] = useState('');
   const [imageURL, setImageURL] = useState('');
-  console.log(selectedFile?.name)
+  // state of image of uploaded file
+  const [files, setFiles] = useState([]);
 
-  async function uploadImage(){
-      const imageRef = ref(storage, `images/${selectedFile.name + uuidv4()}`)
-      uploadBytes(imageRef, selectedFile).then((response)=>{
-        getDownloadURL(imageRef).then(url => setImageURL(url))
-      }).catch(err => console.log(err))
+
+  useEffect(()=>{
+    console.log(selectedFile)
+  }, [selectedFile])
+
+  async function uploadImage(id){
+      
   }
 
-  // async fu
+  async function uploadProduct(name, description, preperationTime, price, category){
+    const id = uuidv4();
+    const imageRef = ref(storage, `images/${id}`)
+    const menuRef = doc(db, 'Menu', category);
+
+      uploadBytes(imageRef, selectedFile).then((response)=>{
+        getDownloadURL(imageRef).then(url => {
+          updateDoc(menuRef, {
+            [category]: arrayUnion({
+              id,
+              name,
+              description,
+              preperationTime,
+              price,
+              image: url
+            })
+          })
+        })
+      }).catch(err => console.log(err))
+   
+  }
 
   const inputInfos = {
     name: {label: 'Product Name', placeholder: 'Enter a name'},
@@ -49,48 +90,70 @@ export default function AddProduct() {
     )
   }
 
+  function renderSelectedFileError(){
+    if(selectedFileError){
+      return <Typography sx={{color: '#F77474', mt: 1, textAlign: 'center'}}>{selectedFileError}</Typography>
+    }
+  }
+
   return (
-    <Grid container sx={{height: '70vh', position: 'relative'}}>
+    <Grid container sx={{height: {xs: '80vh', lg: '70vh'}, position: 'relative'}}>
       <Grid item xs={12} lg={6} >
+      <Typography variant='h5'>Details</Typography>
+
       <Formik 
           initialValues={{
             name: '',
             description: '',
             price: '',
+            category: 'mainDishes',
+            preperationTime: 'Right Away'
           }}
           validationSchema={
             Yup.object({
               name: Yup.string().max(100, 'Max 50 characters.').required(requiredText),
               description: Yup.string().max(500, 'Max 100 characters').required(requiredText),
               category: Yup.string(),
-              price: Yup.number('Please enter a number').required(),
+              preperationTime: Yup.string(),
+              price: Yup.number().required(),
             })
           }
           onSubmit={(values, {resetForm}) => {
-            // check if user selected image
-            console.log(values.category);
-            if(!values.category){
-              values.category = 'mainDishes'
-            }
             console.log(values)
-            // if(selectedFile.path){
-              
-            // }
+            if(selectedFile?.name){
+              uploadProduct(values.name, values.description, values.preperationTime, values.price, values.category);
+
+              resetForm()
+              setSelectedFile('')
+              setFiles([]);
+            }else setSelectedFileError('Choose a file')
           }}
           >
-            {({values, errors, handleSubmit, dirty, handleChange}) => (
+            {({values, errors, handleSubmit, handleChange}) => (
               <form onSubmit={handleSubmit}>
-                <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
+                <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, width: '80%', mt: 1}}>
                   
                   {renderInput(values.name, errors.name, handleChange, 'name')}
                   {renderInput(values.description, errors.description, handleChange, 'description')}
-                  <SelectComponent value={values.category} id='category' handleAddMenuChange={handleChange}/>
+
+                 <Box sx={{display: 'flex', fleWrap: 'wrap', gap: 2}}>
+                  <Box sx={{ flexGrow: 1}}>
+                      <label htmlFor="category" style={{marginBottom: '1rem', display: 'inline-block'}}>Category</label>
+                      <SelectComponent value={values.category} id='category' handleAddMenuChange={handleChange}/>
+                    </Box>
+
+                    <Box sx={{ flexGrow: 1}}>
+                      <label htmlFor="preperationTime" style={{marginBottom: '1rem', display: 'inline-block'}}>Preperation Time</label>
+                      <PreperationSelect id='preperationTime' value={values.preperationTime} handlePreperationChange={handleChange} />
+                    </Box>
+                 </Box>
+
                   <Box sx={{
                     display: 'flex', 
                     flexDirection: 'column', 
                     width: {sm: '100%', md: '30%'},
                     gap: 2.7,
-                    mt: 3
+                    mt: 2
                     }}>
                     
                     <div className='price-wrapper'>
@@ -104,37 +167,25 @@ export default function AddProduct() {
                         fontSize: '15px', 
                         color: '#f77474', 
                         mb: 2}}>
-                          {errors.price}
+                         Please enter a number
                       </Typography>}
                     </div>
                   </Box>
                   
                   <Button type='submit' variant='contained' 
-                      sx={{
-                        color: '#fff',
-                        fontSize: '18px',
-                        borderRadius: '8px',
-                        position: 'absolute', 
-                        px: {xs: 0, lg:16},
-                        left: {xs: 0, lg: 'auto'},
-                        mx: {xs: 3.5, lg: 0},
-                        right: {xs: '0', lg: '0'},
-                        bottom: {xs: 0, lg: '0'},  
-                        mb: {xs: 1, lg: 0},
-                        '&:hover': {
-                          cursor: 'pointer'
-                        }
-                        }}>Add Product</Button>
+                      sx={submitBtnStyle}>Add Product</Button>
                 </Box>
               </form>
             )}
           </Formik>
       </Grid>
       <Grid item xs={12} lg={6}>
-        <Dropzone setSelectedFile={setSelectedFile} setSelectedFileError={setSelectedFileError}/>
-        <Button onClick={uploadImage}>Upload file</Button>
+        <Typography variant='h5' 
+        sx={{mb: {xs: 0, lg: 2}}}>Upload Image</Typography>
+        <Dropzone setSelectedFile={setSelectedFile} setSelectedFileError={setSelectedFileError} selectedFile={renderSelectedFileError}
+        files={files} setFiles={setFiles}/>
+        {renderSelectedFileError()}
       </Grid>
-     
     </Grid>
   )
 }

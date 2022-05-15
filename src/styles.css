@@ -127,7 +127,6 @@ textarea{
 	margin-top: 0.3rem;
 	padding: 1rem 0.7rem;
 	resize: none;
-	width: 80%;
 }
 
 form textarea:focus{
@@ -135,6 +134,10 @@ form textarea:focus{
 	outline: none;
 	background-color: #F0F8FF;
 	color: #3E3E3E;
+}
+
+form label {
+	font-size: 20px;
 }
 
 .price-wrapper{
@@ -147,7 +150,7 @@ form textarea:focus{
 	color: #99A0A7;
 	position: absolute;
 	right: 20px;
-	top: 36px;
+	top: 38px;
 }
 
 .price-input{
