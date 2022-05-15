@@ -10,9 +10,11 @@ import React, {useState, useEffect} from 'react'
 import Dropzone from './DropzoneComp'
 import SelectComponent from './SelectComponent'
 import PreperationSelect from './PreperationSelect'
+import SuccessAlert from './SuccessAlert'
 
 const submitBtnStyle = {
   color: '#fff',
+  backgroundColor: 'warning.main',
   fontSize: '18px',
   borderRadius: '8px',
   position: 'absolute', 
@@ -23,7 +25,8 @@ const submitBtnStyle = {
   bottom: {xs: '-35px', lg: '0'},  
   mb: {xs: 1, lg: 0},
   '&:hover': {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    backgroundColor: 'warning.dark'
   }
   }
 
@@ -35,18 +38,9 @@ export default function AddProduct() {
 
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileError, setSelectedFileError] = useState('');
-  const [imageURL, setImageURL] = useState('');
-  // state of image of uploaded file
+  // state of dropzone for displaying uploaded file
   const [files, setFiles] = useState([]);
-
-
-  useEffect(()=>{
-    console.log(selectedFile)
-  }, [selectedFile])
-
-  async function uploadImage(id){
-      
-  }
+  const [isAlert, setIsAlert] = useState(false)
 
   async function uploadProduct(name, description, preperationTime, price, category){
     const id = uuidv4();
@@ -119,13 +113,13 @@ export default function AddProduct() {
             })
           }
           onSubmit={(values, {resetForm}) => {
-            console.log(values)
             if(selectedFile?.name){
               uploadProduct(values.name, values.description, values.preperationTime, values.price, values.category);
 
               resetForm()
               setSelectedFile('')
               setFiles([]);
+              setIsAlert(true)
             }else setSelectedFileError('Choose a file')
           }}
           >
@@ -186,6 +180,8 @@ export default function AddProduct() {
         files={files} setFiles={setFiles}/>
         {renderSelectedFileError()}
       </Grid>
+
+      <SuccessAlert isAlert={isAlert} setIsAlert={setIsAlert} content='Item added to the menu!'/>
     </Grid>
   )
 }

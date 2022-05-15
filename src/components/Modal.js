@@ -21,18 +21,18 @@ const style = {
 };
 
 const checkoutButton = {
-  background: '#4B9CE2', 
+  backgroundColor: 'primary.light', 
   borderRadius: '8px', 
   color: '#fff', 
   fontSize: '18px', 
   px: 5,
-  '&:hover': {background: '#4B9CE2'}
+  '&:hover': {backgroundColor: 'primary.main'}
 }
 
   const closeButton = {
     background: '#f0f8ff', 
     borderRadius: '8px', 
-    color: '#ff1744', 
+    color: 'warning.dark', 
     fontSize: '18px', 
     mr: 1,
     px: 5 
@@ -57,7 +57,7 @@ export default function BuyModal({isModal, setIsModal, header, content, bgColor,
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-          style:{opacity: 0.7, background: bgColor}
+          style:{opacity: 0.7, backgroundColor: bgColor}
         }}
       >
         <Fade in={isModal}>

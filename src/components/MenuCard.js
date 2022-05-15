@@ -9,13 +9,36 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button'
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
 import Alert from './Alert'
+import Modal from './Modal'
+
 
 import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
 
+
+const closeIconStyle = {
+  color: 'danger.dark',
+  position: 'absolute',
+  right: '15px',
+  bottom: '90px',
+  '&:hover': {cursor: 'pointer'}
+}
+
+const editIconStyle = {
+  color: 'primary.dark',
+  position: 'absolute',
+  right: '50px',
+  bottom: '90px',
+  '&:hover': {cursor: 'pointer'}
+}
+
 function MenuCard({tableItems, setTableItems, item, counters, setCounters, index}) {
   const [isAlert, setIsAlert] = useState(false);
+
+  const [isModal, setIsModal] = useState(false)
 
   function addToTable(item, itemCounter){
     const newItem = {...item, count: itemCounter}
@@ -46,14 +69,16 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
   const renderCards = () => {
       return(
         <Card key={index} 
-        sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1 }}>
+        sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1, position: 'relative' }}>
           <CardMedia
             component="img"
             image={item.image}
             alt={item.name}
-            height='194'
+            height='180'
           />
-          <CardContent sx={{pt: 0.5}}>
+          <CloseIcon sx={closeIconStyle}  onClick={()=> setIsModal(true)}/>
+          <EditIcon sx={editIconStyle}/>
+          <CardContent sx={{pt: 0.5, px: 1}}>
           <Typography variant='h6'>
             {item.name}
           </Typography>
@@ -75,7 +100,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
               onClick={()=> handleCounterChange(index, 1)}/>
             </Box>
           </Box>
-          <Button sx={{width: '100%', mt: 1, background: '#F58840'}} onClick={()=> addToTable(item, counters[index])} variant='contained'>Order</Button>
+          <Button sx={{width: '100%', mt: 1, backgroundColor: 'warning.dark', '&:hover': {backgroundColor: 'warning.main'}}} onClick={()=> addToTable(item, counters[index])} variant='contained'>Add to table</Button>
         </CardActions>
       </Card>
       )
@@ -84,7 +109,8 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
   return (
     <div>
        {renderCards()}
-      <Alert isAlert={isAlert} setIsAlert={setIsAlert}></Alert>
+      {/* <Alert isAlert={isAlert} setIsAlert={setIsAlert}></Alert> */}
+      <Modal header='Deleting Item' content='Are you sure about it?' bgColor='#d32f2f' isModal={isModal} setIsModal={setIsModal}/>
     </div>
   );
 }

@@ -105,7 +105,7 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError, sel
           </Box>
         )
      }
-       else if(selectedFile){
+       else{
         return(
           <aside style={{position: 'relative'}} >
           {thumbs}

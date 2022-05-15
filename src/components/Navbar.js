@@ -67,9 +67,9 @@ import {setTableItems} from '../actions'
   }
 
   return (
-    <Box sx={{ flexGrow: 1, position: 'relative', background: '#F58840' }}>
+    <Box sx={{ flexGrow: 1, position: 'relative', backgroundColor: 'warning.dark' }}>
       <Container maxWidth='xl'>
-      <AppBar elevation={0} position="static" sx={{background: '#F58840'}}>
+      <AppBar elevation={0} position="static" sx={{backgroundColor: 'warning.dark'}}>
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{
             display: 'flex', 
