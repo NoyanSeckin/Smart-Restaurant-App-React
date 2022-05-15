@@ -19,7 +19,7 @@ const closeIconStyle = {
 }
 
 export default function DropzoneComp({setSelectedFile, setSelectedFileError,  files, setFiles}) {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const validImgTypes = ['image/png', 'image/jpg', 'image/jpeg']
   
   const {getRootProps, getInputProps, open} = useDropzone({
@@ -105,7 +105,7 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError,  fi
           </Box>
         )
      }
-       else{
+       else if(files.length > 0){
         return(
           <aside style={{position: 'relative'}} >
           {thumbs}

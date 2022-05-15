@@ -19,6 +19,9 @@ function Menu({setCurrentTable, setTables}) {
   const [deletedItemId, setDeletedItemId] = useState('');
   const [isDeleteItem, setIsDeleteItem] = useState(false);
 
+  const [editItem, setEditItem] = useState({});
+  const [isEditItem, setIsEditItem] = useState(false);
+
 
   const fetchActiveTables = async () =>{
     const docSnap = await getDoc(docRef);
@@ -40,6 +43,8 @@ function Menu({setCurrentTable, setTables}) {
     })
     
   }, [])
+
+  
   
   const [selectedMenu, setSelectedMenu] = useState('mainDishes')
   // get selected item from SelectComponent 
@@ -73,7 +78,7 @@ function Menu({setCurrentTable, setTables}) {
 
   function renderCards(){
     return activeMenuItems.map((item, index) => 
-      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index} setDeletedItemId={setDeletedItemId} setIsDeleteItem={setIsDeleteItem}/>
+      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index} setDeletedItemId={setDeletedItemId} setIsDeleteItem={setIsDeleteItem} editItem={editItem} setEditItem={setEditItem} setIsEditItem={setIsEditItem}/>
     )
   }
 
@@ -92,6 +97,26 @@ function Menu({setCurrentTable, setTables}) {
   useEffect(()=>{
       deleteItem()
   }, [isDeleteItem])
+
+  async function editMenuItem(){
+    if(isEditItem){
+      const unchangedItems = activeMenuItems.filter(item => item.id !== editItem.id);
+      const allItems = [...unchangedItems, editItem];
+
+      updateDoc(menuRef, {
+        [selectedMenu]: allItems
+      })
+      console.log(editItem)
+    
+      setIsEditItem(false);
+      fetchSelectedMenu();
+    }
+    
+  }
+
+  useEffect(()=> {
+    editMenuItem()
+  }, [isEditItem])
 
   return (
     <Box >

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -9,6 +9,10 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 import Typography from '@mui/material/Typography';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import firebaseApp from "../firebase/init"
+import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import { v4 as uuidv4 } from 'uuid';
+
 import PreperationSelect from './PreperationSelect'
 import DropzoneComp from './DropzoneComp';
 const style = {
@@ -51,22 +55,38 @@ const checkoutButton = {
     '&:hover': {cursor: 'pointer'}
   }
 
-export default function EditModal({isModal, setIsModal, item, proceedAction}) {
+export default function EditModal({isModal, setIsModal, item, setItem,  setIsEditItem}) {
 
   const [isItemImageStay, setIsItemImageStay] = useState(true);
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileError, setSelectedFileError] = useState();
   const handleClose = () => setIsModal(false);
-  function handleProceedAction(){
-    proceedAction(true)
-    handleClose();
+
+  async function uploadImage(id, object, setObject, setIsItem){
+    const storage = getStorage(firebaseApp)
+    const imageRef = ref(storage, `images/${id}`)
+    await uploadBytes(imageRef, selectedFile).then((response)=>{
+      getDownloadURL(imageRef).then(url => {
+        setObject({...object, changedId: id, image: url})
+        setIsItem(true)
+      });
+    }).catch(err => console.log(err))
+
   }
+
+  // prevent broken image display
+  useEffect(()=> {
+    if(isItemImageStay){
+      setFiles([]);
+      setSelectedFile({});
+    }
+  },[isItemImageStay])
 
   function renderImageOrDropzone(){
     if(isItemImageStay){
       return  <img src={item?.image} alt="" style={{width: '60%'}} />    
-    }else return <DropzoneComp files={files} setFiles={setFiles} setSelectedFile={setSelectedFile} setSelectedFileError={setSelectedFileError}/>
+    }else return <DropzoneComp files={files} setFiles={setFiles} setSelectedFile={setSelectedFile} setSelectedFileError={setSelectedFileError} selectedFile={selectedFile}/>
   }
 
   function renderActionIcon(){
@@ -94,20 +114,15 @@ export default function EditModal({isModal, setIsModal, item, proceedAction}) {
     )
   }
 
-  function renderSelectedFileError(){
-    if(selectedFileError){
-      return <Typography sx={{color: '#F77474', mt: 1, textAlign: 'center'}}>{selectedFileError}</Typography>
-    }
-  }
-
   function renderButtonActions(){
     return(
       <Box>
-          <Button type='submit' onClick={handleProceedAction} sx={checkoutButton}>Proceed</Button>
+          <Button type='submit' onClick={handleClose} sx={checkoutButton}>Proceed</Button>
          <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
       </Box>
     )
   }
+
   return (
     <Box sx={{position: 'relative'}}>
       <Modal
@@ -143,20 +158,31 @@ export default function EditModal({isModal, setIsModal, item, proceedAction}) {
             Yup.object({
               name: Yup.string().max(100, 'Max 50 characters.').required('Name is required'),
               description: Yup.string().max(500, 'Max 100 characters').required('Description is required'),
-              category: Yup.string(),
               preperationTime: Yup.string(),
               price: Yup.number().required(),
             })
           }
           onSubmit={(values, {resetForm}) => {
-            // if(selectedFile?.name){
-            //   uploadProduct(values.name, values.description, values.preperationTime, values.price, values.category);
+            
+            const editedItem = {
+              id: item.id,
+              name: values.name,
+              description: values.description,
+              preperationTime: values.preperationTime,
+              price: values.price,
+              image: item.image
+            }
+            // if user uploaded photo
+            if(selectedFile && !isItemImageStay){
+              const id = uuidv4();
+              // uploadImage(id).then
+              uploadImage(id, editedItem, setItem, setIsEditItem).then(()=> setSelectedFile({}))
 
-            //   resetForm()
-            //   setSelectedFile('')
-            //   setFiles([]);
-            //   setIsAlert(true)
-            // }else setSelectedFileError('Choose a file')
+            }else {
+              setItem(editedItem)
+              setIsEditItem(true)
+            }
+            
           }}
           >
             {({values, errors, handleSubmit, handleChange}) => (
@@ -183,9 +209,6 @@ export default function EditModal({isModal, setIsModal, item, proceedAction}) {
               </form>
             )}
           </Formik>
-
-
-           
           </Box> 
         </Fade>
       </Modal>

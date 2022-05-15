@@ -36,13 +36,16 @@ const editIconStyle = {
 }
 
 
-function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem}) {
+function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem}) {
 
   const [isAlert, setIsAlert] = useState(false);
 
   const [isModal, setIsModal] = useState(false)
   const [isEditModal, setIsEditModal] = useState(false)
-  const [editItem, setEditItem] = useState({});
+
+  // function renderImageOrSpinner(){
+  //   if()
+  // }
 
   function addToTable(item, itemCounter){
     const newItem = {...item, count: itemCounter}
@@ -125,7 +128,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
   }
 
   function renderEditModal(){
-    return <EditModal isModal={isEditModal} setIsModal={setIsEditModal} item={editItem}/>
+    return <EditModal isModal={isEditModal} setIsModal={setIsEditModal} item={editItem} setItem={setEditItem} setIsEditItem={setIsEditItem}/>
   }
 
   return (
