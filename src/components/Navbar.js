@@ -6,7 +6,6 @@ import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
 import { connect } from "react-redux";
 
-import { initializeApp } from "firebase/app";
 import { getFirestore, doc, updateDoc, arrayUnion} from "firebase/firestore";
 
 import BasketDialog from './BasketDialog'

@@ -6,6 +6,18 @@ import React, {useEffect, useState} from 'react';
 import CloudIcon from '../icons/CloudIcon'
 import ProgressBar from './ProgressBar'
 
+const closeIconStyle = {
+  background: '#3E3E3E', 
+  borderRadius: '50%', 
+  color: '#fff', 
+  left: '105px', 
+  fontSize: '12px', 
+  position: 'absolute', 
+  top: '17px', 
+  zIndex: 3, 
+  '&:hover': {cursor: 'pointer'}
+}
+
 export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
   const [loader, setLoader] = useState(true);
   const [files, setFiles] = useState([]);
@@ -18,10 +30,11 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
     multiple: false,
     noClick: true,
     onDrop: (acceptedFiles) => {
+      const uploadedFile = acceptedFiles[0];
       // size check
-      if(acceptedFiles[0].size > 400000){
-        setSelectedFileError("Fotoğraf boyutu 400kb'den büyük")
-      }else if(validImgTypes.includes(acceptedFiles[0].type)){
+      if(uploadedFile.size > 400000){
+        setSelectedFileError("Image is larger than 400kb")
+      }else if(validImgTypes.includes(uploadedFile.type)){
         // activate loader
         setLoader(true);
         // set image preview
@@ -29,14 +42,14 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
           preview: URL.createObjectURL(file)
         })));
         // get the uploaded image
-        setSelectedFile(acceptedFiles[0])
+        setSelectedFile(uploadedFile)
         setSelectedFileError('')
         // disable loader
         setTimeout(() => {
           setLoader(false);
         }, 1000);
-      } else if(!validImgTypes.includes(acceptedFiles[0])){
-        setSelectedFileError('Lütfen yalnızca jpg veya png formatı yükleyin')
+      } else if(!validImgTypes.includes(uploadedFile)){
+        setSelectedFileError('PNG & JPEG files only')
       }
     }
   });
@@ -77,13 +90,13 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
             color: '#525252', 
             fontWeight: '600',
             display: {xs: 'none', lg: 'block'}
-            }}>Sürükleyip bırakarak yükle </Typography>
-          <Typography sx={{display: {xs: 'none', lg: 'block'}}}>veya</Typography>
-          <button type="button" className='dropzone-button' onClick={open}>Görsel Seçin</button>
+            }}>Drag and drop to upload</Typography>
+          <Typography sx={{display: {xs: 'none', lg: 'block'}}}>or</Typography>
+          <button type="button" className='dropzone-button' onClick={open}>Choose Image</button>
           <Typography sx={{
             color: '#B1B1B1', 
             fontSize: {xs: '12px', lg: '14px'}}}>
-            PNG ve JPEG Dosya boyutu: max. 400kb
+            PNG & JPEG File size: max. 400kb
           </Typography>
         </Box>
       )
@@ -99,7 +112,7 @@ export default function DropzoneComp({setSelectedFile, setSelectedFileError}) {
           <aside style={{position: 'relative'}} >
           {thumbs}
           <CloseIcon onClick={handleRemove} 
-          sx={{position: 'absolute', zIndex: 3, top: '17px', left: '105px', fontSize: '12px', color: '#fff', background: '#3E3E3E', borderRadius: '50%', '&:hover': {cursor: 'pointer'}}}/>
+          sx={closeIconStyle}/>
          </aside>
         )
       }

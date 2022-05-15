@@ -136,3 +136,28 @@ form textarea:focus{
 	background-color: #F0F8FF;
 	color: #3E3E3E;
 }
+
+.price-wrapper{
+	position: relative;
+	height: 65px;
+}
+
+.price-wrapper::after{
+	content: "$";
+	color: #99A0A7;
+	position: absolute;
+	right: 20px;
+	top: 36px;
+}
+
+.price-input{
+	border-radius: 8px;
+	background: #F4F4F4;
+	border: none;
+	color: #99A0A7;
+	outline: none;
+	padding-left: 1rem;
+	width: 100%;
+	box-sizing: border-box;
+}
+

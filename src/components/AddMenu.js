@@ -62,12 +62,16 @@ export default function AddProduct() {
             Yup.object({
               name: Yup.string().max(100, 'Max 50 characters.').required(requiredText),
               description: Yup.string().max(500, 'Max 100 characters').required(requiredText),
-              category: Yup.string().required(requiredText),
+              category: Yup.string(),
               price: Yup.number('Please enter a number').required(),
             })
           }
           onSubmit={(values, {resetForm}) => {
             // check if user selected image
+            console.log(values.category);
+            if(!values.category){
+              values.category = 'mainDishes'
+            }
             console.log(values)
             // if(selectedFile.path){
               
@@ -86,13 +90,22 @@ export default function AddProduct() {
                     flexDirection: 'column', 
                     width: {sm: '100%', md: '30%'},
                     gap: 2.7,
+                    mt: 3
                     }}>
                     
                     <div className='price-wrapper'>
                       <label htmlFor="price" style={{marginBottom: '10px'}}>{inputInfos.price.label}</label>
+                     
                       <input className={'price-input'} type="text" value={values.price} id='price' onChange={handleChange} placeholder={inputInfos.price.placeholder}
                       style={{marginBottom: 0}}/>
-                      {errors.price && <Typography sx={{fontSize: '15px', color: '#f77474', mb: 2}}>0-9 Arasında Bir Rakam Girin</Typography>}
+                      {errors.price && 
+                      
+                      <Typography sx={{
+                        fontSize: '15px', 
+                        color: '#f77474', 
+                        mb: 2}}>
+                          {errors.price}
+                      </Typography>}
                     </div>
                   </Box>
                   
