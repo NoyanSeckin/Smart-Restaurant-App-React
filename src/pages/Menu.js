@@ -16,6 +16,10 @@ function Menu({setCurrentTable, setTables}) {
   
   // add current table to the db
   const docRef = doc(db, 'OccupiedTables', 'occupiedTables');
+  const [deletedItemId, setDeletedItemId] = useState('');
+  const [isDeleteItem, setIsDeleteItem] = useState(false);
+
+
   const fetchActiveTables = async () =>{
     const docSnap = await getDoc(docRef);
     const tables = docSnap.data().occupiedTables;
@@ -47,8 +51,8 @@ function Menu({setCurrentTable, setTables}) {
   const [counters, setCounters] = useState([]);
 
 
+  const menuRef = doc(db, 'Menu', `${selectedMenu}`);
   async function fetchSelectedMenu(){
-    const menuRef = doc(db, 'Menu', `${selectedMenu}`);
     const menuSnap = await getDoc(menuRef);
     const menuArray = menuSnap.data()[selectedMenu]
     setActiveMenuItems(menuArray);
@@ -65,11 +69,29 @@ function Menu({setCurrentTable, setTables}) {
     fetchSelectedMenu();
   },[selectedMenu])
 
+  
+
   function renderCards(){
     return activeMenuItems.map((item, index) => 
-      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index}/>
+      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index} setDeletedItemId={setDeletedItemId} setIsDeleteItem={setIsDeleteItem}/>
     )
   }
+
+  function deleteItem(){
+    if(isDeleteItem){
+      const stayingItems = activeMenuItems.filter(item => item.id !== deletedItemId)
+      console.log(stayingItems)
+      updateDoc(menuRef, {
+        [selectedMenu]: stayingItems
+      })
+      fetchSelectedMenu();
+      setIsDeleteItem(false);
+    }
+  }
+
+  useEffect(()=>{
+      deleteItem()
+  }, [isDeleteItem])
 
   return (
     <Box >

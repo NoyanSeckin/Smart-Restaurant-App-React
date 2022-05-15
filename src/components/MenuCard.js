@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import Alert from './Alert'
 import Modal from './Modal'
-
+import EditModal from './EditModal'
 
 import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
@@ -35,10 +35,14 @@ const editIconStyle = {
   '&:hover': {cursor: 'pointer'}
 }
 
-function MenuCard({tableItems, setTableItems, item, counters, setCounters, index}) {
+
+function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem}) {
+
   const [isAlert, setIsAlert] = useState(false);
 
   const [isModal, setIsModal] = useState(false)
+  const [isEditModal, setIsEditModal] = useState(true)
+  const [editItem, setEditItem] = useState({});
 
   function addToTable(item, itemCounter){
     const newItem = {...item, count: itemCounter}
@@ -65,6 +69,16 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
    countersCopy[index] = newValue;
    setCounters([...countersCopy])
   }
+
+  function handleDelete(id){
+    setIsModal(true)
+    setDeletedItemId(id)
+  }
+
+  function handleEdit(item){
+    setIsEditModal(true);
+    setEditItem(item);
+  }
  
   const renderCards = () => {
       return(
@@ -76,8 +90,8 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
             alt={item.name}
             height='180'
           />
-          <CloseIcon sx={closeIconStyle}  onClick={()=> setIsModal(true)}/>
-          <EditIcon sx={editIconStyle}/>
+          <CloseIcon sx={closeIconStyle}  onClick={()=> handleDelete(item.id)}/>
+          <EditIcon sx={editIconStyle} onClick={()=> handleEdit(item)}/>
           <CardContent sx={{pt: 0.5, px: 1}}>
           <Typography variant='h6'>
             {item.name}
@@ -106,11 +120,21 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
       )
   }
 
+  function renderDeleteModal(){
+    return  <Modal header='Deleting Item' content='Are you sure about it?' bgColor='#d32f2f' isModal={isModal} setIsModal={setIsModal} proceedAction={setIsDeleteItem}/>
+  }
+
+  function renderEditModal(){
+    return <EditModal isModal={isEditModal} setIsModal={setIsEditModal} item={editItem}/>
+  }
+
   return (
     <div>
        {renderCards()}
       {/* <Alert isAlert={isAlert} setIsAlert={setIsAlert}></Alert> */}
-      <Modal header='Deleting Item' content='Are you sure about it?' bgColor='#d32f2f' isModal={isModal} setIsModal={setIsModal}/>
+      {renderDeleteModal()}
+      {renderEditModal()}
+
     </div>
   );
 }
