@@ -22,6 +22,9 @@ function Menu({setCurrentTable, setTables}) {
   const [editItem, setEditItem] = useState({});
   const [isEditItem, setIsEditItem] = useState(false);
 
+  const [isSpinner, setIsSpinner] = useState(true);
+
+
 
   const fetchActiveTables = async () =>{
     const docSnap = await getDoc(docRef);
@@ -78,7 +81,7 @@ function Menu({setCurrentTable, setTables}) {
 
   function renderCards(){
     return activeMenuItems.map((item, index) => 
-      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index} setDeletedItemId={setDeletedItemId} setIsDeleteItem={setIsDeleteItem} editItem={editItem} setEditItem={setEditItem} setIsEditItem={setIsEditItem}/>
+      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index} setDeletedItemId={setDeletedItemId} setIsDeleteItem={setIsDeleteItem} editItem={editItem} setEditItem={setEditItem} setIsEditItem={setIsEditItem} isSpinner={isSpinner} setIsSpinner={setIsSpinner}/>
     )
   }
 
@@ -109,7 +112,8 @@ function Menu({setCurrentTable, setTables}) {
       console.log(editItem)
     
       setIsEditItem(false);
-      fetchSelectedMenu();
+      fetchSelectedMenu().then(()=> setIsSpinner(false)
+      )
     }
     
   }

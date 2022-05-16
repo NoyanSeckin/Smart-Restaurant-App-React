@@ -14,6 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Alert from './Alert'
 import Modal from './Modal'
 import EditModal from './EditModal'
+import Spinner from './Spinner'
 
 import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
@@ -36,16 +37,23 @@ const editIconStyle = {
 }
 
 
-function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem}) {
+function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem, isSpinner, setIsSpinner}) {
 
   const [isAlert, setIsAlert] = useState(false);
 
   const [isModal, setIsModal] = useState(false)
   const [isEditModal, setIsEditModal] = useState(false)
 
-  // function renderImageOrSpinner(){
-  //   if()
-  // }
+  function renderImageOrSpinner(){
+    if(isSpinner && editItem?.id === item.id){
+      return <Spinner/>
+    }else return  <CardMedia
+    component="img"
+    image={item.image}
+    alt={item.name}
+    height='180'
+  />
+  }
 
   function addToTable(item, itemCounter){
     const newItem = {...item, count: itemCounter}
@@ -87,12 +95,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
       return(
         <Card key={index} 
         sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1, position: 'relative' }}>
-          <CardMedia
-            component="img"
-            image={item.image}
-            alt={item.name}
-            height='180'
-          />
+         {renderImageOrSpinner()}
           <CloseIcon sx={closeIconStyle}  onClick={()=> handleDelete(item.id)}/>
           <EditIcon sx={editIconStyle} onClick={()=> handleEdit(item)}/>
           <CardContent sx={{pt: 0.5, px: 1}}>
@@ -128,7 +131,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
   }
 
   function renderEditModal(){
-    return <EditModal isModal={isEditModal} setIsModal={setIsEditModal} item={editItem} setItem={setEditItem} setIsEditItem={setIsEditItem}/>
+    return <EditModal isModal={isEditModal} setIsModal={setIsEditModal} item={editItem} setItem={setEditItem} setIsEditItem={setIsEditItem} setIsSpinner={setIsSpinner}/>
   }
 
   return (

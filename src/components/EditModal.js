@@ -55,13 +55,13 @@ const checkoutButton = {
     '&:hover': {cursor: 'pointer'}
   }
 
-export default function EditModal({isModal, setIsModal, item, setItem,  setIsEditItem}) {
+export default function EditModal({isModal, setIsModal, item, setItem,  setIsEditItem, setIsSpinner}) {
 
   const [isItemImageStay, setIsItemImageStay] = useState(true);
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileError, setSelectedFileError] = useState();
-  const handleClose = () => setIsModal(false);
+  const handleClose = () => {setIsModal(false); setIsSpinner(false)};
 
   async function uploadImage(id, object, setObject, setIsItem){
     const storage = getStorage(firebaseApp)
@@ -174,15 +174,15 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
             }
             // if user uploaded photo
             if(selectedFile && !isItemImageStay){
+              setIsSpinner(true);
               const id = uuidv4();
               // uploadImage(id).then
-              uploadImage(id, editedItem, setItem, setIsEditItem).then(()=> setSelectedFile({}))
+              uploadImage(id, editedItem, setItem, setIsEditItem).then(()=> {setSelectedFile({}); setFiles([])})
 
             }else {
               setItem(editedItem)
               setIsEditItem(true)
             }
-            
           }}
           >
             {({values, errors, handleSubmit, handleChange}) => (
