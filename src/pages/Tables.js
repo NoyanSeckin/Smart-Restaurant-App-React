@@ -1,7 +1,5 @@
 import {Box, Button, Container, Grid, Typography, Paper} from '@mui/material'
 import QRCodeReact from 'qrcode.react';
-import { initializeApp } from "firebase/app";
-import firebaseApp from '../firebase/init'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { getFirestore, onSnapshot, doc} from "firebase/firestore";
 
@@ -33,9 +31,9 @@ export default function Tables() {
   }
   return (
     <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
-      <Container sx={{pt: 5}}>
-        <Paper sx={{py: 5}}>
-          <Typography sx={{ml: 9, mb: 5}} variant='h1'>Tables</Typography>
+      <Container maxWidth='xl' sx={{pt: 5}}>
+        <Paper sx={{py: 5, borderRadius: '8px'}}>
+          <Typography sx={{ml: {xs: 2, lg: 9}, mb: 5}} variant='h1'>Tables</Typography>
           <Grid container sx={{gap: 8, justifyContent: 'center'}}>
           {renderQrCodes()}
           </Grid>

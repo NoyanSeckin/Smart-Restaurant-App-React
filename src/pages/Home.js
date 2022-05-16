@@ -15,7 +15,7 @@ export default function Home() {
            <Box sx={{
              display: 'flex',
              flexDirection: 'column',
-             width: '50%',
+             width: {xs: '100%', lg: '50%'},
              gap: 2
            }}>
             <Typography variant='h1'
@@ -23,10 +23,11 @@ export default function Home() {
                 fontWeight: '700',
                 width: '50%',
                 lineHeight: 1.05,
+                fontSize: {xs: '4rem', lg: '7rem'}
               }}>
                 A <span style={{color: '#F58840'}}>Smarter</span> Restaurant
               </Typography>
-              <Typography sx={{width: '115%'}}>
+              <Typography sx={{width: {xs: '100%', lg: '115%'}}}>
                 Make your restaurants smarter with next level technology. Efficient management, excellent customer experience. <br /> You will love it.
               </Typography>
               <Box>
@@ -46,7 +47,7 @@ export default function Home() {
            </Box>
           </Grid>
 
-          <Grid item xs={12} lg={6}>
+          <Grid item xs={12} lg={6} sx={{mt: {xs: 4, lg: 0}}}>
             <img src={require('../images/main.jpg')} alt="" 
             style={{
               width: '100%',
@@ -76,8 +77,8 @@ export default function Home() {
 
   function renderMain(){
     return(
-      <Grid container sx={{mt: '15rem'}}>
-        <Grid item xs={12} lg={6}>
+      <Grid container sx={{mt: {xs: 3, lg: '15rem'}}}>
+        <Grid item xs={12} lg={6} sx={{display: {xs: 'none', lg: 'block'}}}>
           <img src={require('../images/QRCode.jpg')} alt="" 
           style={{
             width: '70%',

@@ -11,7 +11,6 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import Alert from './Alert'
 import Modal from './Modal'
 import EditModal from './EditModal'
 import Spinner from './Spinner'
@@ -38,8 +37,6 @@ const editIconStyle = {
 
 
 function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem, isSpinner, setIsSpinner, authentication}) {
-
-  const [isAlert, setIsAlert] = useState(false);
 
   const [isModal, setIsModal] = useState(false)
   const [isEditModal, setIsEditModal] = useState(false)
@@ -105,7 +102,8 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
   const renderCards = () => {
       return(
         <Card key={index} 
-        sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1, position: 'relative' }}>
+        sx={{ 
+          maxWidth: 300, minWidth: 300, px: 1, py: 1, position: 'relative' }}>
          {renderImageOrSpinner()}
          {renderMenuEditDeleteIcons()}
           <CardContent sx={{pt: 0.5, px: 1}}>
@@ -146,11 +144,9 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
 
   return (
     <div>
-       {renderCards()}
-      {/* <Alert isAlert={isAlert} setIsAlert={setIsAlert}></Alert> */}
+      {renderCards()}
       {renderDeleteModal()}
       {renderEditModal()}
-
     </div>
   );
 }

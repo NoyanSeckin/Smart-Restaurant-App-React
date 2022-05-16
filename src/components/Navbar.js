@@ -75,14 +75,29 @@ import {setTableItems, setAuthentication} from '../actions'
   function renderGoToTable(){
     return(
       <Box sx={{alignSelf: 'center' ,position: 'relative', '&:hover': {cursor: 'pointer'}}}>
-      <Typography sx={{position: 'absolute', right: '20px', top: '-5px', color: '#F2F2F2'}} variant="caption">
+      <Typography sx={{
+        position: 'absolute', 
+        right: {xs: '0', lg:'20px'},
+         top: '-5px', 
+         color: '#F2F2F2'
+         }} variant="caption">
           {calculateTotalItems(tableItems)}
         </Typography>
         <NavLink to='/usertable'>
         <Button 
-        sx={{color: '#F2F2F2', mr: 3}}
-        endIcon={ <TableRestaurantIcon  sx={{alignSelf: 'center', color: '#F2F2F2'}}/>}>
-          Go to table
+        sx={{
+          color: '#F2F2F2', 
+          mr: {sx: 0, lg: 3},
+          fontSize: {xs: '0.8rem', lg: '1rem'}
+        }}
+        endIcon={ 
+        <TableRestaurantIcon  
+        sx={{
+          alignSelf: 'center', 
+          color: '#F2F2F2',
+        }}/>
+        }>
+         Table
         </Button>
         </NavLink>
     </Box>
@@ -91,12 +106,12 @@ import {setTableItems, setAuthentication} from '../actions'
 
   function renderCallWaiter(){
     return(
-      <Button variant='outlined'
-      sx={{color: '#F2F2F2'}}
+      <Button
+      sx={{color: '#F2F2F2', fontSize: {xs: '0.8rem', lg: '1rem'}}}
       onClick={callWaiter}
       endIcon={<RoomServiceIcon 
       sx={{color: '#F2F2F2'}}/>}>
-        Call waiter
+        Waiter
       </Button>
     )
   }
@@ -121,8 +136,8 @@ import {setTableItems, setAuthentication} from '../actions'
             {renderNavLink(`/menu/${currentTable}`, 'Menu')}
           </Box>
           <Box sx={{display: 'flex'}}>
-            {renderGoToTable()}
             {renderCallWaiter()}
+            {renderGoToTable()}
             {/* small screens means customers who wont authenticate */}
             <Box sx={{display: {xs: 'none',  md: 'block'}}}>
               {renderAuthButtons()}

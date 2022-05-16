@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect({getSelectedMenu, handleAddMenuChange, value}) {
+export default function BasicSelect({getSelectedMenu, handleAddMenuChange, value, style}) {
   // value and handleAddMenuChange are props of add menu
   // getselectedmenu belongs to menu page
   
@@ -18,7 +18,7 @@ export default function BasicSelect({getSelectedMenu, handleAddMenuChange, value
   };
 
   return (
-    <Box sx={{ minWidth: 120, maxWidth: '300px' }}>
+    <Box sx={{ minWidth: 120, maxWidth: '320px', mx: {xs: 'auto', sm: '0'}}}>
       <FormControl fullWidth>
         <InputLabel 
           id="demo-simple-select-label">Menu</InputLabel>
