@@ -1,4 +1,4 @@
-import {AppBar, Box, Container, Toolbar, Typography, IconButton, Menu, MenuItem} from '@mui/material';
+import {AppBar, Box, Button, Container, Toolbar, Typography, IconButton, Menu, MenuItem} from '@mui/material';
 import { NavLink } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu'
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -7,10 +7,12 @@ import RoomServiceIcon from '@mui/icons-material/RoomService';
 import { connect } from "react-redux";
 
 import { getFirestore, doc, updateDoc, arrayUnion} from "firebase/firestore";
+import {getAuth, signInWithEmailAndPassword, signOut} from 'firebase/auth'
 
 import BasketDialog from './BasketDialog'
 import * as React from 'react';
 import {useState} from 'react'
+import Login from './Login'
 // Redux
 import {setTableItems} from '../actions'
 
@@ -20,8 +22,24 @@ import {setTableItems} from '../actions'
   }
  function Navbar({tableItems, currentTable}) {
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoginModal, setIsLoginModal] = useState(false)
+
+  const auth = getAuth()
+
   const db = getFirestore();
   const callsRef = doc(db, 'WaiterCalls', 'tables')
+
+  async function signInUser(email, password){
+    signInWithEmailAndPassword(auth, email, password).then(cred => {
+      console.log(cred.user)
+    }).catch(err => console.log(err))
+  }
+
+  async function signOutUser(){
+    signOut(auth).then(()=> console.log('working'))
+  }
 
   async function callWaiter(){
     updateDoc(callsRef, {
@@ -33,7 +51,6 @@ import {setTableItems} from '../actions'
  
   const [open, setOpen] = useState(false)
   
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
@@ -67,7 +84,7 @@ import {setTableItems} from '../actions'
   }
 
   return (
-    <Box sx={{ flexGrow: 1, position: 'relative', backgroundColor: 'warning.dark' }}>
+    <Box sx={{ flexGrow: 1, backgroundColor: 'warning.dark' }}>
       <Container maxWidth='xl'>
       <AppBar elevation={0} position="static" sx={{backgroundColor: 'warning.dark'}}>
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
@@ -81,50 +98,36 @@ import {setTableItems} from '../actions'
             {renderNavLink('/tables', 'Tables')}
             {renderNavLink(`/menu/${currentTable}`, 'Menu')}
           </Box>
-          {auth && (
             <Box sx={{display: 'flex'}}>
               <Box sx={{alignSelf: 'center' ,position: 'relative', '&:hover': {cursor: 'pointer'}}}>
-                <TableRestaurantIcon onClick={handleDialogOpen}  sx={{alignSelf: 'center', color: '#F2F2F2', mr: 3}}/>
-                <Typography sx={{position: 'absolute', right: '14px', top: '-10px', color: '#F2F2F2'}} variant="caption">
+               
+                <Typography sx={{position: 'absolute', right: '20px', top: '-5px', color: '#F2F2F2'}} variant="caption">
                     {calculateTotalItems(tableItems)}
                  </Typography>
+                 <Button 
+                 onClick={handleDialogOpen} 
+                 sx={{color: '#F2F2F2', mr: 3}}
+                 endIcon={ <TableRestaurantIcon  sx={{alignSelf: 'center', color: '#F2F2F2'}}/>}>
+                    Go to table
+                 </Button>
               </Box>
-              <RoomServiceIcon onClick={callWaiter}
-              sx={{color: '#F2F2F2', '&:hover': {cursor: 'pointer'}}}/>
-              {/* <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem sx={{size: 'large'}} onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu> */}
+              <Button variant='outlined'
+              sx={{color: '#F2F2F2'}}
+              onClick={callWaiter}
+              endIcon={<RoomServiceIcon 
+              sx={{color: '#F2F2F2'}}/>}>
+                Call waiter
+              </Button>
+              <Button onClick={()=> setIsLoginModal(true)}
+              sx={{color: '#F2F2F2', ml: 2}}>
+                Sign in
+              </Button>
             </Box>
-          )}
         </Toolbar>
       </AppBar>
-      <BasketDialog open={open} setOpen={setOpen} handleDialogOpen={handleDialogOpen}handleDialogClose={handleDialogClose}></BasketDialog>
       </Container>
+      <BasketDialog open={open} setOpen={setOpen} handleDialogOpen={handleDialogOpen} handleDialogClose={handleDialogClose}></BasketDialog>
+      <Login proceedAction={signInUser} isModal={isLoginModal} setIsModal={setIsLoginModal}/>
      
     </Box>
   );

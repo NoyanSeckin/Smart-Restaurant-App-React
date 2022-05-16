@@ -14,23 +14,21 @@ import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
 import { NavLink } from "react-router-dom";
 import Box from '@mui/material/Box'
-// redux
 
-import {setTableItems} from '../actions'
 import { connect } from 'react-redux';
 
 function BasketDialog(props) {
   const {open, handleDialogClose} = props;
   return (
     <Dialog sx={{ 
-      position: 'absolute', 
-      bottom: {lg: '570px', md: '620px', xs: '570px'}, 
-      left: {md: '400px', lg: '66%', xs: '70px', sm: '360px'}, 
-      minHeight: 300}} 
+      top: 0,
+      minHeight: 300,
+      borderRadius: '8px'
+      }} 
       onClose={handleDialogClose} 
       open={open}>
       <DialogTitle>Your Table</DialogTitle>
-      <List sx={{ pt: 0 }}>
+      <List sx={{ pt: 0, position: 'relative' }}>
          {props.tableItems.map(tableItem => {
            return(
             <ListItem key={tableItem.name}>
@@ -38,7 +36,7 @@ function BasketDialog(props) {
               <img style={{width:'70px'}} src={tableItem.image} alt="" />
             </ListItemAvatar>
             <ListItemText sx={{mx: 5}} primary={tableItem.name} />
-            <ListItemText sx={{mr: 3}} primary={tableItem.count} />
+            <ListItemText sx={{position: 'absolute', right: '15px'}} primary={tableItem.count} />
           </ListItem>
          )})}
             
@@ -65,6 +63,5 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps, {
-  setTableItems,
 })(BasketDialog);
 

@@ -22,7 +22,7 @@ function Menu({setCurrentTable, setTables}) {
   const [editItem, setEditItem] = useState({});
   const [isEditItem, setIsEditItem] = useState(false);
 
-  const [isSpinner, setIsSpinner] = useState(true);
+  const [isSpinner, setIsSpinner] = useState(false);
 
 
 

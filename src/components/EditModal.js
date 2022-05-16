@@ -61,7 +61,7 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileError, setSelectedFileError] = useState();
-  const handleClose = () => {setIsModal(false); setIsSpinner(false)};
+  const handleClose = () => setIsModal(false);
 
   async function uploadImage(id, object, setObject, setIsItem){
     const storage = getStorage(firebaseApp)
