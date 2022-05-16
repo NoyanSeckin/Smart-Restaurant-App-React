@@ -1,6 +1,6 @@
 import {Box, Button, Container, Grid, Typography, List, ListItem, ListItemText} from '@mui/material'
-
-import {React, useEffect, useState} from 'react'
+import {NavLink} from 'react-router-dom'
+import React from 'react'
 
 export default function Home() {
 
@@ -24,18 +24,24 @@ export default function Home() {
                 width: '50%',
                 lineHeight: 1.05,
               }}>
-                A Smarter Restaurant
+                A <span style={{color: '#F58840'}}>Smarter</span> Restaurant
               </Typography>
               <Typography sx={{width: '115%'}}>
                 Make your restaurants smarter with next level technology. Efficient management, excellent customer experience. <br /> You will love it.
               </Typography>
               <Box>
-                <Button variant='contained' sx={{mr: 2}}>
+                <Button variant='contained' 
+                sx={{mr: 2, 
+                  backgroundColor: 'warning.dark',
+                  '&:hover': {backgroundColor: 'warning.main'}
+                  }}>
                   Learn More
                 </Button>
-                <Button>
-                  Go to tables
-                </Button>
+                <NavLink to='/tables'>
+                  <Button variant='outlined'>
+                    Go to tables
+                  </Button>
+                </NavLink>
               </Box>
            </Box>
           </Grid>
@@ -54,13 +60,13 @@ export default function Home() {
   }
 
   function renderListTexts(){
-    const listTexts = ['A panel to display and handle recieved orders', 'Customiziable QR menu', 'Digital table system with QR code', 'Interactive loyalty program', 'Enhanced restaurant management', 'Revenue Panel']
+    const listTexts = ['A panel to display and handle recieved orders', 'Customiziable QR menu', 'Digital table system with QR code', 'Enhanced restaurant management']
     return(
       <List>
         {listTexts.map(text =>
           <ListItem>
             <ListItemText
-            primary={text}
+            primary={'- ' + text}
             />
          </ListItem> )}
       </List>
@@ -89,13 +95,11 @@ export default function Home() {
   }
   
   return (
-    <Box sx={{background: 'orange', minHeight: '150vh'}}>
+    <Box sx={{background: '#f2f2f2', minHeight: '150vh'}}>
       <Container maxWidth='xl'>
         {renderIntro()}
         {renderMain()}
       </Container>
-
-
     </Box>
   )
 }

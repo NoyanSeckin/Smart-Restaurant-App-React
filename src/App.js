@@ -11,6 +11,7 @@ import UserTable from './pages/UserTable'
 import Admin from './pages/Admin'
 import Tables from './pages/Tables'
 import AdminTablesDetail from './pages/AdminTablesDetail'
+import ProtectedRoute from './routes/ProtectedRoute'
 
 const App = () => {
 
@@ -23,9 +24,9 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/menu/:id" component={Menu} />
             <Route path="/usertable" component={UserTable} />
-            <Route path="/admin" component={Admin} />
             <Route path="/tables" component={Tables} />
-            <Route path="/admintablesdetail/:tableNum" component={AdminTablesDetail} />
+            <ProtectedRoute path="/admin" component={Admin} />
+            <ProtectedRoute path="/admintablesdetail/:tableNum" component={AdminTablesDetail} />
           </div>
         </BrowserRouter>
       </ThemeProvider>

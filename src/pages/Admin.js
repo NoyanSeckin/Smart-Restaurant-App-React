@@ -9,7 +9,7 @@ export default function Admin() {
   const [activePage, setActivePage] = useState('Restaurant Tables');
   
   function renderNavs(){
-    const navs = ['Restaurant Tables', 'Add Menu', 'Revenue'];
+    const navs = ['Restaurant Tables', 'Add Menu'];
     return navs.map(nav => 
       <Typography key={nav} variant='h6' className={activePage === nav && 'active-nav'}
       onClick={()=> setActivePage(nav)}

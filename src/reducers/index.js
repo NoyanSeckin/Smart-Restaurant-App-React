@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   tables: [],
   orderedItems: [],
   currentOrder: 1,
+  authentication: '',
 };
 
 // bu switch degistirmek icin
@@ -21,7 +22,9 @@ export const reducer = (state = INITIAL_STATE, action) => {
    case "GET_ORDERED_ITEMS":
       return {...state, orderedItems: action.payload};
    case "GET_CURRENT_ORDER":
-      return {...state, currentOrder: action.payload}
+      return {...state, currentOrder: action.payload};
+    case "GET_AUTHENTICATION":
+      return {...state, authentication: action.payload};
     default:
       return state;
   }

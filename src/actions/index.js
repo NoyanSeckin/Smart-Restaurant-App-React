@@ -21,3 +21,7 @@ export const setOrderedItems = (orderedItems) => {
 export const setCurrentOrder = (currentOrder) => {
   return {type: "GET_CURRENT_ORDER", payload: currentOrder}
 }
+
+export const setAuthentication = (authentication) => {
+  return {type: "GET_AUTHENTICATION", payload: authentication}
+}

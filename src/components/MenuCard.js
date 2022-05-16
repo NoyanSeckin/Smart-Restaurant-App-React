@@ -37,7 +37,7 @@ const editIconStyle = {
 }
 
 
-function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem, isSpinner, setIsSpinner}) {
+function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem, isSpinner, setIsSpinner, authentication}) {
 
   const [isAlert, setIsAlert] = useState(false);
 
@@ -90,14 +90,24 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
     setIsEditModal(true);
     setEditItem(item);
   }
+
+  function renderMenuEditDeleteIcons(){
+    if(authentication){
+      return(
+        <div>
+           <CloseIcon sx={closeIconStyle}  onClick={()=> handleDelete(item.id)}/>
+          <EditIcon sx={editIconStyle} onClick={()=> handleEdit(item)}/>
+        </div>
+      )
+    }
+  }
  
   const renderCards = () => {
       return(
         <Card key={index} 
         sx={{ maxWidth: 300, minWidth: 300, px: 1, py: 1, position: 'relative' }}>
          {renderImageOrSpinner()}
-          <CloseIcon sx={closeIconStyle}  onClick={()=> handleDelete(item.id)}/>
-          <EditIcon sx={editIconStyle} onClick={()=> handleEdit(item)}/>
+         {renderMenuEditDeleteIcons()}
           <CardContent sx={{pt: 0.5, px: 1}}>
           <Typography variant='h6'>
             {item.name}
@@ -148,6 +158,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
 const mapStateToProps = (state) => {
   return {
     tableItems: state.tableItems,
+    authentication: state.authentication
   };
 };
 export default connect(mapStateToProps, {
