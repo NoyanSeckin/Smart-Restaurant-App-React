@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Formik} from 'formik';
 import * as Yup from 'yup';
 
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import Dropzone from './DropzoneComp'
 import SelectComponent from './SelectComponent'
 import PreperationSelect from './PreperationSelect'
@@ -30,24 +30,35 @@ const submitBtnStyle = {
   }
   }
 
+const priceContainerStyle = {
+  display: 'flex', 
+  flexDirection: 'column', 
+  width: {sm: '100%', md: '30%'},
+  gap: 2.7,
+  mt: 2
+  }
+
+const gridContainerStyle = {
+  height: {xs: '80vh', lg: '70vh'}, 
+  position: 'relative'
+}
+
 export default function AddProduct() {
   const db = getFirestore()
   const storage = getStorage(firebaseApp)
-
-  const requiredText = 'This field is required.'
-
+  // user's selected image
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileError, setSelectedFileError] = useState('');
   // state of dropzone for displaying uploaded file
   const [files, setFiles] = useState([]);
   const [isAlert, setIsAlert] = useState(false)
 
-  async function uploadProduct(name, description, preperationTime, price, category){
+  async function handleUploadProduct(name, description, preperationTime, price, category, resetForm){
     const id = uuidv4();
     const imageRef = ref(storage, `images/${id}`)
     const menuRef = doc(db, 'Menu', category);
 
-      uploadBytes(imageRef, selectedFile).then((response)=>{
+      uploadBytes(imageRef, selectedFile).then(()=>{
         getDownloadURL(imageRef).then(url => {
           updateDoc(menuRef, {
             [category]: arrayUnion({
@@ -61,17 +72,15 @@ export default function AddProduct() {
           })
         })
       }).catch(err => console.log(err))
+
+      resetForm()
+      setSelectedFile('')
+      setFiles([]);
+      setIsAlert(true)
    
   }
 
-  const inputInfos = {
-    name: {label: 'Product Name', placeholder: 'Enter a name'},
-    description: {label: 'Description', placeholder: 'Enter a description'},
-    category: {label: 'Category', placeholder: 'Choose a category'},
-    price: {label: 'Price', placeholder: 'Enter a price'}
-  }
-
-  function renderInput(value, error, handleChange, valueName){
+  function renderTextarea(value, error, handleChange, valueName){
     return(
       <Box sx={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
         <label htmlFor={valueName}> 
@@ -90,90 +99,108 @@ export default function AddProduct() {
     }
   }
 
-  return (
-    <Grid container sx={{height: {xs: '80vh', lg: '70vh'}, position: 'relative'}}>
+  function renderSelectInputs(categoryValue, preperationValue, handleChange){
+    return(
+      <Box sx={{display: 'flex', fleWrap: 'wrap', gap: 2}}>
+        <Box sx={{ flexGrow: 1}}>
+          <label htmlFor="category" style={{marginBottom: '1rem', display: 'inline-block'}}>Category</label>
+          <SelectComponent value={categoryValue} id='category' handleAddMenuChange={handleChange}/>
+        </Box>
+
+       <Box sx={{ flexGrow: 1}}>
+         <label htmlFor="preperationTime" style={{marginBottom: '1rem', display: 'inline-block'}}>Preperation Time</label>
+         <PreperationSelect id='preperationTime' value={preperationValue} handlePreperationChange={handleChange}/>
+       </Box>
+    </Box>
+    )
+  }
+
+  function renderPriceInput(priceValue, priceError, handleChange){
+   return(
+    <Box sx={priceContainerStyle}>
+    <div className='price-wrapper'>
+      <label htmlFor="price" style={{marginBottom: '10px'}}>{inputInfos.price.label}</label>
+      <input className={'price-input'} type="text" value={priceValue} id='price' onChange={handleChange} placeholder={inputInfos.price.placeholder}
+      style={{marginBottom: 0}}/>
+      {priceError && 
+      <Typography sx={{
+        fontSize: '15px', 
+        color: '#f77474', 
+        mb: 2}}>
+          Please enter a number
+      </Typography>}
+    </div>
+  </Box>
+   )
+  }
+
+  function renderSubmitBtn(){
+    return(
+      <Button type='submit' variant='contained' 
+      sx={submitBtnStyle}>
+        Add Product
+     </Button>
+    )
+  }
+
+  // Formik and yup values
+  const inputInfos = {
+    name: {label: 'Product Name', placeholder: 'Enter a name'},
+    description: {label: 'Description', placeholder: 'Enter a description'},
+    category: {label: 'Category', placeholder: 'Choose a category'},
+    price: {label: 'Price', placeholder: 'Enter a price'}
+  }
+
+  const initialValues = {
+    name: '',
+    description: '',
+    price: '',
+    category: 'mainDishes',
+    preperationTime: 'Right Away'
+  }
+
+  const yupObject = {
+    name: Yup.string().max(20, 'Max 20 characters.').required(),
+    description: Yup.string().max(40, 'Max 40 characters').required(),
+    category: Yup.string(),
+    preperationTime: Yup.string(),
+    price: Yup.number().required(),
+  }
+
+  function renderFormikGridItem(){
+    return(
       <Grid item xs={12} lg={6} >
       <Typography variant='h5'>Details</Typography>
-
       <Formik 
-          initialValues={{
-            name: '',
-            description: '',
-            price: '',
-            category: 'mainDishes',
-            preperationTime: 'Right Away'
-          }}
+          initialValues={initialValues}
           validationSchema={
-            Yup.object({
-              name: Yup.string().max(20, 'Max 20 characters.').required(),
-              description: Yup.string().max(40, 'Max 40 characters').required(),
-              category: Yup.string(),
-              preperationTime: Yup.string(),
-              price: Yup.number().required(),
-            })
+            Yup.object(yupObject)
           }
           onSubmit={(values, {resetForm}) => {
             // check if user selected image, if so submit
             if(selectedFile?.name){
-              uploadProduct(values.name, values.description, values.preperationTime, values.price, values.category);
-
-              resetForm()
-              setSelectedFile('')
-              setFiles([]);
-              setIsAlert(true)
+              handleUploadProduct(values.name, values.description, values.preperationTime, values.price, values.category, resetForm);
             }else setSelectedFileError('Choose a file')
           }}
           >
             {({values, errors, handleSubmit, handleChange}) => (
               <form onSubmit={handleSubmit}>
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, width: '80%', mt: 1}}>
-                  
-                  {renderInput(values.name, errors.name, handleChange, 'name')}
-                  {renderInput(values.description, errors.description, handleChange, 'description')}
-
-                 <Box sx={{display: 'flex', fleWrap: 'wrap', gap: 2}}>
-                  <Box sx={{ flexGrow: 1}}>
-                      <label htmlFor="category" style={{marginBottom: '1rem', display: 'inline-block'}}>Category</label>
-                      <SelectComponent value={values.category} id='category' handleAddMenuChange={handleChange}/>
-                    </Box>
-
-                    <Box sx={{ flexGrow: 1}}>
-                      <label htmlFor="preperationTime" style={{marginBottom: '1rem', display: 'inline-block'}}>Preperation Time</label>
-                      <PreperationSelect id='preperationTime' value={values.preperationTime} handlePreperationChange={handleChange}/>
-                    </Box>
-                 </Box>
-
-                  <Box sx={{
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    width: {sm: '100%', md: '30%'},
-                    gap: 2.7,
-                    mt: 2
-                    }}>
-                    
-                    <div className='price-wrapper'>
-                      <label htmlFor="price" style={{marginBottom: '10px'}}>{inputInfos.price.label}</label>
-                     
-                      <input className={'price-input'} type="text" value={values.price} id='price' onChange={handleChange} placeholder={inputInfos.price.placeholder}
-                      style={{marginBottom: 0}}/>
-                      {errors.price && 
-                      
-                      <Typography sx={{
-                        fontSize: '15px', 
-                        color: '#f77474', 
-                        mb: 2}}>
-                         Please enter a number
-                      </Typography>}
-                    </div>
-                  </Box>
-                  
-                  <Button type='submit' variant='contained' 
-                      sx={submitBtnStyle}>Add Product</Button>
+                  {renderTextarea(values.name, errors.name, handleChange, 'name')}
+                  {renderTextarea(values.description, errors.description, handleChange, 'description')}
+                  {renderSelectInputs(values.category, values.preperationTime, handleChange)}
+                  {renderPriceInput(values.price, errors.price, handleChange)}
+                  {renderSubmitBtn()}
                 </Box>
               </form>
             )}
           </Formik>
       </Grid>
+    )
+  }
+
+  function renderUploadGridItem(){
+    return(
       <Grid item xs={12} lg={6}>
         <Typography variant='h5' 
         sx={{mb: {xs: 0, lg: 2}}}>Upload Image</Typography>
@@ -181,7 +208,13 @@ export default function AddProduct() {
         files={files} setFiles={setFiles}/>
         {renderSelectedFileError()}
       </Grid>
+    )
+  }
 
+  return (
+    <Grid container sx={gridContainerStyle}>
+      {renderFormikGridItem()}
+      {renderUploadGridItem()}
       <SuccessAlert isAlert={isAlert} setIsAlert={setIsAlert} content='Item added to the menu!'/>
     </Grid>
   )

@@ -87,7 +87,9 @@ const checkoutButton = {
 export default function EditModal({isModal, setIsModal, item, setItem,  setIsEditItem, setIsSpinner}) {
 
   const [isItemImageStay, setIsItemImageStay] = useState(true);
+  // state of dropzone for displaying uploaded file
   const [files, setFiles] = useState([]);
+  // user's selected image
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileError, setSelectedFileError] = useState('');
   const handleClose = () => setIsModal(false);
@@ -125,7 +127,7 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
     } else return <SettingsBackupRestoreIcon sx={iconStyle} onClick={()=> setIsItemImageStay(true)}/>
   }
 
-  function renderInput(value, error, handleChange, valueName){
+  function renderTextarea(value, error, handleChange, valueName){
     return(
       <Box sx={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
         <textarea className={error && 'form-error'} id={valueName} type='text' value={value} onChange={handleChange} rows='1'
@@ -279,8 +281,8 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
             {({values, errors, handleSubmit, handleChange}) => (
               <form className='edit' onSubmit={handleSubmit}>
                 <Box sx={formContainerStyle}>
-                  {renderInput(values.name, errors.name, handleChange, 'name')}
-                  {renderInput(values.description, errors.description, handleChange, 'description')}
+                  {renderTextarea(values.name, errors.name, handleChange, 'name')}
+                  {renderTextarea(values.description, errors.description, handleChange, 'description')}
                   {renderSelectComponent(values.preperationTime, handleChange)}
                   {renderPriceInput(values.price, errors.price, handleChange)}
                   {renderButtonActions()}
