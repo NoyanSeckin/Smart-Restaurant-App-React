@@ -93,14 +93,13 @@ function Menu({setCurrentTable, setTables}) {
 
   function renderCards(){
     return activeMenuItems.map((item, index) => 
-      <MenuCard item={item} counters={counters} setCounters={setCounters} index={index} setDeletedItemId={setDeletedItemId} setIsDeleteItem={setIsDeleteItem} editItem={editItem} setEditItem={setEditItem} setIsEditItem={setIsEditItem} isSpinner={isSpinner} setIsSpinner={setIsSpinner}/>
+      <MenuCard key={item.id} item={item} counters={counters} setCounters={setCounters} index={index} setDeletedItemId={setDeletedItemId} setIsDeleteItem={setIsDeleteItem} editItem={editItem} setEditItem={setEditItem} setIsEditItem={setIsEditItem} isSpinner={isSpinner} setIsSpinner={setIsSpinner}/>
     )
   }
 
   function deleteItem(){
     if(isDeleteItem){
       const stayingItems = activeMenuItems.filter(item => item.id !== deletedItemId)
-      console.log(stayingItems)
       updateDoc(menuRef, {
         [selectedMenu]: stayingItems
       })

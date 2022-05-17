@@ -55,12 +55,41 @@ const checkoutButton = {
     '&:hover': {cursor: 'pointer'}
   }
 
+  const formContainerStyle = {
+    display: 'flex', 
+    flexDirection: 'column', 
+    gap: 1, 
+    mt: 1,
+    width: '100%'
+  }
+
+  const displayContainerStyle = {
+    height: '170px', 
+    mt: 3, 
+    position: 'relative'
+  }
+
+  const selectedFileErrorStyle = {
+    color: '#F77474', 
+    mt: 1, 
+    position: 'absolute', 
+    right: '0',
+    top: '-35px',
+  }
+
+  const textareaErrorStyle = {
+    bottom: '5px', 
+    color: '#F77474',
+    left: '5px', 
+    position: 'absolute'
+  }
+
 export default function EditModal({isModal, setIsModal, item, setItem,  setIsEditItem, setIsSpinner}) {
 
   const [isItemImageStay, setIsItemImageStay] = useState(true);
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
-  const [selectedFileError, setSelectedFileError] = useState();
+  const [selectedFileError, setSelectedFileError] = useState('');
   const handleClose = () => setIsModal(false);
 
   async function uploadImage(id, object, setObject, setIsItem){
@@ -80,6 +109,7 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
     if(isItemImageStay){
       setFiles([]);
       setSelectedFile({});
+      setSelectedFileError('')
     }
   },[isItemImageStay])
 
@@ -95,7 +125,98 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
     } else return <SettingsBackupRestoreIcon sx={iconStyle} onClick={()=> setIsItemImageStay(true)}/>
   }
 
-  // formik
+  function renderInput(value, error, handleChange, valueName){
+    return(
+      <Box sx={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
+        <textarea className={error && 'form-error'} id={valueName} type='text' value={value} onChange={handleChange} rows='1'
+        />
+        <Typography sx={textareaErrorStyle}>{error}</Typography>
+      </Box>
+    )
+  }
+
+  function renderButtonActions(){
+    return(
+      <Box>
+          <Button type='submit' sx={checkoutButton}>Proceed</Button>
+         <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
+      </Box>
+    )
+  }
+
+  function renderSelectedFileError(){
+    if(selectedFileError){
+      return <Typography sx={selectedFileErrorStyle}>{selectedFileError}</Typography>
+    }
+  }
+
+  function handleFileUploadAndUpdate(editedItem){
+    if(selectedFile.name){
+      setIsSpinner(true);
+      handleClose();
+      const id = uuidv4();
+      // uploadImage(id).then
+      uploadImage(id, editedItem, setItem, setIsEditItem).then(()=> {
+        setSelectedFile({}); 
+        setFiles([]); 
+      })
+      setSelectedFileError('')
+    }else{
+     setSelectedFileError('Please choose image')
+    }
+  }
+
+  function handleOnlyUpdate(editedItem){
+    setItem(editedItem)
+    setIsEditItem(true)
+    handleClose()
+    setSelectedFileError('')
+  }
+
+  function handleUpdate(editedItem){
+     // if user uploaded photo
+     if(!isItemImageStay){
+      handleFileUploadAndUpdate(editedItem)
+    }else {
+      handleOnlyUpdate(editedItem);
+    } 
+  }
+
+  function renderHeading(){
+    return <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', mb: 2}}>
+    Edit Item
+  </Typography>
+  }
+
+  function renderDisplay(){
+    return(
+      <Box sx={displayContainerStyle}>
+      {renderImageOrDropzone()}
+      {renderSelectedFileError()}
+    </Box>
+    )
+  }
+
+  function renderSelectComponent(preperationTime, handleChange){
+    return(
+      <Box>
+        <Box sx={{ flexGrow: 1}}>
+          <PreperationSelect id='preperationTime' value={preperationTime} handlePreperationChange={handleChange} style={{p: 0}}/>
+        </Box>
+      </Box>
+    )
+  }
+
+  function renderPriceInput(priceValue, priceError, handleChange){
+    return(
+      <div className='price-wrapper'>
+        <input className={` price-input ${priceError && 'form-error'}`} type="text" value={priceValue} id='price' onChange={handleChange} placeholder={inputInfos.price.placeholder}
+        style={{marginBottom: 0}}/>
+      </div>
+    )
+  }
+
+   // formik & yup values
 
   const inputInfos = {
     name: {label: 'Product Name', placeholder: 'Enter a name'},
@@ -110,25 +231,12 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
     preperationTime: item.preperationTime
   }
 
-  function renderInput(value, error, handleChange, valueName){
-    return(
-      <Box sx={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-        <textarea className={error && 'form-error'} id={valueName} type='text' value={value} onChange={handleChange} rows='1'
-        />
-        <Typography sx={{position: 'absolute', bottom: '-5px', color: '#F77474'}}>{error}</Typography>
-      </Box>
-    )
+  const yupObject = {
+    name: Yup.string().max(20, 'Max 20 characters.').required('Name is required'),
+    description: Yup.string().max(40, 'Max 40 characters').required('Description is required'),
+    preperationTime: Yup.string(),
+    price: Yup.number().required(),
   }
-
-  function renderButtonActions(){
-    return(
-      <Box>
-          <Button type='submit' onClick={handleClose} sx={checkoutButton}>Proceed</Button>
-         <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
-      </Box>
-    )
-  }
-
 
   return (
     <Box sx={{position: 'relative'}}>
@@ -148,24 +256,14 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
         <Fade in={isModal}>
           <Box sx={style}>
             {renderActionIcon()}
-            <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', mb: 2}}>
-              Edit Item
-            </Typography>
-            <Box sx={{height: '160px', mt: 3}}>
-              {renderImageOrDropzone()}
-            </Box>
+            {renderHeading()}
+            {renderDisplay()}
             <Formik 
           initialValues={initialValues}
           validationSchema={
-            Yup.object({
-              name: Yup.string().max(20, 'Max 20 characters.').required('Name is required'),
-              description: Yup.string().max(40, 'Max 40 characters').required('Description is required'),
-              preperationTime: Yup.string(),
-              price: Yup.number().required(),
-            })
+            Yup.object(yupObject)
           }
-          onSubmit={(values, {resetForm}) => {
-            
+          onSubmit={(values) => {
             const editedItem = {
               id: item.id,
               name: values.name,
@@ -174,40 +272,19 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
               price: values.price,
               image: item.image
             }
-            // if user uploaded photo
-            if(selectedFile && !isItemImageStay){
-              setIsSpinner(true);
-              const id = uuidv4();
-              // uploadImage(id).then
-              uploadImage(id, editedItem, setItem, setIsEditItem).then(()=> {setSelectedFile({}); setFiles([])})
 
-            }else {
-              setItem(editedItem)
-              setIsEditItem(true)
-            }
+            handleUpdate(editedItem);
           }}
           >
             {({values, errors, handleSubmit, handleChange}) => (
               <form className='edit' onSubmit={handleSubmit}>
-                
-                <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, width: '100%', mt: 1}}>
-                  
+                <Box sx={formContainerStyle}>
                   {renderInput(values.name, errors.name, handleChange, 'name')}
                   {renderInput(values.description, errors.description, handleChange, 'description')}
-
-                 <Box sx={{display: 'flex', fleWrap: 'wrap', gap: 2}}>
-                    <Box sx={{ flexGrow: 1}}>
-                      <PreperationSelect id='preperationTime' value={values.preperationTime} handlePreperationChange={handleChange} style={{p: 0}}/>
-                    </Box>
-                 </Box>
-
-                  <div className='price-wrapper'>
-                    <input className={` price-input ${errors.price && 'form-error'}`} type="text" value={values.price} id='price' onChange={handleChange} placeholder={inputInfos.price.placeholder}
-                    style={{marginBottom: 0}}/>
-                  </div>
-                  
+                  {renderSelectComponent(values.preperationTime, handleChange)}
+                  {renderPriceInput(values.price, errors.price, handleChange)}
                   {renderButtonActions()}
-                  </Box>
+                </Box>
               </form>
             )}
           </Formik>

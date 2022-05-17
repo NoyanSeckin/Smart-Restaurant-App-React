@@ -59,7 +59,15 @@ const actionsContainerStyle = {
   width: '100%'
 }
 
-function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem, isSpinner, setIsSpinner, authentication}) {
+const cardStyle = { 
+  maxWidth: 300, 
+  minWidth: 300, 
+  px: 1, 
+  py: 1, 
+  position: 'relative' 
+}
+
+function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem, isSpinner, setIsSpinner, authentication, key}) {
 
   const [isModal, setIsModal] = useState(false)
   const [isEditModal, setIsEditModal] = useState(false)
@@ -122,20 +130,20 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
     }
   }
 
-  function renderCardContent(itemName, itemDescription){
+  function renderCardContent(){
     return(
       <CardContent sx={{pt: 0.5, px: 1}}>
       <Typography variant='h6'>
-        {itemName}
+        {item.name}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        {itemDescription || 'Lorem ipsum'}
+        {item.description|| 'Lorem ipsum'}
       </Typography>
     </CardContent>
     )
   }
 
-  function renderCardActions(item, index){
+  function renderCardActions(){
     return(
       <CardActions sx={{display: 'flex', flexDirection: 'column'}} disableSpacing>
       <Typography sx={{alignSelf: 'start'}}>{item?.price} $</Typography>
@@ -156,13 +164,11 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
  
   function renderCards(){
       return(
-        <Card key={item.id} 
-        sx={{ 
-          maxWidth: 300, minWidth: 300, px: 1, py: 1, position: 'relative' }}>
+        <Card key={key} sx={cardStyle}>
          {renderImageOrSpinner()}
          {renderMenuEditDeleteIcons()}
-         {renderCardContent(item.name, item.description)}
-         {renderCardActions(item, index)}
+         {renderCardContent()}
+         {renderCardActions()}
       </Card>
       )
   }

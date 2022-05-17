@@ -24,7 +24,7 @@ export default function Admin() {
       return <AdminTables/>
     } else if(activePage === 'Add Menu'){
       return <AddMenu/>
-    }else return 'Revenue'
+    }
   }
  
   return (

@@ -9,13 +9,14 @@ export default function Tables() {
   const db = getFirestore();
   const [occupiedTables, setOccupiedTables] = useState([]);
   const docRef = doc(db, 'OccupiedTables', 'occupiedTables')
-
+  const [isComponentMounted, setIsComponentMounted] = useState(true)
   useEffect(()=> {
-    const abortCont = new AbortController()
-    onSnapshot(docRef, {signal: abortCont.signal}, (doc) => {
+    if(isComponentMounted){
+      onSnapshot(docRef, (doc) => {
         setOccupiedTables(doc.data().occupiedTables);
       })
-      return () => abortCont.abort();
+    }
+    return () => setIsComponentMounted(false);
     }, []) 
   
   function renderQrCodes(){

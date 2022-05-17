@@ -21,18 +21,20 @@ export default function AdminTables({tables}) {
   const [occupiedTables, setOccupiedTables] = useState([]);
   const [waiterCalls, setWaiterCalls] = useState([]);
   const [waiterAlert, setWaiterAlert] = useState(false);
+  const [isComponentMounted, setIsComponentMounted] = useState(true);
 
   // get occupied tables and waitercalls
   useEffect(()=> {
-    const abortCont = new AbortController()
-    onSnapshot(docRef, {signal: abortCont.signal}, (doc) => {
-        setOccupiedTables(doc.data().occupiedTables);
-      })
+   if(isComponentMounted){
+    onSnapshot(docRef, (doc) => {
+      setOccupiedTables(doc.data().occupiedTables);
+    })
 
-    onSnapshot(callsRef, {signal: abortCont.signal}, (doc) => {
+   }
+    onSnapshot(callsRef, (doc) => {
       setWaiterCalls(doc.data().calls);
     })
-    return () => abortCont.abort()
+    return () => setIsComponentMounted(false)
     }, []) 
 
   let history = useHistory();
