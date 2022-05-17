@@ -8,6 +8,15 @@ import {setCurrentTable, setTables} from '../actions'
 import MenuCard from '../components/MenuCard'
 import SelectComponent from '../components/SelectComponent'
 
+
+const cardsContainerStyle = {
+  display: 'flex', 
+  justifyContent: {xs: 'center', sm: 'start'},
+  pt: 2, 
+  gap: 4, 
+  flexWrap: 'wrap',
+  }
+
 function Menu({setCurrentTable, setTables}) {
   // get current table with id route parameter
   const { id } = useParams();
@@ -116,8 +125,6 @@ function Menu({setCurrentTable, setTables}) {
       }).then(()=> fetchSelectedMenu()).then(()=> setIsSpinner(false));
 
       setIsEditItem(false);
-      
-    
     }
     
   }
@@ -126,20 +133,24 @@ function Menu({setCurrentTable, setTables}) {
     editMenuItem()
   }, [isEditItem])
 
+  function renderSelectComponent(){
+    return  <SelectComponent style={{mx: 'auto'}} getSelectedMenu={getSelectedMenu}/>
+  }
+
+  function renderPage(){
+    return(
+      <Container maxWidth='xl' sx={{py: 10}}>
+      {renderSelectComponent()}
+       <Box sx={cardsContainerStyle}>
+         {renderCards()}
+       </Box>
+   </Container>
+    )
+  }
+
   return (
     <Box >
-     <Container maxWidth='xl' sx={{py: 10}}>
-         <SelectComponent style={{mx: 'auto'}} getSelectedMenu={getSelectedMenu}/>
-         <Box sx={{
-           display: 'flex', 
-           justifyContent: {xs: 'center', sm: 'start'},
-           pt: 2, 
-           gap: 4, 
-           flexWrap: 'wrap',
-           }}>
-           {renderCards()}
-         </Box>
-     </Container>
+      {renderPage()}
     </Box>
   )
 }

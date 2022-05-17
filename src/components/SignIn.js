@@ -45,6 +45,31 @@ export default function BuyModal({isModal, setIsModal, email, setEmail, password
     proceedAction(email, password)
     handleClose();
   }
+
+  function renderForm(){
+    return(
+      <form className='login' onSubmit={(e)=> e.preventDefault()}>
+      <label htmlFor="email" style={{display: 'block'}}>Email</label>
+      <input type="text" onChange={(e)=> setEmail(e.target.value)}
+      value={email}/> 
+      <label htmlFor="password" style={{display: 'block'}}>Password</label>
+      <input type="password" onChange={(e)=> setPassword(e.target.value)}
+      value={password}/> 
+      <Box sx={{display: 'flex'}}>
+      <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
+      <Button onClick={handleProceedAction} sx={loginButton}>Login</Button>
+      </Box>
+    </form>
+    )
+  }
+
+  function renderHeader(){
+    return(
+      <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', fontSize: '25px', mb:1}}>
+        Admin Login
+      </Typography>
+    )
+  }
   return (
     <Box>
       <Modal
@@ -62,21 +87,8 @@ export default function BuyModal({isModal, setIsModal, email, setEmail, password
       >
         <Fade in={isModal}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', fontSize: '25px', mb:1}}>
-              Admin Login
-            </Typography>
-            <form className='login' onSubmit={(e)=> e.preventDefault()}>
-              <label htmlFor="email" style={{display: 'block'}}>Email</label>
-              <input type="text" onChange={(e)=> setEmail(e.target.value)}
-              value={email}/> 
-              <label htmlFor="password" style={{display: 'block'}}>Password</label>
-              <input type="password" onChange={(e)=> setPassword(e.target.value)}
-              value={password}/> 
-              <Box sx={{display: 'flex'}}>
-              <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleProceedAction} sx={loginButton}>Login</Button>
-              </Box>
-            </form>
+            {renderHeader()}
+            {renderForm()}
           </Box> 
         </Fade>
       </Modal>

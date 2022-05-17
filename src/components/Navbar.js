@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { getFirestore, doc, updateDoc, arrayUnion} from "firebase/firestore";
 import {getAuth, signInWithEmailAndPassword, signOut} from 'firebase/auth'
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import SignIn from './SignIn'
 import {setTableItems, setAuthentication} from '../actions'
 
@@ -29,10 +29,21 @@ import {setTableItems, setAuthentication} from '../actions'
 
   const db = getFirestore();
   const callsRef = doc(db, 'WaiterCalls', 'tables')
+
+  useEffect(()=> {
+    // detect page refresh and keep admin logged in
+    if(performance.getEntriesByType("navigation")[0].type){
+      let auth = sessionStorage.getItem('auth');
+      if(auth){
+        setAuthentication(auth)
+      }
+    }
+  }, [])
   
   async function signInUser(email, password){
     signInWithEmailAndPassword(auth, email, password).then(cred => {
       setAuthentication(cred.user.email)
+      sessionStorage.setItem('auth', cred.user.email)
     }).catch(err => console.log(err))
   }
 

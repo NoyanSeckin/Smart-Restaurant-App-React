@@ -21,7 +21,7 @@ export default function Home() {
             <Typography variant='h1'
               sx={{
                 fontWeight: '700',
-                width: '50%',
+                width: {xs: '%70', lg: '50%'},
                 lineHeight: 1.05,
                 fontSize: {xs: '4rem', lg: '7rem'}
               }}>
@@ -32,6 +32,7 @@ export default function Home() {
               </Typography>
               <Box>
                 <Button variant='contained' 
+                onClick={scrollToBottom}
                 sx={{mr: 2, 
                   backgroundColor: 'warning.dark',
                   '&:hover': {backgroundColor: 'warning.main'}
@@ -47,7 +48,7 @@ export default function Home() {
            </Box>
           </Grid>
 
-          <Grid item xs={12} lg={6} sx={{mt: {xs: 4, lg: 0}}}>
+          <Grid item xs={9} lg={6} sx={{mt: {xs: 4, lg: 0}}}>
             <img src={require('../images/main.jpg')} alt="" 
             style={{
               width: '100%',
@@ -94,6 +95,15 @@ export default function Home() {
       </Grid>
     )
   }
+
+    
+  function scrollToBottom(){ 
+    window.scrollTo({ 
+      top: document.documentElement.scrollHeight, 
+      behavior: 'smooth'
+    }); 
+  }
+
   
   return (
     <Box sx={{background: '#f2f2f2', minHeight: '150vh'}}>

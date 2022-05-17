@@ -2,10 +2,16 @@ import {Box, Button, Container, Typography, Grid} from '@mui/material'
 import {Card, CardActions, CardContent} from '@mui/material'
 import AlarmOffIcon from '@mui/icons-material/AlarmOff';
 import {useHistory} from 'react-router-dom'
-import { initializeApp } from "firebase/app";
 import { getFirestore, doc, onSnapshot, updateDoc} from "firebase/firestore";
 
 import React, {useState, useEffect} from 'react'
+
+const gridContainerStyle = {
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  gap: 4
+}
+
 export default function AdminTables({tables}) {
   
   const db = getFirestore();
@@ -18,13 +24,15 @@ export default function AdminTables({tables}) {
 
   // get occupied tables and waitercalls
   useEffect(()=> {
-    onSnapshot(docRef, (doc) => {
+    const abortCont = new AbortController()
+    onSnapshot(docRef, {signal: abortCont.signal}, (doc) => {
         setOccupiedTables(doc.data().occupiedTables);
       })
 
-      onSnapshot(callsRef, (doc) => {
-        setWaiterCalls(doc.data().calls);
-      })
+    onSnapshot(callsRef, {signal: abortCont.signal}, (doc) => {
+      setWaiterCalls(doc.data().calls);
+    })
+    return () => abortCont.abort()
     }, []) 
 
   let history = useHistory();
@@ -119,7 +127,7 @@ export default function AdminTables({tables}) {
   }
 
   return (
-    <Grid container sx={{display: 'flex', justifyContent: 'space-between', gap: 4}}>
+    <Grid container sx={gridContainerStyle}>
      {renderTables()}
     </Grid>
   )

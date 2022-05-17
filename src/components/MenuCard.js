@@ -35,6 +35,29 @@ const editIconStyle = {
   '&:hover': {cursor: 'pointer'}
 }
 
+const addToTableBtnStyle = {
+  backgroundColor: 'warning.dark', 
+  mt: 1, 
+  width: '100%', 
+  '&:hover': {backgroundColor: 'warning.main'}
+}
+
+const decreaseIconStyle = {
+  alignSelf: 'center', 
+  '&:hover': {cursor: 'pointer'}
+}
+
+const increaseIconStyle = {
+  alignSelf: 'center', 
+  '&:hover': {cursor: 'pointer'}
+}
+
+const actionsContainerStyle = {
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  flexGrow: 1, 
+  width: '100%'
+}
 
 function MenuCard({tableItems, setTableItems, item, counters, setCounters, index, setDeletedItemId, setIsDeleteItem, editItem, setEditItem, setIsEditItem, isSpinner, setIsSpinner, authentication}) {
 
@@ -98,38 +121,48 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
       )
     }
   }
+
+  function renderCardContent(itemName, itemDescription){
+    return(
+      <CardContent sx={{pt: 0.5, px: 1}}>
+      <Typography variant='h6'>
+        {itemName}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {itemDescription || 'Lorem ipsum'}
+      </Typography>
+    </CardContent>
+    )
+  }
+
+  function renderCardActions(item, index){
+    return(
+      <CardActions sx={{display: 'flex', flexDirection: 'column'}} disableSpacing>
+      <Typography sx={{alignSelf: 'start'}}>{item?.price} $</Typography>
+        <Box sx={actionsContainerStyle}>
+          <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime}</Typography>
+          <Box sx={{display: 'flex', gap: 1}}>
+            <RemoveIcon fontSize='small' sx={decreaseIconStyle}
+            onClick={()=> handleCounterChange(index, - 1)} />
+            <Typography>{counters[index]}</Typography>
+            <AddIcon fontSize='small' sx={increaseIconStyle}
+            onClick={()=> handleCounterChange(index, 1)}/>
+          </Box>
+        </Box>
+        <Button sx={addToTableBtnStyle} onClick={()=> addToTable(item, counters[index])} variant='contained'>Add to table</Button>
+      </CardActions>
+    )
+  }
  
-  const renderCards = () => {
+  function renderCards(){
       return(
-        <Card key={index} 
+        <Card key={item.id} 
         sx={{ 
           maxWidth: 300, minWidth: 300, px: 1, py: 1, position: 'relative' }}>
          {renderImageOrSpinner()}
          {renderMenuEditDeleteIcons()}
-          <CardContent sx={{pt: 0.5, px: 1}}>
-          <Typography variant='h6'>
-            {item.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {item.description || 'Lorem ipsum'}
-          </Typography>
-        </CardContent>
-        
-        <CardActions sx={{display: 'flex', flexDirection: 'column'}} disableSpacing>
-        <Typography sx={{alignSelf: 'start'}}>{item?.price} $</Typography>
-
-          <Box sx={{display: 'flex', justifyContent: 'space-between', flexGrow: 1, width: '100%'}}>
-            <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime}</Typography>
-            <Box sx={{display: 'flex', gap: 1}}>
-              <RemoveIcon fontSize='small' sx={{alignSelf: 'center', '&:hover': {cursor: 'pointer'}}}
-              onClick={()=> handleCounterChange(index, - 1)} />
-              <Typography>{counters[index]}</Typography>
-              <AddIcon fontSize='small' sx={{alignSelf: 'center', '&:hover': {cursor: 'pointer'}}}
-              onClick={()=> handleCounterChange(index, 1)}/>
-            </Box>
-          </Box>
-          <Button sx={{width: '100%', mt: 1, backgroundColor: 'warning.dark', '&:hover': {backgroundColor: 'warning.main'}}} onClick={()=> addToTable(item, counters[index])} variant='contained'>Add to table</Button>
-        </CardActions>
+         {renderCardContent(item.name, item.description)}
+         {renderCardActions(item, index)}
       </Card>
       )
   }
