@@ -45,6 +45,32 @@ export default function BuyModal({isModal, setIsModal, header, content, bgColor,
     proceedAction(true)
     handleClose();
   }
+
+  function renderHeader(){
+    return(
+      <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', fontSize: '25px', mt: 2.5}}>
+        {header}
+      </Typography>
+    )
+  }
+  
+  function renderContent(){
+    return(
+      <Typography id="transition-modal-description" sx={{ my: 1.7, color: '#555555' }}>
+        {content}
+      </Typography>
+    )
+  }
+
+  function renderActionBtns(){
+    return(
+      <Box>
+      <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
+      <Button onClick={handleProceedAction} sx={checkoutButton}>Proceed</Button>
+      </Box>
+    )
+  }
+
   return (
     <Box>
       <Modal
@@ -62,14 +88,9 @@ export default function BuyModal({isModal, setIsModal, header, content, bgColor,
       >
         <Fade in={isModal}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h5" sx={{fontWeight: '700', fontSize: '25px', mt: 2.5}}>
-              {header}
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ my: 1.7, color: '#555555' }}>
-             {content}
-            </Typography>
-            <Button sx={closeButton} onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleProceedAction} sx={checkoutButton}>Proceed</Button>
+            {renderHeader()}
+            {renderContent()}
+            {renderActionBtns()}
           </Box> 
         </Fade>
       </Modal>

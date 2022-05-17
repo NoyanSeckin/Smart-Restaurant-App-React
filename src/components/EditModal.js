@@ -15,7 +15,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import PreperationSelect from './PreperationSelect'
 import DropzoneComp from './DropzoneComp';
-const style = {
+
+const modalContainerStyle = {
   bgcolor: '#fff',
   borderRadius: '8px',
   boxShadow: '0px 3px 12px #1E36482E',
@@ -239,28 +240,10 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
     preperationTime: Yup.string(),
     price: Yup.number().required(),
   }
-
-  return (
-    <Box sx={{position: 'relative'}}>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={isModal}
-        onClose={handleClose}
-        closeAfterTransition
-        disableAutoFocus
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-          style:{opacity: 0.7, backgroundColor: '#4B9CE2'}
-        }}
-      >
-        <Fade in={isModal}>
-          <Box sx={style}>
-            {renderActionIcon()}
-            {renderHeading()}
-            {renderDisplay()}
-            <Formik 
+  
+  function renderFormik(){
+    return(
+      <Formik 
           initialValues={initialValues}
           validationSchema={
             Yup.object(yupObject)
@@ -289,7 +272,31 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
                 </Box>
               </form>
             )}
-          </Formik>
+    </Formik>
+    )
+  }
+
+  return (
+    <Box sx={{position: 'relative'}}>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={isModal}
+        onClose={handleClose}
+        closeAfterTransition
+        disableAutoFocus
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+          style:{opacity: 0.7, backgroundColor: '#4B9CE2'}
+        }}
+      >
+        <Fade in={isModal}>
+          <Box sx={modalContainerStyle}>
+            {renderActionIcon()}
+            {renderHeading()}
+            {renderDisplay()}
+            {renderFormik()}
           </Box> 
         </Fade>
       </Modal>

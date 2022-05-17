@@ -11,13 +11,41 @@ import React, {useState, useEffect} from 'react'
 import SignIn from './SignIn'
 import {setTableItems, setAuthentication} from '../actions'
 
+  const containerStyle = { 
+    flexGrow: 1, 
+    backgroundColor: 'warning.dark' 
+  }
+
   const navLinkStyle = {
-    fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
     color: '#F2F2F2',
+    fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
     pb: 1.2
   }
 
- 
+  const tableCounterStyle = {
+    color: '#F2F2F2',
+    position: 'absolute', 
+    right: {xs: '0', lg:'20px'},
+    top: '-5px', 
+    }
+
+  const tableContainerStyle = {
+    alignSelf: 'center' ,
+    position: 'relative', 
+    '&:hover': {cursor: 'pointer'}
+  }
+
+  const tableBtnStyle = {
+    color: '#F2F2F2', 
+    mr: {sx: 0, lg: 3},
+    fontSize: {xs: '0.7rem', sm: '0.95rem'}
+  }
+
+  const callWaiterBtnStyle = {
+    color: '#F2F2F2', 
+    fontSize: {xs: '0.7rem', sm: '0.95rem'}
+  
+  }
  function Navbar({tableItems, currentTable, authentication, setAuthentication}) {
 
   const [activeNav, setActiveNav] = useState('Home')
@@ -89,22 +117,13 @@ import {setTableItems, setAuthentication} from '../actions'
 
   function renderGoToTable(){
     return(
-      <Box sx={{alignSelf: 'center' ,position: 'relative', '&:hover': {cursor: 'pointer'}}}>
-      <Typography sx={{
-        position: 'absolute', 
-        right: {xs: '0', lg:'20px'},
-         top: '-5px', 
-         color: '#F2F2F2'
-         }} variant="caption">
+      <Box sx={tableContainerStyle}>
+      <Typography sx={tableCounterStyle} variant="caption">
           {calculateTotalItems(tableItems)}
         </Typography>
         <NavLink to='/usertable'>
         <Button 
-        sx={{
-          color: '#F2F2F2', 
-          mr: {sx: 0, lg: 3},
-          fontSize: {xs: '0.7rem', sm: '0.95rem'}
-        }}
+        sx={tableBtnStyle}
         endIcon={ 
         <TableRestaurantIcon  
         sx={{
@@ -122,7 +141,7 @@ import {setTableItems, setAuthentication} from '../actions'
   function renderCallWaiter(){
     return(
       <Button
-      sx={{color: '#F2F2F2', fontSize: {xs: '0.7rem', sm: '0.95rem'}}}
+      sx={callWaiterBtnStyle}
       onClick={callWaiter}
       endIcon={<RoomServiceIcon 
       sx={{color: '#F2F2F2'}}/>}>
@@ -135,32 +154,50 @@ import {setTableItems, setAuthentication} from '../actions'
     return <SignIn proceedAction={signInUser} isModal={isLoginModal} setIsModal={setIsLoginModal} email={email} setEmail={setEmail} password={password} setPassword={setPassword}/>
   }
 
-  return (
-    <Box sx={{ flexGrow: 1, backgroundColor: 'warning.dark' }}>
-      <Container maxWidth='xl'>
+  function renderLeftNavs(){
+    return(
+      <Box sx={{
+        display: 'flex', 
+        gap: {xs: 1, md: 5}, 
+        alignItems: 'end',
+        }}>
+        <img width='50px' src={require('../images/logo.png')} alt="" />
+        {renderNavLink('/', 'Home')}
+        {authentication && renderNavLink('/admin', 'Admin')}
+        {renderNavLink('/tables', 'Tables')}
+        {renderNavLink(`/menu/${currentTable}`, 'Menu')}
+      </Box>
+    )
+  }
+
+  function renderRightNavs(){
+    return(
+      <Box sx={{display: 'flex', mt: {xs: 1, md: 0}}}>
+      {renderCallWaiter()}
+      {renderGoToTable()}
+      {/*on small screens means customers who wont authenticate */}
+      <Box sx={{display: {xs: 'none',  md: 'block'}}}>
+        {renderAuthButtons()}
+      </Box>
+    </Box>
+    )
+  }
+
+  function renderAppBar(){
+    return(
       <AppBar elevation={0} position="static" sx={{backgroundColor: 'warning.dark'}}>
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between'}}>
-          <Box sx={{
-            display: 'flex', 
-            gap: {xs: 1, md: 5}, 
-            alignItems: 'end',
-            }}>
-            <img width='50px' src={require('../images/logo.png')} alt="" />
-            {renderNavLink('/', 'Home')}
-            {authentication && renderNavLink('/admin', 'Admin')}
-            {renderNavLink('/tables', 'Tables')}
-            {renderNavLink(`/menu/${currentTable}`, 'Menu')}
-          </Box>
-          <Box sx={{display: 'flex', mt: {xs: 1, md: 0}}}>
-            {renderCallWaiter()}
-            {renderGoToTable()}
-            {/*on small screens means customers who wont authenticate */}
-            <Box sx={{display: {xs: 'none',  md: 'block'}}}>
-              {renderAuthButtons()}
-            </Box>
-          </Box>
+          {renderLeftNavs()}
+          {renderRightNavs()}
         </Toolbar>
       </AppBar>
+    )
+  }
+
+  return (
+    <Box sx={containerStyle}>
+      <Container maxWidth='xl'>
+        {renderAppBar()}
       </Container>
       {renderSignInModal()}
     </Box>
