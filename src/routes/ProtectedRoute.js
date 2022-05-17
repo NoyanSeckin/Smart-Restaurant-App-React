@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 
 function ProtectedRoute({authentication, component: Component, ...restOfProps }) {
   const isAuthenticated = authentication
-  console.log("this", isAuthenticated);
-
   return (
     <Route
       {...restOfProps}

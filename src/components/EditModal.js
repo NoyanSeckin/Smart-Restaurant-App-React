@@ -103,6 +103,12 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
     category: {label: 'Category', placeholder: 'Choose a category'},
     price: {label: 'Price', placeholder: 'Enter a price'}
   }
+  const initialValues = {
+    name: item.name,
+    description: item.description,
+    price: item.price,
+    preperationTime: item.preperationTime
+  }
 
   function renderInput(value, error, handleChange, valueName){
     return(
@@ -122,6 +128,7 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
       </Box>
     )
   }
+
 
   return (
     <Box sx={{position: 'relative'}}>
@@ -148,16 +155,11 @@ export default function EditModal({isModal, setIsModal, item, setItem,  setIsEdi
               {renderImageOrDropzone()}
             </Box>
             <Formik 
-          initialValues={{
-            name: item.name,
-            description: item.description,
-            price: item.price,
-            preperationTime: item.preperationTime
-          }}
+          initialValues={initialValues}
           validationSchema={
             Yup.object({
-              name: Yup.string().max(100, 'Max 50 characters.').required('Name is required'),
-              description: Yup.string().max(500, 'Max 100 characters').required('Description is required'),
+              name: Yup.string().max(20, 'Max 20 characters.').required('Name is required'),
+              description: Yup.string().max(40, 'Max 40 characters').required('Description is required'),
               preperationTime: Yup.string(),
               price: Yup.number().required(),
             })

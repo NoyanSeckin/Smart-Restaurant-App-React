@@ -16,6 +16,7 @@ function Menu({setCurrentTable, setTables}) {
   
   // add current table to the db
   const docRef = doc(db, 'OccupiedTables', 'occupiedTables');
+
   const [deletedItemId, setDeletedItemId] = useState('');
   const [isDeleteItem, setIsDeleteItem] = useState(false);
 
@@ -32,6 +33,7 @@ function Menu({setCurrentTable, setTables}) {
     setTables(tables);
     return tables;
   }
+
   useEffect(() => {
     const currentTable = Number(id);
     setCurrentTable(currentTable);
@@ -60,6 +62,7 @@ function Menu({setCurrentTable, setTables}) {
 
 
   const menuRef = doc(db, 'Menu', `${selectedMenu}`);
+
   async function fetchSelectedMenu(){
     const menuSnap = await getDoc(menuRef);
     const menuArray = menuSnap.data()[selectedMenu]
@@ -103,17 +106,18 @@ function Menu({setCurrentTable, setTables}) {
 
   async function editMenuItem(){
     if(isEditItem){
-      const unchangedItems = activeMenuItems.filter(item => item.id !== editItem.id);
-      const allItems = [...unchangedItems, editItem];
+      const menuItems = activeMenuItems;
+      const index = activeMenuItems.findIndex(item => item.id === editItem.id);
+      console.log(index)
+      menuItems[index] = editItem;
 
       updateDoc(menuRef, {
-        [selectedMenu]: allItems
-      })
-      console.log(editItem)
-    
+        [selectedMenu]: menuItems
+      }).then(()=> fetchSelectedMenu()).then(()=> setIsSpinner(false));
+
       setIsEditItem(false);
-      fetchSelectedMenu().then(()=> setIsSpinner(false)
-      )
+      
+    
     }
     
   }

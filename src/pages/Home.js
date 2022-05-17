@@ -65,7 +65,7 @@ export default function Home() {
     return(
       <List>
         {listTexts.map(text =>
-          <ListItem>
+          <ListItem key={text}>
             <ListItemText
             primary={'- ' + text}
             />
