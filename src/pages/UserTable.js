@@ -72,13 +72,23 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   }
 
   function renderDirectToMenu(){
-    return(
-      <Paper elevation={0} sx={{mt: 2}}>
-        <Typography variant='h5' sx={{mb: 1}}>Nothing to order!</Typography> 
-        <Typography>Check your previous orders.</Typography>
-        {directToMenuButton()}
-      </Paper>
-      ) 
+    if(activePage === 'New Order'){
+      return(
+        <Paper elevation={0} sx={{mt: 2}}>
+          <Typography variant='h5' sx={{mb: 1}}>Nothing to order!</Typography> 
+          {<Typography>Check your previous orders.</Typography>}
+          {directToMenuButton()}
+        </Paper>
+        ) 
+    }else{
+      return(
+        <Paper elevation={0} sx={{mt: 2}}>
+          <Typography variant='h5' sx={{mb: 1}}>No previous orders!</Typography> 
+          {<Typography>Check our menu.</Typography>}
+          {directToMenuButton()}
+        </Paper>
+      )
+    }
 }
 
   function renderNavs(){

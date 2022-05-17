@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect({getSelectedMenu, handleAddMenuChange, value, style}) {
+export default function BasicSelect({getSelectedMenu, handleAddMenuChange, value}) {
   // value and handleAddMenuChange are props of add menu
   // getselectedmenu belongs to menu page
   

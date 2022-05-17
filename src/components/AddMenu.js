@@ -105,14 +105,15 @@ export default function AddProduct() {
           }}
           validationSchema={
             Yup.object({
-              name: Yup.string().max(100, 'Max 50 characters.').required(),
-              description: Yup.string().max(500, 'Max 100 characters').required(),
+              name: Yup.string().max(20, 'Max 20 characters.').required(),
+              description: Yup.string().max(40, 'Max 40 characters').required(),
               category: Yup.string(),
               preperationTime: Yup.string(),
               price: Yup.number().required(),
             })
           }
           onSubmit={(values, {resetForm}) => {
+            // check if user selected image, if so submit
             if(selectedFile?.name){
               uploadProduct(values.name, values.description, values.preperationTime, values.price, values.category);
 

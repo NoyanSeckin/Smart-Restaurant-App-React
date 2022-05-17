@@ -11,13 +11,15 @@ export default function Tables() {
   const docRef = doc(db, 'OccupiedTables', 'occupiedTables')
 
   useEffect(()=> {
-    onSnapshot(docRef, (doc) => {
+    const abortCont = new AbortController()
+    onSnapshot(docRef, {signal: abortCont.signal}, (doc) => {
         setOccupiedTables(doc.data().occupiedTables);
       })
+      return () => abortCont.abort();
     }, []) 
   
   function renderQrCodes(){
-    const tables = [1,2,3,4,5,6];
+    const tables = [1,2,3,4,5,6,7,8,9];
     return tables.map(table => (
           <Grid item key={table} lg={3}  sx={{display: 'flex', gap: 5}}>
             <Typography variant='h1'>{table}</Typography>
@@ -33,7 +35,12 @@ export default function Tables() {
     <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
       <Container maxWidth='xl' sx={{pt: 5}}>
         <Paper sx={{py: 5, borderRadius: '8px'}}>
-          <Typography sx={{ml: {xs: 2, lg: 9}, mb: 5}} variant='h1'>Tables</Typography>
+          <Grid container sx={{justifyContent: 'center', mb: 2}}>
+            <Grid item lg={10} md={10} sx={{display: 'flex', flexDirection: 'column', alignItems: {xs: 'center', md: 'start'}}}>
+            <Typography variant='h1'>Tables</Typography>
+            <Typography sx={{width: {xs: '80%', md: '40%', lg: '30%'}, ml: {xs: 5, md: 1}}}>Scan available qr codes with your mobile phone. This will automatically assign you to the scanned code's table and direct you to the menu.</Typography>
+            </Grid>
+          </Grid>
           <Grid container sx={{gap: 8, justifyContent: 'center'}}>
           {renderQrCodes()}
           </Grid>

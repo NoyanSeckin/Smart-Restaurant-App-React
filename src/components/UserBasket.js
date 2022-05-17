@@ -355,7 +355,7 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       <Box sx={{alignSelf: 'end'}}>
-        <Typography sx={{fontSize: '0.85rem'}}>{orderErrorMessage}</Typography>
+        <Typography sx={{fontSize: '0.8rem', color: 'danger.main'}}>{orderErrorMessage}</Typography>
         <Button onClick={handleSendOrder} variant='contained' 
         sx={{background: '#ff9800', px: 4, mb: 2, mr: 2}}>Order Now</Button>
       </Box>

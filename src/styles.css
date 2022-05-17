@@ -188,3 +188,9 @@ form label {
 	box-sizing: border-box;
 }
 
+/* Navbar */
+
+.navbarActive{
+	border-bottom: 2px solid #fff;
+	padding-bottom: 0.5rem !important;
+}

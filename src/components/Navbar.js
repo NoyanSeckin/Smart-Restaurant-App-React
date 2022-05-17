@@ -13,11 +13,14 @@ import {setTableItems, setAuthentication} from '../actions'
 
   const navLinkStyle = {
     fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
-    color: '#F2F2F2'
+    color: '#F2F2F2',
+    pb: 1.2
   }
 
+ 
  function Navbar({tableItems, currentTable, authentication, setAuthentication}) {
 
+  const [activeNav, setActiveNav] = useState('Home')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginModal, setIsLoginModal] = useState(false)
@@ -65,7 +68,8 @@ import {setTableItems, setAuthentication} from '../actions'
   function renderNavLink(direction, label){
     return(
       <NavLink to={direction}>
-      <Typography variant="h6" sx={navLinkStyle}>
+      <Typography  onClick={()=> setActiveNav(label)}
+      className={label === activeNav && 'navbarActive'} variant="h6" sx={navLinkStyle}>
         {label}
       </Typography>
      </NavLink>
@@ -88,7 +92,7 @@ import {setTableItems, setAuthentication} from '../actions'
         sx={{
           color: '#F2F2F2', 
           mr: {sx: 0, lg: 3},
-          fontSize: {xs: '0.8rem', lg: '1rem'}
+          fontSize: {xs: '0.7rem', sm: '0.95rem'}
         }}
         endIcon={ 
         <TableRestaurantIcon  
@@ -107,7 +111,7 @@ import {setTableItems, setAuthentication} from '../actions'
   function renderCallWaiter(){
     return(
       <Button
-      sx={{color: '#F2F2F2', fontSize: {xs: '0.8rem', lg: '1rem'}}}
+      sx={{color: '#F2F2F2', fontSize: {xs: '0.7rem', sm: '0.95rem'}}}
       onClick={callWaiter}
       endIcon={<RoomServiceIcon 
       sx={{color: '#F2F2F2'}}/>}>
@@ -128,17 +132,18 @@ import {setTableItems, setAuthentication} from '../actions'
           <Box sx={{
             display: 'flex', 
             gap: {xs: 1, md: 5}, 
-            alignItems: 'center',
+            alignItems: 'end',
             }}>
+            <img width='50px' src={require('../images/logo.png')} alt="" />
             {renderNavLink('/', 'Home')}
             {authentication && renderNavLink('/admin', 'Admin')}
             {renderNavLink('/tables', 'Tables')}
             {renderNavLink(`/menu/${currentTable}`, 'Menu')}
           </Box>
-          <Box sx={{display: 'flex'}}>
+          <Box sx={{display: 'flex', mt: {xs: 1, md: 0}}}>
             {renderCallWaiter()}
             {renderGoToTable()}
-            {/* small screens means customers who wont authenticate */}
+            {/*on small screens means customers who wont authenticate */}
             <Box sx={{display: {xs: 'none',  md: 'block'}}}>
               {renderAuthButtons()}
             </Box>
