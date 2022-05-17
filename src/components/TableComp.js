@@ -8,9 +8,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button'
 
-export default function BasicTable({tableItems, renderDirectToMenu}) {
+export default function BasicTable({renderDirectToMenu}) {
 
   const [orderedItems, setOrderedItems] = useState([]);
 
@@ -69,11 +68,6 @@ export default function BasicTable({tableItems, renderDirectToMenu}) {
       orderedItems.length > 0 && renderTable(orderedItems)
     )
   }
-  console.log(orderedItems)
-  // function renderOrderedItems(){
-  //   return  Object.values(orderedItems).map((orderedItem, index) => renderTable(orderedItem))
-  // }
- 
 
   function renderPage(){
     if(orderedItems.length > 0){

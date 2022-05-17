@@ -3,7 +3,7 @@ import Alert from '@mui/material/Alert';
 import React,{useEffect} from 'react';
 import SuccesIcon from '../icons/SuccessIcon';
 
-export default function SuccessAlert({isAlert, setIsAlert, screen, content}) {
+export default function SuccessAlert({isAlert, setIsAlert, content}) {
 
   const style = {
     background: '#F1FFF0',
@@ -24,14 +24,6 @@ export default function SuccessAlert({isAlert, setIsAlert, screen, content}) {
     width: '321px',
   }
 
-  const mobileStyle = {
-    ...style,
-    left: '10px',
-    padding: '0.6rem 0.7rem',
-    top: '81px',
-    width: '89%',
-  }
-  
   function handleClose(){
     setTimeout(() => {
       setIsAlert(false);
