@@ -39,7 +39,7 @@ export default function Tables() {
           <Grid container sx={{justifyContent: 'center', mb: 2}}>
             <Grid item lg={10} md={10} sx={{display: 'flex', flexDirection: 'column', alignItems: {xs: 'center', md: 'start'}}}>
             <Typography variant='h1'>Tables</Typography>
-            <Typography sx={{width: {xs: '80%', md: '40%', lg: '30%'}, ml: {xs: 5, md: 1}}}>Scan available Qr codes with your mobile phone. This will automatically assign you to the scanned code's table and direct you to the menu. Green tick marks means table is occupied.</Typography>
+            <Typography sx={{width: {xs: '80%', md: '40%', lg: '30%'}, ml: {xs: 5, md: 1}}}>Scan available Qr codes with your mobile phone. This will automatically assign you to the scanned code's table and direct you to the menu. Green tick marks mean table is occupied. Cancel or checkout table in the admin panel to revert that tick to qr code.</Typography>
             </Grid>
           </Grid>
           <Grid container sx={{gap: 8, justifyContent: 'center'}}>

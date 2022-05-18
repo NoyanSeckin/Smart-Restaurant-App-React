@@ -45,6 +45,18 @@ import {setTableItems, setAuthentication} from '../actions'
     fontSize: {xs: '0.7rem', sm: '0.95rem'}
   
   }
+
+  const navLinkStyle = {
+    color: '#F2F2F2',
+    fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
+    pb: 1.2,
+  }
+
+  function hideFromUsers(label){
+    return {display: {xs: label === ('Admin') && 'none', lg: 'block' }}
+     
+  }
+
  function Navbar({tableItems, currentTable, authentication, setAuthentication}) {
 
   const location = useLocation();
@@ -116,19 +128,15 @@ import {setTableItems, setAuthentication} from '../actions'
   }
 
   function renderNavLink(direction, label){
-    const navLinkStyle = {
-      color: '#F2F2F2',
-      fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
-      pb: 1.2,
-      display: {xs: label === 'Admin' && 'none', sm: 'block' }
-    }
     return(
+     <Box sx={hideFromUsers(label)}>
       <NavLink to={direction}>
       <Typography
       className={direction === activeNav && 'navbarActive'} variant="h6" sx={navLinkStyle}>
         {label}
       </Typography>
      </NavLink>
+     </Box>
     )
   }
 
@@ -189,11 +197,13 @@ import {setTableItems, setAuthentication} from '../actions'
 
   function renderRightNavs(){
     return(
-      <Box sx={{display: 'flex', mt: {xs: 1, md: 0}}}>
-      {renderCallWaiter()}
-      {renderGoToTable()}
+      <Box sx={{mt: {xs: 1, md: 0}}}>
+      <Box sx={{display: {xs: 'flex', lg: 'none'}}}>
+        {renderCallWaiter()}
+        {renderGoToTable()}
+      </Box>
       {/*on small screens means customers who wont authenticate */}
-      <Box sx={{display: {xs: 'none',  md: 'block'}}}>
+      <Box sx={{display: {xs: 'none',  lg: 'block'}}}>
         {renderAuthButtons()}
       </Box>
     </Box>

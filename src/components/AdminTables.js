@@ -2,7 +2,7 @@ import {Button, Typography, Grid} from '@mui/material'
 import {Card, CardActions, CardContent} from '@mui/material'
 import AlarmOffIcon from '@mui/icons-material/AlarmOff';
 import {useHistory} from 'react-router-dom'
-import { getFirestore, doc, onSnapshot, updateDoc} from "firebase/firestore";
+import { getFirestore, doc, onSnapshot, updateDoc, arrayRemove} from "firebase/firestore";
 
 import React, {useState, useEffect} from 'react'
 
@@ -12,7 +12,7 @@ const gridContainerStyle = {
   gap: 4
 }
 
-export default function AdminTables({tables}) {
+export default function AdminTables() {
   
   const db = getFirestore();
   const docRef = doc(db, 'OccupiedTables', 'occupiedTables')
@@ -53,10 +53,9 @@ export default function AdminTables({tables}) {
     }, 1000);
   }, [waiterAlert])
 
-  async function turnOffTableAlert(tableNum){
-    const filteredAlerts = waiterCalls.filter(call => call !== tableNum);
-    updateDoc(callsRef, {
-      calls: filteredAlerts
+  async function revertTableToNormal(tableNum, colRef, field){
+    updateDoc(colRef, {
+      [field]: arrayRemove(tableNum)
     })
   }
 
@@ -114,7 +113,7 @@ export default function AdminTables({tables}) {
         position: 'relative'}}>
           {waiterCalls.includes(table) && 
           <Button endIcon={<AlarmOffIcon/>} 
-          onClick={()=> turnOffTableAlert(table)}
+          onClick={()=> revertTableToNormal(table, callsRef, 'calls')}
           sx={{
             color: '#000',
             position: 'absolute', 
@@ -138,7 +137,8 @@ export default function AdminTables({tables}) {
 
   function directToDetail(tableNum){
     history.push(`/admintablesdetail/${tableNum}`)
-    turnOffTableAlert(tableNum);
+    revertTableToNormal(tableNum, callsRef, 'calls');
+    revertTableToNormal(tableNum, newOrdersRef, 'newOrders');
   }
 
   return (

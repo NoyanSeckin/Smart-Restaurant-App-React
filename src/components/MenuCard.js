@@ -20,23 +20,26 @@ import { connect } from 'react-redux';
 
 
 const closeIconStyle = {
+  bottom: '35px',
   color: 'danger.dark',
+  display: {xs: 'none', lg: 'block'},
   position: 'absolute',
   right: '15px',
-  bottom: '90px',
   '&:hover': {cursor: 'pointer'}
 }
 
 const editIconStyle = {
+  bottom: '35px',
   color: 'primary.dark',
+  display: {xs: 'none', lg: 'block'},
   position: 'absolute',
   right: '50px',
-  bottom: '90px',
   '&:hover': {cursor: 'pointer'}
 }
 
 const addToTableBtnStyle = {
   backgroundColor: 'warning.dark', 
+  display: {xs: 'block', lg: 'none'},
   mt: 1, 
   width: '100%', 
   '&:hover': {backgroundColor: 'warning.main'}
@@ -149,7 +152,7 @@ function MenuCard({tableItems, setTableItems, item, counters, setCounters, index
       <Typography sx={{alignSelf: 'start'}}>{item?.price} $</Typography>
         <Box sx={actionsContainerStyle}>
           <Typography sx={{fontWeight: 'bold'}} variant='caption'>Approx: {item.preperationTime}</Typography>
-          <Box sx={{display: 'flex', gap: 1}}>
+          <Box sx={{display: {xs: 'flex', lg: 'none'}, gap: 1}}>
             <RemoveIcon fontSize='small' sx={decreaseIconStyle}
             onClick={()=> handleCounterChange(index, - 1)} />
             <Typography>{counters[index]}</Typography>

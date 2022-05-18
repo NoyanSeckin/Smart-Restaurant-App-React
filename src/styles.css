@@ -54,7 +54,7 @@ a{
 
 .active-nav{
 	color: #b2102f !important;
-	border-bottom: 2px solid #b2102f;
+	border-bottom: 3px solid #b2102f;
 	padding-bottom: 10px;
 	z-index: 3;
 }
@@ -191,6 +191,6 @@ form label {
 /* Navbar */
 
 .navbarActive{
-	border-bottom: 2px solid #fff;
-	padding-bottom: 0.5rem !important;
+	border-bottom: 3px solid #fff;
+	padding-bottom: 0.4rem !important;
 }
