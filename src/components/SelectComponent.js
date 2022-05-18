@@ -29,7 +29,7 @@ export default function BasicSelect({getSelectedMenu, handleAddMenuChange, value
           value={value || menu}
           label="Menu"
           onChange={handleAddMenuChange || handleChangeEvent}
-        >
+        > 
           <MenuItem value='mainDishes'>Main Dishes</MenuItem>
           <MenuItem value='sideDishes'>Side Dishes</MenuItem>
           <MenuItem value='soups'>Soups</MenuItem>

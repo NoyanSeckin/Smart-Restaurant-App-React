@@ -144,7 +144,7 @@ export default function AdminTablesDetail() {
       <Container maxWidth='xl' sx={{pt:4}}>
       {renderTable()}
     </Container>
-    <Modal isModal={isCheckoutModal} setIsModal={setIsCheckoutModal} header='Checking Out' content='Press proceed to checkout.' bgColor='#4B9CE2'/>
+    <Modal isModal={isCheckoutModal} setIsModal={setIsCheckoutModal} header='Checking Out' content='Press proceed to checkout.' bgColor='#4B9CE2' proceedAction={setIsCancelTable}/>
     <Modal isModal={isCancelModal} setIsModal={setIsCancelModal} header='Canceling Table' content='Press proceed to cancel table activity.' bgColor='#ff1744' proceedAction={setIsCancelTable}/>
     </Box>
   )

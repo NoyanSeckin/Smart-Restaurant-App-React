@@ -330,13 +330,14 @@ export default function EnhancedTable({tableOrders, tableNum, deletedItems, setD
           sx={{
             color: '#ff1744', 
             background: '#F2F2F2',
-            mr: 2
+            mr: 2,
+            '&:hover': {backgroundColor: '#F2F2F2'}
             }}>
             Cancel Table
           </Button>
           <Button variant='contained'
           onClick={()=> handleModalOpen(setIsCheckoutModal)}
-          sx={{px: 3}}>
+          sx={{px: 3, mr: 1}}>
             Checkout
           </Button>
         </Box>

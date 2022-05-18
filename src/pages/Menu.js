@@ -85,6 +85,8 @@ function Menu({setCurrentTable, setTables}) {
     setCounters([...totalCounters])
   }
 
+  
+
   useEffect(()=>{
     fetchSelectedMenu();
   },[selectedMenu])
