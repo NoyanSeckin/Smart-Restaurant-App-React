@@ -1,7 +1,10 @@
 import {AppBar, Box, Button, Container, Toolbar, Typography} from '@mui/material';
-import { NavLink } from "react-router-dom";
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
+
+import { NavLink } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+
 import { connect } from "react-redux";
 
 import { getFirestore, doc, updateDoc, arrayUnion} from "firebase/firestore";
@@ -16,11 +19,7 @@ import {setTableItems, setAuthentication} from '../actions'
     backgroundColor: 'warning.dark' 
   }
 
-  const navLinkStyle = {
-    color: '#F2F2F2',
-    fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
-    pb: 1.2
-  }
+
 
   const tableCounterStyle = {
     color: '#F2F2F2',
@@ -48,7 +47,9 @@ import {setTableItems, setAuthentication} from '../actions'
   }
  function Navbar({tableItems, currentTable, authentication, setAuthentication}) {
 
-  const [activeNav, setActiveNav] = useState('Home')
+  const location = useLocation();
+
+  const [activeNav, setActiveNav] = useState(location.pathname)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginModal, setIsLoginModal] = useState(false)
@@ -67,6 +68,16 @@ import {setTableItems, setAuthentication} from '../actions'
       }
     }
   }, [])
+
+
+  // handle active nav changes
+  useEffect(()=> {
+    if(location.pathname === '/usertable'){
+      setActiveNav('')
+    }else setActiveNav(location.pathname)
+  }, [location])
+
+ 
   
   async function signInUser(email, password){
     signInWithEmailAndPassword(auth, email, password).then(cred => {
@@ -105,10 +116,16 @@ import {setTableItems, setAuthentication} from '../actions'
   }
 
   function renderNavLink(direction, label){
+    const navLinkStyle = {
+      color: '#F2F2F2',
+      fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
+      pb: 1.2,
+      display: {xs: label === 'Admin' && 'none', sm: 'block' }
+    }
     return(
       <NavLink to={direction}>
-      <Typography  onClick={()=> setActiveNav(label)}
-      className={label === activeNav && 'navbarActive'} variant="h6" sx={navLinkStyle}>
+      <Typography
+      className={direction === activeNav && 'navbarActive'} variant="h6" sx={navLinkStyle}>
         {label}
       </Typography>
      </NavLink>
@@ -121,7 +138,7 @@ import {setTableItems, setAuthentication} from '../actions'
       <Typography sx={tableCounterStyle} variant="caption">
           {calculateTotalItems(tableItems)}
         </Typography>
-        <NavLink to='/usertable'>
+        <NavLink to='/usertable'  >
         <Button 
         sx={tableBtnStyle}
         endIcon={ 
@@ -140,7 +157,7 @@ import {setTableItems, setAuthentication} from '../actions'
 
   function renderCallWaiter(){
     return(
-      <Button
+      <Button 
       sx={callWaiterBtnStyle}
       onClick={callWaiter}
       endIcon={<RoomServiceIcon 

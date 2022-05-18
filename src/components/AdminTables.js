@@ -17,8 +17,11 @@ export default function AdminTables({tables}) {
   const db = getFirestore();
   const docRef = doc(db, 'OccupiedTables', 'occupiedTables')
   const callsRef = doc(db, 'WaiterCalls', 'tables')
+  const newOrdersRef = doc(db, 'NewOrders', 'newOrders');
 
   const [occupiedTables, setOccupiedTables] = useState([]);
+  // new orders are table numbers to trigger alert
+  const [newOrders, setNewOrders] = useState([]);
   const [waiterCalls, setWaiterCalls] = useState([]);
   const [waiterAlert, setWaiterAlert] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState(true);
@@ -34,6 +37,11 @@ export default function AdminTables({tables}) {
     onSnapshot(callsRef, (doc) => {
       setWaiterCalls(doc.data().calls);
     })
+
+    onSnapshot(newOrdersRef, (doc) => {
+      setNewOrders(doc.data().newOrders)
+    })
+
     return () => setIsComponentMounted(false)
     }, []) 
 
@@ -47,31 +55,36 @@ export default function AdminTables({tables}) {
 
   async function turnOffTableAlert(tableNum){
     const filteredAlerts = waiterCalls.filter(call => call !== tableNum);
-    console.log(filteredAlerts)
     updateDoc(callsRef, {
       calls: filteredAlerts
     })
   }
 
-  function returnAlertColor(){
-    if(waiterAlert){
-      return '#E3170A';
-    }else return '#F58840'
-  }
-
   function renderTableText(tableNum){
     if(waiterCalls.includes(tableNum)){
-      return 'Waiter is needed!'
+      return 'Waiter called!'
+    }
+    else if(newOrders.includes(tableNum)){
+      return 'New Order'
     }
     else if(occupiedTables.includes(tableNum)){
       return 'Active'
     }
     else return 'Empty'
   }
-  function renderTableColor(tableNum){
-    if(occupiedTables.includes(tableNum)){
+
+  function returnTableColor(tableNum){
+    if(waiterCalls.includes(tableNum)){
+      if(waiterAlert) return 'danger.main'
+      else return 'warning.dark'
+    }
+    else if(newOrders.includes(tableNum)){
+      return 'primary.light'
+    }
+    else if(occupiedTables.includes(tableNum)){
       return '#F58840'
-    }else return '#F3F4ED'
+    }
+    else return '#F3F4ED'
   }
 
   function renderGoToTableBtn(tableNum){
@@ -95,7 +108,7 @@ export default function AdminTables({tables}) {
     <Grid key={table} item lg={3} md={3}> 
       <Card elevation={5} 
       sx={{
-        background: `${waiterCalls.includes(table) ? returnAlertColor() : renderTableColor(table)}`, 
+        backgroundColor: returnTableColor(table), 
         px: 1, 
         pb: 1,
         position: 'relative'}}>

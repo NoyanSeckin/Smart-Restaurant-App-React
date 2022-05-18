@@ -8,7 +8,7 @@ export default function SelectLabels({handlePreperationChange, id, value}) {
   function renderMenuItems(){
     const menuItems = ['Right Away', '3-5 Minutes', '5-10 Minutes', '10-15 Minutes', '15-20 Minutes', '20-25 Minutes', '25-30 Minutes', '30+ Minutes']
 
-    return menuItems.map(item => <MenuItem value={item}>{item}</MenuItem>)
+    return menuItems.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>)
   }
 
   return (

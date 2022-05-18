@@ -26,6 +26,14 @@ import {useEffect} from 'react'
 
 let rows = []
 
+const orderBtnStyle = {
+  backgroundColor: 'warning.dark', 
+  px: 4, 
+  mb: 2, 
+  mr: 2, 
+  '&:hover': {backgroundColor: 'warning.main'}
+}
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -42,8 +50,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -194,6 +200,13 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
     }
 
   },[selected])
+
+
+  // select all items in the beginning
+  useEffect(()=> {
+    const newSelecteds = rows.map((n) => n.name);
+    setSelected(newSelecteds);
+  }, [])
 
   function handleSendOrder(){
     sendOrdersToDb();
@@ -357,7 +370,7 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
       <Box sx={{alignSelf: 'end'}}>
         <Typography sx={{fontSize: '0.8rem', color: 'danger.main'}}>{orderErrorMessage}</Typography>
         <Button onClick={handleSendOrder} variant='contained' 
-        sx={{background: '#ff9800', px: 4, mb: 2, mr: 2}}>Order Now</Button>
+        sx={orderBtnStyle}>Order Now</Button>
       </Box>
       </Paper>
     </Box>

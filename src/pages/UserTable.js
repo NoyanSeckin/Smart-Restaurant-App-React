@@ -1,13 +1,12 @@
 import {Box, Button,Container, Typography, Paper} from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-import { getFirestore, doc, updateDoc, onSnapshot} from "firebase/firestore";
-import firebaseApp from '../firebase/init';
+import { getFirestore, doc, updateDoc, arrayUnion} from "firebase/firestore";
 
 import {NavLink} from 'react-router-dom'
-import {React, useState, useEffect} from 'react';
+import {React, useState} from 'react';
 import { connect } from "react-redux";
 import {setTableItems, setCurrentTable, setCurrentOrder} from '../actions';
-import TableComp from '../components/TableComp';
+import PrevOrders from '../components/PrevOrders';
 import UserBasket from '../components/UserBasket';
 
 function Table({tableItems, setTableItems, currentTable, currentOrder, setCurrentOrder }) {
@@ -34,6 +33,14 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
     }
   }
 
+  async function updateNewOrdersList(){
+    const listRef = doc(db, 'NewOrders', 'newOrders')
+    updateDoc(listRef, {
+      newOrders: arrayUnion(Number(currentTable))
+    })
+
+  }
+
   const sendOrdersToDb = async () => {
     const orderedItems = [];
     const itemsToSessionStorage = [];
@@ -58,6 +65,7 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
       const notOrderedItems = tableItems.filter(item => !ordersToSend.includes(item.name));
       setTableItems(notOrderedItems);
       
+      updateNewOrdersList();
       setOrderErrorMessage('');
       setItemsToSessionStorage(itemsToSessionStorage);
     }else setOrderErrorMessage('Please choose items')
@@ -66,7 +74,7 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   function directToMenuButton(){
     return(
       <NavLink to={`/menu/${currentTable}`}>
-        <Button onClick={()=> sendOrdersToDb()} variant='contained' sx={{mt: 2, background: '#ff9800'}}>Go To Menu</Button>
+        <Button onClick={()=> sendOrdersToDb()} variant='contained' sx={{mt: 2, backgroundColor: 'warning.dark', '&:hover': {backgroundColor: 'warning.main'}}}>Go To Menu</Button>
       </NavLink>
     )
   }
@@ -115,7 +123,7 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
         return renderDirectToMenu();
       }
     } 
-    else return <TableComp renderDirectToMenu={renderDirectToMenu} tableItems={tableItems} />
+    else return <PrevOrders renderDirectToMenu={renderDirectToMenu} tableItems={tableItems} />
   }
   return (
     <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
