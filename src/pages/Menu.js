@@ -140,7 +140,7 @@ function Menu({setCurrentTable, setTables}) {
 
   function renderPage(){
     return(
-      <Container maxWidth='xl' sx={{py: 10}}>
+      <Container maxWidth='xl' sx={{py: {xs: 3, py: 10}}}>
       {renderSelectComponent()}
        <Box sx={cardsContainerStyle}>
          {renderCards()}

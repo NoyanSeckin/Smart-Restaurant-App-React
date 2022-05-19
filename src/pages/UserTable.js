@@ -9,6 +9,12 @@ import {setTableItems, setCurrentTable, setCurrentOrder} from '../actions';
 import PrevOrders from '../components/PrevOrders';
 import UserBasket from '../components/UserBasket';
 
+const navsContainerStyle = {
+  background: '#fff',
+  display: 'flex',
+  gap: {xs: 5, lg: 5},
+  }
+
 function Table({tableItems, setTableItems, currentTable, currentOrder, setCurrentOrder }) {
 
   const [activePage, setActivePage] = useState('New Order')
@@ -118,7 +124,7 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
   function renderActivePage(){
     if(activePage === 'New Order'){
       if(tableItems.length > 0){
-        return <UserBasket newHeaders={extraTableHeader} tableItems={tableItems} setTableItems={setTableItems} sendOrdersToDb={sendOrdersToDb} setOrdersToSend={setOrdersToSend} orderErrorMessage={orderErrorMessage} setOrderErrorMessage={setOrderErrorMessage}/>
+        return <UserBasket tableItems={tableItems} setTableItems={setTableItems} sendOrdersToDb={sendOrdersToDb} setOrdersToSend={setOrdersToSend} orderErrorMessage={orderErrorMessage} setOrderErrorMessage={setOrderErrorMessage}/>
       }else{
         return renderDirectToMenu();
       }
@@ -126,26 +132,15 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
     else return <PrevOrders renderDirectToMenu={renderDirectToMenu} tableItems={tableItems} />
   }
   return (
-    <Box sx={{background: '#F2F2F2', minHeight: '120vh'}}>
-      <Container maxWidth='xl' sx={{pt: 4}}>
-        <Paper elevation={4} 
-        sx={{
-            py: 5,
-            px: 5, 
-            }}>
+    <Box sx={{background: '#F2F2F2'}}>
+       <Paper elevation={4} 
+        sx={{py: 3, px: {xs: 1, sm: 4, md: 5}}}>
           <Box
-          sx={{
-            background: '#fff',
-            display: 'flex',
-            gap: {xs: 5, lg: 5},
-            }}>
+          sx={navsContainerStyle}>
           {renderNavs()}
         </Box>
         {renderActivePage()}
         </Paper>
-      
-     
-    </Container>
     </Box>
   )
 }

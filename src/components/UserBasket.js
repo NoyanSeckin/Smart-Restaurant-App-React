@@ -270,7 +270,6 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
     {id: 'price', numeric: false, disablePadding: true, label: 'Price'},
     {id: 'subtotal', numeric: false, disablePadding: true, label: 'Subtotal'},
     ];
-  headCells = headCells.concat(newHeaders);
 
   return (
     <Box sx={{mt: 3}}>
@@ -307,7 +306,6 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -340,9 +338,8 @@ export default function EnhancedTable({tableItems, newHeaders, setTableItems, se
                       </TableCell>
                       <TableCell 
                         align="left">{row.count}</TableCell>
-                      <TableCell align="left">{row.price}</TableCell>
-                      <TableCell align="left">{row.price * row.count}</TableCell>
-                      <TableCell align="left">Not Ordered</TableCell>
+                      <TableCell align="left">{row.price}$</TableCell>
+                      <TableCell align="left">{row.price * row.count}$</TableCell>
                     </TableRow>
                   );
                 })}

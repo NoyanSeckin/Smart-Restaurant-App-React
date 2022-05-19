@@ -27,7 +27,7 @@ export default function Home() {
               }}>
                 A <span style={{color: '#F58840'}}>Smarter</span> Restaurant
               </Typography>
-              <Typography sx={{width: {xs: '100%', lg: '115%'}}}>
+              <Typography sx={{width: {xs: '100%', sm: '70%', lg: '115%'}}}>
                 Make your restaurants smarter with next level technology. Efficient management, excellent customer experience. <br /> You will love it.
               </Typography>
               <Box>
@@ -49,7 +49,7 @@ export default function Home() {
           </Grid>
 
           <Grid item xs={9} lg={6} sx={{mt: {xs: 4, lg: 0}}}>
-            <img src={require('../images/main.jpg')} alt="" 
+          <img src={require('../images/main.jpg')} alt="" 
             style={{
               width: '100%',
               borderRadius: '8px',

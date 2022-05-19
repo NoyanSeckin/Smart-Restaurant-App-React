@@ -19,7 +19,11 @@ import {setTableItems, setAuthentication} from '../actions'
     backgroundColor: 'warning.dark' 
   }
 
-
+  const authBtnStyle = {
+    color: '#F2F2F2', 
+    ml: 2,
+    fontSize: '1rem'
+  }
 
   const tableCounterStyle = {
     color: '#F2F2F2',
@@ -111,13 +115,13 @@ import {setTableItems, setAuthentication} from '../actions'
   function renderAuthButtons(){
     if(authentication){
       return(
-        <Button onClick={signOutUser} sx={{color: '#F2F2F2', ml: 2}}>
+        <Button onClick={signOutUser} sx={authBtnStyle}>
         Sign out
       </Button>
       )
     }else return(
       <Button onClick={()=> setIsLoginModal(true)}
-      sx={{color: '#F2F2F2', ml: 2}}>
+      sx={authBtnStyle}>
         Sign in
       </Button>
     ) 

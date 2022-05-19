@@ -36,7 +36,6 @@ export default function BasicTable({renderDirectToMenu}) {
             <TableCell align="center">Quantity</TableCell>
             <TableCell align="center">Price</TableCell>
             <TableCell align="center">Subtotal</TableCell>
-            <TableCell align="center">Order Number</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -45,8 +44,8 @@ export default function BasicTable({renderDirectToMenu}) {
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0}}}
             >
-              <TableCell align='left' sx={{display: 'flex', gap: 5, pr: 0}} component="th" scope="row">
-                 <img style={{width: '100px', borderRadius: '8px'}} src={row.image} alt="" /> 
+              <TableCell align='left' sx={{display: 'flex', gap: 2, pr: 0}} component="th" scope="row">
+                 <img style={{width: '60px', borderRadius: '8px'}} src={row.image} alt="" /> 
                  <Typography sx={{alignSelf: 'center', justifySelf: 'center'}}>
                    {row.name}
                  </Typography>
@@ -54,7 +53,6 @@ export default function BasicTable({renderDirectToMenu}) {
               <TableCell  padding='none' size={'small'} align="center"> {row.count} </TableCell>
               <TableCell align="center">{row.price}$</TableCell>
               <TableCell align="center">{row.price * row.count}$</TableCell>
-              <TableCell align="center">{row?.orderNumber}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -27,7 +27,7 @@ export default function Tables() {
             {occupiedTables?.includes(table) 
             ? 
               <CheckCircleIcon sx={{fontSize: '110px', color: '#357a38'}}></CheckCircleIcon>
-            : <QRCodeReact value={`http://localhost:3000/menu/${table}`}>
+            : <QRCodeReact value={`https://smart-restaurant-app-react.web.app/menu/${table}`}>
               </QRCodeReact>}
          </Grid>
     ))
