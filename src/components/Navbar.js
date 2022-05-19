@@ -54,6 +54,7 @@ import {setTableItems, setAuthentication} from '../actions'
     color: '#F2F2F2',
     fontSize: {xs: '0.9rem', sm: '1.1rem', md: '1.25rem'},
     pb: 1.2,
+    mt: 1.4
   }
 
   function hideFromUsers(label){
@@ -76,13 +77,9 @@ import {setTableItems, setAuthentication} from '../actions'
   const callsRef = doc(db, 'WaiterCalls', 'tables')
 
   useEffect(()=> {
-    // detect page refresh and keep admin logged in
-    if(performance.getEntriesByType("navigation")[0].type){
-      let auth = sessionStorage.getItem('auth');
-      if(auth){
-        setAuthentication(auth)
+    if(auth){
+      setAuthentication(auth)
       }
-    }
   }, [])
 
 
@@ -188,7 +185,7 @@ import {setTableItems, setAuthentication} from '../actions'
       <Box sx={{
         display: 'flex', 
         gap: {xs: 1, md: 5}, 
-        alignItems: 'end',
+        alignItems: 'center',
         }}>
         <img width='50px' src={require('../images/logo.png')} alt="" />
         {renderNavLink('/', 'Home')}
@@ -201,7 +198,7 @@ import {setTableItems, setAuthentication} from '../actions'
 
   function renderRightNavs(){
     return(
-      <Box sx={{mt: {xs: 1, md: 0}}}>
+      <Box>
       <Box sx={{display: {xs: 'flex', lg: 'none'}}}>
         {renderCallWaiter()}
         {renderGoToTable()}
