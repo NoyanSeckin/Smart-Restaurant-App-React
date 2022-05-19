@@ -57,7 +57,6 @@ function Table({tableItems, setTableItems, currentTable, currentOrder, setCurren
         itemsToSessionStorage.push(sessionItem);
         delete item.image;
         orderedItems.push({...item, orderNumber: currentOrder, id: uuidv4()});
-        console.log(orderedItems)
       }
     })
 

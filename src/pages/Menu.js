@@ -118,7 +118,6 @@ function Menu({setCurrentTable, setTables}) {
     if(isEditItem){
       const menuItems = activeMenuItems;
       const index = activeMenuItems.findIndex(item => item.id === editItem.id);
-      console.log(index)
       menuItems[index] = editItem;
 
       updateDoc(menuRef, {

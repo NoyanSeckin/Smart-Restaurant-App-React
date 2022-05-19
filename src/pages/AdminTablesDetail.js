@@ -68,7 +68,6 @@ export default function AdminTablesDetail() {
     await updateDoc(occupiedTableRef, {
       occupiedTables: arrayRemove(Number(tableNum))
     })
-    console.log(typeof tableNum)
   }
 
   async function cancelTable(){

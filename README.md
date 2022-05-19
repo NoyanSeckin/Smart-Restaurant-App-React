@@ -1,3 +1,28 @@
+# Description
+
+This is a smart restaurant app, a gateway to digital restaurants. It has two dimensions. On the one hand, there is the admin panel(screen sizes large and above ) where an admin can add new menu, edit and delete existing ones, and handle recieved orders. On the other hand, the user (screen sizes below large) scan a qr code to be sitted in a table, display the digital menu, place new orders and see previous ones.
+
+## Additional Info
+
+For admin authentication email: admin@admin.com  password: 12345678
+
+Introduction video link: https://vimeo.com/711628923/3994f07de5
+
+App is live at: https://smart-restaurant-app-react.web.app/
+
+### Screen Shots
+
+![main-page](https://i.ibb.co/qyd5pCd/main.png)
+![qr-page](https://i.ibb.co/9YHT1h1/Screenshot-2022-05-19-at-00-31-26-React-App.png)
+![menu](https://i.ibb.co/YppM0bG/Screenshot-2022-05-19-at-00-32-03-React-App.png)
+![edit-menu](https://i.ibb.co/4VhGrwF/Screenshot-2022-05-19-at-00-32-36-React-App.png)
+![admin-tables](https://i.ibb.co/yhySq92/Screenshot-2022-05-19-at-00-35-41-React-App.png)
+![admin-table](https://i.ibb.co/8Kfwv47/Screenshot-2022-05-19-at-00-38-15-React-App.png)
+![admin-modal](https://i.ibb.co/ZdN3Jd5/Screenshot-2022-05-19-at-00-38-30-React-App.png)
+![add-product](https://i.ibb.co/xzsgzDq/Screenshot-2022-05-19-at-00-38-48-React-App.png)
+![mobile-new-orders](https://i.ibb.co/Wzybkys/Screenshot-2022-05-19-at-16-23-52-React-App.png)
+![mobile-prev-orders](https://i.ibb.co/1rwC1pb/Screenshot-2022-05-19-at-16-25-08-React-App.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
