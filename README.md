@@ -1,6 +1,6 @@
 # Description
 
-This is a smart restaurant app, a gateway to digital restaurants. It has two dimensions. On the one hand, there is the admin panel(screen sizes large and above ) where an admin can add new menu, edit and delete existing ones, and handle recieved orders. On the other hand, the user (screen sizes below large) scan a qr code to be sitted in a table, display the digital menu, place new orders and see previous ones.
+This is a smart restaurant app, a gateway to digital restaurants. It has two dimensions. On the one hand, there is the admin panel(screen sizes large and above) where an admin can add new menu, edit and delete existing ones, and handle recieved orders. On the other hand, the user (screen sizes below large) scan a qr code to be sitted in a table, display the digital menu, place new orders and see previous ones.
 
 ## Additional Info
 
