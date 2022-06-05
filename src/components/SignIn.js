@@ -38,7 +38,7 @@ const loginButton = {
     width: '100%',
   }
 
-export default function BuyModal({isModal, setIsModal, email, setEmail, password, setPassword, proceedAction}) {
+export default function SignInModal({isModal, setIsModal, email, setEmail, password, setPassword, proceedAction}) {
   
   const handleClose = () => setIsModal(false);
   function handleProceedAction(){
