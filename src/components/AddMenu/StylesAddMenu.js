@@ -88,6 +88,21 @@ export const styles = {
         color: 'danger.light',
         fontSize: '15px',
         mb: 2
+    },
+
+    formBox: { 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: 1, 
+        mt: 1 ,
+        width: '80%'
+    },
+
+    uploadHeader: { 
+        mb: { 
+            xs: 0, 
+            lg: 2 
+        } 
     }
 
 }

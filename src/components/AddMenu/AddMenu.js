@@ -32,7 +32,9 @@ export default function AddProduct() {
 
     const [isAlert, setIsAlert] = useState(false)
 
-    async function handleUploadProduct(name, description, preperationTime, price, category, resetForm) {
+    async function handleUploadProduct(values) {
+
+        const { name, description, preperationTime, price, category } = values;
 
         const id = uuidv4();
 
@@ -57,11 +59,9 @@ export default function AddProduct() {
             })
         }).catch(err => console.log(err))
 
-        resetForm()
         setSelectedFile('')
         setFiles([]);
         setIsAlert(true)
-
     }
 
     function renderTextarea(value, error, handleChange, valueName, rowCount) {
@@ -169,21 +169,21 @@ export default function AddProduct() {
 
     // Formik and yup values
     const inputInfos = {
-        name: { 
-            label: 'Product Name', 
-            placeholder: 'Enter a name' 
+        name: {
+            label: 'Product Name',
+            placeholder: 'Enter a name'
         },
-        description: { 
-            label: 'Description', 
-            placeholder: 'Enter a description' 
+        description: {
+            label: 'Description',
+            placeholder: 'Enter a description'
         },
-        category: { 
-            label: 'Category', 
-            placeholder: 'Choose a category' 
+        category: {
+            label: 'Category',
+            placeholder: 'Choose a category'
         },
-        price: { 
-            label: 'Price', 
-            placeholder: 'Enter a price' 
+        price: {
+            label: 'Price',
+            placeholder: 'Enter a price'
         }
     }
 
@@ -223,45 +223,83 @@ export default function AddProduct() {
                         // check if user selected image, if so submit
                         if (selectedFile?.name) {
 
-                            handleUploadProduct(values.name, values.description, values.preperationTime, values.price, values.category, resetForm);
+                            handleUploadProduct(values)
+                                .then(() => resetForm());
 
-                        } else setSelectedFileError('Choose a file')
+                        }
+                        else {
+                            setSelectedFileError('Choose a file')
+                        }
 
                     }}
                 >
-                    {({ values, errors, handleSubmit, handleChange }) => (
-                        <form onSubmit={handleSubmit}>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: '80%', mt: 1 }}>
-                                {renderTextarea(values.name, errors.name, handleChange, 'name', '1')}
-                                {renderTextarea(values.description, errors.description, handleChange, 'description', '3')}
-                                {renderSelectInputs(values.category, values.preperationTime, handleChange)}
-                                {renderPriceInput(values.price, errors.price, handleChange)}
-                                {renderSubmitBtn()}
-                            </Box>
-                        </form>
-                    )}
+                    {({ values, errors, handleSubmit, handleChange }) => {
+
+                        const nameTextArea = renderTextarea(values.name, errors.name, handleChange, 'name', '1');
+
+                        const descriptionTextArea = renderTextarea(values.description, errors.description, handleChange, 'description', '3');
+
+                        const selectInputViews = renderSelectInputs(values.category, values.preperationTime, handleChange);
+
+                        const priceInputView = renderPriceInput(values.price, errors.price, handleChange);
+
+                        const submitButtonView = renderSubmitBtn();
+
+                        return (
+                            <form onSubmit={handleSubmit}>
+
+                                <Box sx={styles.formBox}>
+
+                                    {nameTextArea}
+                                    {descriptionTextArea}
+
+                                    {selectInputViews}
+                                    {priceInputView}
+
+                                    {submitButtonView}
+
+                                </Box>
+
+                            </form>
+                        )
+                    }}
                 </Formik>
             </Grid>
         )
     }
 
     function renderUploadGridItem() {
+        
+        const errorView =  renderSelectedFileError();
+
         return (
             <Grid item xs={12} lg={6}>
-                <Typography variant='h5'
-                    sx={{ mb: { xs: 0, lg: 2 } }}>Upload Image</Typography>
+
+                <Typography variant='h5' sx={styles.uploadHeader}>
+                        Upload Image
+                 </Typography>
+
                 <Dropzone setSelectedFile={setSelectedFile} setSelectedFileError={setSelectedFileError} selectedFile={renderSelectedFileError}
                     files={files} setFiles={setFiles} />
-                {renderSelectedFileError()}
+
+                {errorView}
+
             </Grid>
         )
     }
 
+    const formGridView = renderFormikGridItem();
+    const uploadGridView = renderUploadGridItem();
+
     return (
+        
         <Grid container sx={styles.gridContainerStyle}>
-            {renderFormikGridItem()}
-            {renderUploadGridItem()}
+            
+            {formGridView}
+            {uploadGridView}
+
             <SuccessAlert isAlert={isAlert} setIsAlert={setIsAlert} content='Item added to the menu!' />
+
         </Grid>
     )
 }
