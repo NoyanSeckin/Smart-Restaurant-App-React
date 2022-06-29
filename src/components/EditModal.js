@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -7,14 +8,17 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import Typography from '@mui/material/Typography';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+
 import firebaseApp from "../firebase/init"
 import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+
 import { v4 as uuidv4 } from 'uuid';
 
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
 import PreperationSelect from './PreperationSelect'
-import DropzoneComp from './DropzoneComp';
+import DropzoneComp from './Dropzone/Dropzone';
 
 const modalContainerStyle = {
   bgcolor: '#fff',

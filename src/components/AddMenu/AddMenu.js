@@ -12,7 +12,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import { styles } from './StylesAddMenu';
-import Dropzone from '../DropzoneComp'
+import Dropzone from '../Dropzone/Dropzone'
 import SelectComponent from '../SelectComponent'
 import PreperationSelect from '../PreperationSelect'
 import SuccessAlert from '../SuccessAlert'
@@ -292,7 +292,7 @@ export default function AddProduct() {
     const uploadGridView = renderUploadGridItem();
 
     return (
-        
+
         <Grid container sx={styles.gridContainerStyle}>
             
             {formGridView}
