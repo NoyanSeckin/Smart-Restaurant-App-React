@@ -3,7 +3,7 @@ import {React, useState} from 'react'
 import {Box, Container, Paper, Typography} from '@mui/material'
 
 import AdminTables from '../components/AdminTables'
-import AddMenu from '../components/AddMenu'
+import AddMenu from '../components/AddMenu/AddMenu'
 export default function Admin() {
 
   const [activePage, setActivePage] = useState('Restaurant Tables');

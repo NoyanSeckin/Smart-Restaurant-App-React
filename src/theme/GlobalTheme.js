@@ -10,6 +10,7 @@ export const GlobalTheme = createTheme({
       dark: '#F58840'
     },
     danger: {
+        light: '#F77474',
       main: '#f44336',
       dark: '#d32f2f'
     }
