@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import Modal from './Modal'
-import EditModal from './EditModal'
+import EditModal from './EditModal/EditModal'
 import Spinner from './Spinner'
 
 import {setTableItems} from '../actions'
